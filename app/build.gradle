@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    defaultConfig {
+        applicationId rootProject.ext.android.applicationId
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    //Warning:Conflict with dependency 'com.google.code.findbugs:jsr305'. Resolved versions for app (3.0.1
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    testCompile 'junit:junit:4.12'
+    compile rootProject.ext.dependencies.getAt("butterknife")
+    annotationProcessor rootProject.ext.dependencies.getAt("butterknife-compiler")
+    compile rootProject.ext.dependencies.getAt("dagger")
+    annotationProcessor rootProject.ext.dependencies.getAt("dagger-compiler")
+    compile rootProject.ext.dependencies.getAt("support-v4")
+    compile rootProject.ext.dependencies.getAt("appcompat-v7")
+    compile rootProject.ext.dependencies.getAt("design")
+    compile rootProject.ext.dependencies.getAt("recyclerview")
+    compile rootProject.ext.dependencies.getAt("cardview")
+    compile rootProject.ext.dependencies.getAt("rxandroid")
+    compile rootProject.ext.dependencies.getAt("rxbinding")
+    compile rootProject.ext.dependencies.getAt("rxbinding-support-v4")
+    compile rootProject.ext.dependencies.getAt("rxbinding-appcompat-v7")
+    compile rootProject.ext.dependencies.getAt("rxbinding-design")
+    compile rootProject.ext.dependencies.getAt("rxbinding-recyclerview-v7")
+//    compile rootProject.ext.dependencies.getAt("ormlite-android")
+//    compile rootProject.ext.dependencies.getAt("stream")
+    compile rootProject.ext.dependencies.getAt("retrofit")
+    compile rootProject.ext.dependencies.getAt("adapter-rxjava")
+    compile rootProject.ext.dependencies.getAt("fastjson")
+    compile rootProject.ext.dependencies.getAt("okhttp3-logging-interceptor")
+    compile rootProject.ext.dependencies.getAt("stetho")
+    compile rootProject.ext.dependencies.getAt("stetho-okhttp3")
+    compile rootProject.ext.dependencies.getAt("rxlifecycle-components")
+    compile rootProject.ext.dependencies.getAt("imagepicker")
+    compile rootProject.ext.dependencies.getAt("avi")
+    compile rootProject.ext.dependencies.getAt("circleimageview")
+    compile rootProject.ext.dependencies.getAt("fragmentation")
+    compile rootProject.ext.dependencies.getAt("glide")
+    compile rootProject.ext.dependencies.getAt("adapter")
+    compile 'org.glassfish:javax.annotation:10.0-b28'
+}

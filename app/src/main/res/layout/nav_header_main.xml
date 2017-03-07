@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:id="@+id/rl_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_gray">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:src="@mipmap/ic_launcher"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="30dp"
+            android:layout_toRightOf="@+id/profile_image"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="小哥" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="工号:1001" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_quit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:orientation="vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <Button
+                android:id="@+id/btn_left_draw_quit"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:gravity="center"
+                android:text="@string/quit"
+                android:textColor="@color/text_color_bar"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_image"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/main_money"
+                    android:textColor="@color/text_color_bar" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="500.2元"
+                    android:textColor="@color/main_color_red" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/water_coupon"
+                    android:textColor="@color/text_color_bar" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="50张"
+                    android:textColor="@color/main_color_red" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/ll_money"
+            android:layout_marginTop="15dp"
+            android:background="@color/cline_deep" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_below="@+id/iv_line"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/begin_make_order"
+                android:textColor="@color/text_color_bar"
+                android:textSize="14sp" />
+
+            <com.eme.waterdelivery.widget.ToggleButton
+                android:id="@+id/tb_work"
+                android:layout_width="50dp"
+                android:layout_height="28dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_head"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/num_order_today"
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_today_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:text="15"
+                    android:textColor="@color/main_color_red"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/cline_deep" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/num_month_today"
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_month_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:text="15"
+                    android:textColor="@color/main_color_red"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/cline_deep" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/num_month_invalid_record"
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_month_invalid_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:text="15"
+                    android:textColor="@color/main_color_red"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/cline_deep" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/num_total_record"
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_total_record"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:text="15"
+                    android:textColor="@color/main_color_red"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/cline_deep" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/water_station"
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_station_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:text="400-2432-13"
+                    android:textColor="@color/main_color_blue"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/cline_deep" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</RelativeLayout>

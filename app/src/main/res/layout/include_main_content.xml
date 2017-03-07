@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/activity_bg"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:theme="@style/toolBar">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:singleLine="true"
+            android:text="配送单"
+            android:textColor="@color/text_color_bar"
+            android:textSize="20sp" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:tabBackground="@android:color/white"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/main_color_blue"
+        app:tabSelectedTextColor="@color/main_color_red"
+        app:tabTextColor="@color/bg_gray" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_main"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

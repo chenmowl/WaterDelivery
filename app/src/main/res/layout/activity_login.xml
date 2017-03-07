@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/include_tb"
+        layout="@layout/tb_normal" />
+
+    <LinearLayout
+        android:id="@+id/ll_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/include_tb"
+        android:layout_margin="15dp"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/et_login_username"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:background="@android:color/white"
+                android:hint="@string/input_username"
+                android:inputType="text"
+                android:longClickable="false"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:singleLine="true"
+                android:textSize="15sp" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/cline_low" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <EditText
+                android:id="@+id/et_login_password"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:background="@android:color/white"
+                android:hint="@string/input_password"
+                android:inputType="textPassword"
+                android:longClickable="false"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:singleLine="true"
+                android:textSize="15sp" />
+
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_login"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_below="@+id/ll_input"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/btn_status_unable"
+        android:singleLine="true"
+        android:text="@string/login"
+        android:textColor="@android:color/white"
+        android:textSize="12sp" />
+
+    <include layout="@layout/net_loading" />
+</RelativeLayout>
