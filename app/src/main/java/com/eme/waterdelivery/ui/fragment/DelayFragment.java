@@ -1,9 +1,12 @@
 package com.eme.waterdelivery.ui.fragment;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +22,6 @@ import com.eme.waterdelivery.contract.DelayContract;
 import com.eme.waterdelivery.model.bean.DelayBean;
 import com.eme.waterdelivery.presenter.DelayPresenter;
 import com.eme.waterdelivery.ui.adapter.DelayAdapter;
-import com.eme.waterdelivery.widget.FullyLinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,8 +59,8 @@ public class DelayFragment extends BaseFragment<DelayPresenter> implements Delay
     protected void initEventAndData() {
         swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
-        rvContent.setLayoutManager(new FullyLinearLayoutManager(getActivity()));
-        delayData=new ArrayList<>();
+        rvContent.setLayoutManager(new LinearLayoutManager(getActivity()));
+        delayData = new ArrayList<>();
         delayAdapter = new DelayAdapter(delayData);
         delayAdapter.setOnLoadMoreListener(this);
         delayAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
@@ -75,20 +77,33 @@ public class DelayFragment extends BaseFragment<DelayPresenter> implements Delay
                 super.onItemChildClick(adapter, view, position);
                 switch (view.getId()) {
                     case R.id.btn_receiving:
-                        Toast.makeText(getActivity(), "订单已接收", Toast.LENGTH_LONG).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("是否接单？\n一旦接单将无法取消");
+                        builder.setNegativeButton("取消", null);
+                        builder.setPositiveButton("接单", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
+                        builder.show();
+//                        Toast.makeText(getActivity(), "订单已接收", Toast.LENGTH_LONG).show();
                         break;
                 }
             }
         });
 
-        delayData.add(new DelayBean("123",1));
-        delayData.add(new DelayBean("销量",1));
-        delayData.add(new DelayBean("你哈",1));
-        delayData.add(new DelayBean("亚麻",1));
-        delayData.add(new DelayBean("司法",1));
-        delayData.add(new DelayBean("是个",1));
-        delayData.add(new DelayBean("极为",1));
+        delayData.add(new DelayBean("123", 1));
+        delayData.add(new DelayBean("销量", 1));
+        delayData.add(new DelayBean("你哈", 1));
+        delayData.add(new DelayBean("亚麻", 1));
+        delayData.add(new DelayBean("司法", 1));
+        delayData.add(new DelayBean("是个", 1));
+        delayData.add(new DelayBean("极为", 1));
         delayAdapter.notifyDataSetChanged();
+
+        //// TODO: 2017/3/7 RecyclerView添加头布局
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.header_recycler, null);
+        delayAdapter.addHeaderView(v);
     }
 
     @Override
