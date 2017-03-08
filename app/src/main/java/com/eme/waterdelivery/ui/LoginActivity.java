@@ -68,7 +68,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
     @Override
-    protected void initEventAndData() {
+    protected void initEventAndData(Bundle savedInstanceState) {
         //初始化并设置控件监听
         back.setVisibility(View.GONE);
         tvTitle.setText(getText(R.string.login));

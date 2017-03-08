@@ -8,7 +8,10 @@
     <color name="text_color_bar">#212121</color>//顶部字体颜色，加粗
     <color name="main_color_red">#E61717</color>//红主色
     <color name="main_color_blue">#3385ff</color>//蓝主色
-    <color name="color_useless">#B2B2B2</color> //失效的颜色 登陆按钮不能点击的灰色
+    <color name="text_color_gray_black">#646464</color>//字体灰黑之间
+    <color name="text_color_gray">#989898</color>//字体灰
+    <color name="text_color_gray02">#808080</color>//字体灰,商品详情页中有用
+    <color name="hint_text_gray">#4c4c4c</color>
 
     <!--分割线-->
     <color name="cline_low">#EBEBEB</color>//常用浅色分割线
@@ -16,9 +19,11 @@
     <color name="cline_bar">#E2E2E2</color>//标题栏分割线
 
     <!--背景色-->
-    <color name="activity_bg">#F9F9F9</color>//背景颜色
+    <color name="activity_bg">#F2F2F2</color>//背景颜色
     <color name="bg_gray">#E4E4E4</color> //按钮的灰色背景
     <color name="bg_gray2">#C8C8C8</color>
+    <color name="border_gray">#ACACAC</color> //按钮的边框色
+    <color name="color_useless">#B2B2B2</color> //失效的颜色 登陆按钮不能点击的灰色
 
 </resources>
 

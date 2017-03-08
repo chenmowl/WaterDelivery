@@ -1,4 +1,4 @@
-package com.eme.waterdelivery.ui;
+package com.eme.waterdelivery.tools;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
+    android:layout_height="@dimen/title_bar_height"
     android:background="@android:color/white">
 
     <LinearLayout
@@ -31,6 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/cline_bar" />
+        android:background="@color/cline_deep" />
 
 </RelativeLayout>

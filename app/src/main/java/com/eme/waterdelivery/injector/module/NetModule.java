@@ -1,7 +1,7 @@
 package com.eme.waterdelivery.injector.module;
 
 import com.eme.waterdelivery.App;
-import com.eme.waterdelivery.annotation.ZhihuQual;
+import com.eme.waterdelivery.injector.ZhihuQual;
 import com.eme.waterdelivery.model.net.ApiConstant;
 import com.eme.waterdelivery.model.net.api.ZhihuApi;
 import com.eme.waterdelivery.model.net.converter.FastJsonConverterFactory;

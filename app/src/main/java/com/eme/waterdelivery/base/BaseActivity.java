@@ -33,7 +33,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
         initInject();
         if (mPresenter != null)
             mPresenter.subscribe();
-        initEventAndData();
+        initEventAndData(savedInstanceState);
     }
 
     protected void setToolBar(Toolbar toolbar, String title) {
@@ -50,10 +50,7 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
     }
 
     protected ViewComponent getViewComponent() {
-        return DaggerViewComponent.builder()
-                .appComponent(App.getAppInstance().getAppComponent())
-                .viewModule(getViewModule())
-                .build();
+        return DaggerViewComponent.builder().appComponent(App.getAppInstance().getAppComponent()).viewModule(getViewModule()).build();
     }
 
     protected ViewModule getViewModule() {
@@ -90,5 +87,5 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
 
     protected abstract int getLayout();
 
-    protected abstract void initEventAndData();
+    protected abstract void initEventAndData(Bundle savedInstanceState);
 }

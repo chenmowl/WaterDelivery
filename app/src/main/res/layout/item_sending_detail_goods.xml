@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/activity_bg"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sdv_iodg_icon"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="10dp"
+        android:clickable="false"
+        android:src="@mipmap/ic_launcher"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/sdv_iodg_icon"
+        android:layout_alignTop="@id/sdv_iodg_icon"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@id/sdv_iodg_icon"
+        android:orientation="vertical"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp">
+
+        <TextView
+            android:id="@+id/tv_good_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="53度茅台飞天 名贵白酒正品"
+            android:textColor="@color/text_color_bar"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/specs_colon"
+            android:textColor="@color/hint_text_gray"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:id="@+id/tv_iodg_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="￥666.00"
+                android:textColor="@color/main_color_red"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_iodg_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="x12"
+                android:textColor="@color/text_color_gray"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/sdv_iodg_icon"
+        android:layout_marginTop="10dp"
+        android:background="@color/cline_low"
+
+        />
+
+
+</RelativeLayout>

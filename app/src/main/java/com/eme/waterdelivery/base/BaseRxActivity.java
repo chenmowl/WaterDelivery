@@ -10,7 +10,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.eme.waterdelivery.App;
 import com.eme.waterdelivery.R;
+import com.eme.waterdelivery.injector.component.DaggerViewComponent;
+import com.eme.waterdelivery.injector.component.ViewComponent;
+import com.eme.waterdelivery.injector.module.ViewModule;
 import com.lzy.imagepicker.view.SystemBarTintManager;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -24,7 +28,7 @@ import butterknife.Unbinder;
  *
  * Created by dijiaoliang on 17/3/2.
  */
-public abstract class BaseRxActivity<T extends BasePresenter> extends RxAppCompatActivity {
+public abstract class BaseRxActivity<T extends BasePresenter> extends RxAppCompatActivity implements BaseView {
 
     @Inject
     protected T mPresenter;
@@ -46,6 +50,14 @@ public abstract class BaseRxActivity<T extends BasePresenter> extends RxAppCompa
         if (mPresenter != null)
             mPresenter.unSubscribe();
         mUnBinder.unbind();
+    }
+
+    protected ViewComponent getViewComponent() {
+        return DaggerViewComponent.builder().appComponent(App.getAppInstance().getAppComponent()).viewModule(getViewModule()).build();
+    }
+
+    protected ViewModule getViewModule() {
+        return new ViewModule(this);
     }
 
     /** 子类可以重写改变状态栏颜色 */

@@ -1,8 +1,8 @@
 package com.eme.waterdelivery.injector.module;
 
 
-import com.eme.waterdelivery.annotation.ActivityScope;
 import com.eme.waterdelivery.base.BaseView;
+import com.eme.waterdelivery.injector.ActivityScope;
 
 import dagger.Module;
 import dagger.Provides;

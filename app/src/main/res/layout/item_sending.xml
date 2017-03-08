@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/activity_bg"
@@ -40,31 +39,17 @@
             android:elevation="2dp"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="@android:color/white"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="订单号: 243453345"
+                android:textColor="@color/text_color_bar"
+                android:textSize="12sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="订单号: 243453345"
-                    android:textColor="@color/text_color_bar"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:gravity="center_vertical"
-                    android:text="现金"
-                    android:textColor="@color/main_color_red"
-                    android:textSize="12sp" />
-
-            </RelativeLayout>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -78,12 +63,12 @@
                 android:orientation="horizontal"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:weightSum="3">
+                android:weightSum="5">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:gravity="center_vertical"
                     android:orientation="vertical"
                     android:paddingBottom="15dp"
@@ -112,7 +97,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="2">
 
                     <ImageView
                         android:layout_width="1dp"
@@ -136,18 +121,32 @@
                             android:id="@+id/tv_delivery_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/reach_time"
+                            android:text="立即送达"
                             android:textColor="@color/text_color_bar"
                             android:textSize="12sp" />
 
-                        <TextView
-                            android:id="@+id/tv_delivery_time"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp"
-                            android:text="15分钟"
-                            android:textColor="@color/main_color_red"
-                            android:textSize="12sp" />
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="已用时间"
+                                android:textColor="@color/text_color_bar"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/tv_delivery_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="4dp"
+                                android:text="15分钟"
+                                android:textColor="@color/main_color_red"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -178,19 +177,35 @@
                 android:textColor="@color/text_color_bar"
                 android:textSize="12sp" />
 
-            <com.eme.waterdelivery.widget.FixedListButton
-                android:id="@+id/btn_receiving"
-                style="?android:attr/borderlessButtonStyle"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/btn_gray"
-                android:text="扫码接单"
-                android:textColor="@color/text_color_bar"
-                android:textSize="12sp" />
+                android:layout_height="40dp"
+                android:background="@android:color/white"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="水票: 1张"
+                    android:textColor="@color/main_color_red"
+                    android:textSize="12sp" />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/btn_call"
+                    android:layout_width="60dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/btn_gray_border"
+                    android:text="@string/call"
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
 
         </LinearLayout>
 

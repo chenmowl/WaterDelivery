@@ -25,6 +25,20 @@
     <string name="product">产品:</string>
     <string name="reach_time">送达时间</string>
 
+    <!--sending-->
+    <string name="call">电话</string>
+    <string name="place_time">下单时间</string>
+    <string name="pay_mode">付款方式</string>
+    <string name="used_time">已用时间</string>
+    <string name="service">客服:</string>
+    <string name="customer">客户:</string>
+    <string name="good_info">商品信息</string>
+    <string name="order_detail_open_surplus">展开剩余商品</string>
+    <string name="order_detail_sign">收款签收</string>
+    <string name="specs_colon">规格</string>
+    <string name="order_detail_title_close_surplus">隐藏商品</string>
+    <string name="order_detail_title_open_surplus">展开剩余商品</string>
+
 
 
 </resources>

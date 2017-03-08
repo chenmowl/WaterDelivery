@@ -1,14 +1,14 @@
-package com.eme.waterdelivery.annotation;
+package com.eme.waterdelivery.injector;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import javax.inject.Scope;
+import javax.inject.Qualifier;
 
 /**
  * Created by dijiaoliang on 17/3/2.
  */
-@Scope
+@Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ActivityScope {
+public @interface ZhihuQual {
 }

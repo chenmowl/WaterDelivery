@@ -25,6 +25,7 @@ import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.tools.Util;
 import com.eme.waterdelivery.ui.adapter.HomeFragmentAdapter;
 import com.eme.waterdelivery.ui.fragment.DelayFragment;
+import com.eme.waterdelivery.ui.fragment.SendingFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +68,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     }
 
     @Override
-    protected void initEventAndData() {
+    protected void initEventAndData(Bundle savedInstanceState) {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setToolBar(mToolbar, "");
 
@@ -100,7 +101,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         headerLayout.findViewById(R.id.ll_quit).setOnClickListener(this);
 
         fragments.add(new DelayFragment());
-        fragments.add(new DelayFragment());
+        fragments.add(new SendingFragment());
         homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
         vpMain.setAdapter(homeFragmentAdapter);
         //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
@@ -116,6 +117,9 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         ButterKnife.bind(this);
     }
 
+    /**
+     * SupportActivity 提供的方法支持 onBackPressed()
+     */
     @Override
     public void onBackPressedSupport() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -131,11 +135,15 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-
-            if (System.currentTimeMillis() - mExitTime > 3000) {
-                ToastUtil.shortToast(this, "再按一次退出程序");
-                mExitTime = System.currentTimeMillis();
-                return true;
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                if (System.currentTimeMillis() - mExitTime > 3000) {
+                    ToastUtil.shortToast(this, "再按一次退出程序");
+                    mExitTime = System.currentTimeMillis();
+                    return true;
+                }
             }
         }
         return super.dispatchKeyEvent(event);
