@@ -181,15 +181,15 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     /**
      * SupportActivity 提供的方法支持 onBackPressed()
      */
-    @Override
-    public void onBackPressedSupport() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+//    @Override
+//    public void onBackPressedSupport() {
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
 
     private long mExitTime = 0;
 

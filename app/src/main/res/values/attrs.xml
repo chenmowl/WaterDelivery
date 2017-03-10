@@ -34,4 +34,5 @@
 		</attr>
 		<attr name="clickToClose" format="boolean" />
 	</declare-styleable>
+
 </resources>

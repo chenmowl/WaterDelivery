@@ -47,5 +47,41 @@
     <!--我的申请-->
     <string name="add_procurement">添加采购项</string>
     <string name="commit_apply">提交申请</string>
+    <string name="remark">备注说明</string>
+    <string name="add_apply">添加采购项</string>
+    <string name="product_type">产品品类</string>
+    <string name="product_name">产品名称</string>
+    <string name="product_size">产品规格</string>
+    <string name="choice_type">请选择品类</string>
+    <string name="choice_name">请选择名称</string>
+    <string name="choice_size">请选择规格</string>
+    <string name="apply_count">采购数量</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
+
+
+    <array name="product_types">
+        <item>格里</item>
+        <item>美的</item>
+        <item>西门子</item>
+        <item>飞利浦</item>
+        <item>海尔</item>
+    </array>
+
+    <array name="product_names">
+        <item>c语言</item>
+        <item>java </item>
+        <item>php</item>
+        <item>xml</item>
+        <item>html</item>
+    </array>
+
+    <array name="product_sizes">
+        <item>1.0T</item>
+        <item>1.5T</item>
+        <item>3.0T</item>
+        <item>4.5T</item>
+        <item>10.0T</item>
+    </array>
 
 </resources>

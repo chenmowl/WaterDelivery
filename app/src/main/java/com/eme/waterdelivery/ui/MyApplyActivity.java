@@ -12,6 +12,7 @@ import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.MyApplyContract;
 import com.eme.waterdelivery.presenter.MyApplyPresenter;
 import com.eme.waterdelivery.ui.adapter.HomeFragmentAdapter;
+import com.eme.waterdelivery.ui.fragment.ApplyFragment;
 import com.eme.waterdelivery.ui.fragment.CurrentDayFragment;
 import com.jakewharton.rxbinding.view.RxView;
 
@@ -58,7 +59,7 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
 
     @Override
     protected void initEventAndData(Bundle savedInstanceState) {
-        fragments.add(new CurrentDayFragment());
+        fragments.add(new ApplyFragment());
         fragments.add(new CurrentDayFragment());
         homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
         vpMain.setAdapter(homeFragmentAdapter);

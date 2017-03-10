@@ -50,6 +50,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MyApplyActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden"
             android:screenOrientation="portrait" />
 
         <meta-data
