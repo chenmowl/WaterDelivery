@@ -5,25 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/activity_bg"
-        app:popupTheme="@style/AppTheme.PopupOverlay"
-        app:theme="@style/toolBar">
-
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:singleLine="true"
-            android:text="配送单"
-            android:textColor="@color/text_color_bar"
-            android:textSize="20sp" />
-
-    </android.support.v7.widget.Toolbar>
+    <include layout="@layout/tb_normal"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_main"

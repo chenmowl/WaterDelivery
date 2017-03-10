@@ -20,7 +20,7 @@ import com.eme.waterdelivery.base.BaseFragment;
 import com.eme.waterdelivery.contract.SendingContract;
 import com.eme.waterdelivery.model.bean.DelayBean;
 import com.eme.waterdelivery.presenter.SendingPresenter;
-import com.eme.waterdelivery.ui.TestRecyclerVewActivity;
+import com.eme.waterdelivery.ui.SendingDetailActivity;
 import com.eme.waterdelivery.ui.adapter.SendingAdapter;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class SendingFragment extends BaseFragment<SendingPresenter> implements S
             @Override
             public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
 //                Toast.makeText(getActivity(), Integer.toString(position), Toast.LENGTH_LONG).show();
-                startActivity(new Intent(getActivity(), TestRecyclerVewActivity.class));
+                startActivity(new Intent(getActivity(), SendingDetailActivity.class));
             }
 
             @Override
@@ -96,8 +96,8 @@ public class SendingFragment extends BaseFragment<SendingPresenter> implements S
         sendingAdapter.notifyDataSetChanged();
 
         //// TODO: 2017/3/7 RecyclerView添加头布局
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.header_recycler, null);
-        sendingAdapter.addHeaderView(v);
+//        View v = LayoutInflater.from(getActivity()).inflate(R.layout.header_recycler, null);
+//        sendingAdapter.addHeaderView(v);
     }
 
     @Override

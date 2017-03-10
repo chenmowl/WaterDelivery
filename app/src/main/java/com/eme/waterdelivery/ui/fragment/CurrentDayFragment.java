@@ -1,27 +1,26 @@
 package com.eme.waterdelivery.ui.fragment;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseFragment;
-import com.eme.waterdelivery.contract.DelayContract;
+import com.eme.waterdelivery.contract.CurrentDayContract;
 import com.eme.waterdelivery.model.bean.DelayBean;
-import com.eme.waterdelivery.presenter.DelayPresenter;
-import com.eme.waterdelivery.ui.adapter.DelayAdapter;
+import com.eme.waterdelivery.presenter.CurrentDayPresenter;
+import com.eme.waterdelivery.ui.CompleteDetailActivity;
+import com.eme.waterdelivery.ui.adapter.CurrentDayAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +29,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ * 当日接单
+ *
  * Created by dijiaoliang on 17/3/7.
  */
-public class DelayFragment extends BaseFragment<DelayPresenter> implements DelayContract.View, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class CurrentDayFragment extends BaseFragment<CurrentDayPresenter> implements CurrentDayContract.View, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
 
     @BindView(R.id.rv_content)
@@ -42,7 +43,7 @@ public class DelayFragment extends BaseFragment<DelayPresenter> implements Delay
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
 
-    private DelayAdapter delayAdapter;
+    private CurrentDayAdapter currentDayAdapter;
     private List<DelayBean> delayData;
 
     @Override
@@ -61,34 +62,21 @@ public class DelayFragment extends BaseFragment<DelayPresenter> implements Delay
         swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
         rvContent.setLayoutManager(new LinearLayoutManager(getActivity()));
         delayData = new ArrayList<>();
-        delayAdapter = new DelayAdapter(delayData);
-        delayAdapter.setOnLoadMoreListener(this);
-//        delayAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
-        rvContent.setAdapter(delayAdapter);
+        currentDayAdapter = new CurrentDayAdapter(delayData);
+        currentDayAdapter.setOnLoadMoreListener(this);
+//        currentDayAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+        rvContent.setAdapter(currentDayAdapter);
         rvContent.addOnItemTouchListener(new OnItemClickListener() {
 
             @Override
             public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
-                Toast.makeText(getActivity(), Integer.toString(position), Toast.LENGTH_LONG).show();
+//                Toast.makeText(getActivity(), Integer.toString(position), Toast.LENGTH_LONG).show();
+                startActivity(new Intent(getActivity(), CompleteDetailActivity.class));
             }
 
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 super.onItemChildClick(adapter, view, position);
-                switch (view.getId()) {
-                    case R.id.btn_receiving:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setMessage("是否接单？\n一旦接单将无法取消");
-                        builder.setNegativeButton("取消", null);
-                        builder.setPositiveButton("接单", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                            }
-                        });
-                        builder.show();
-//                        Toast.makeText(getActivity(), "订单已接收", Toast.LENGTH_LONG).show();
-                        break;
-                }
             }
         });
 
@@ -99,11 +87,11 @@ public class DelayFragment extends BaseFragment<DelayPresenter> implements Delay
         delayData.add(new DelayBean("司法", 1));
         delayData.add(new DelayBean("是个", 1));
         delayData.add(new DelayBean("极为", 1));
-        delayAdapter.notifyDataSetChanged();
+        currentDayAdapter.notifyDataSetChanged();
 
         //// TODO: 2017/3/7 RecyclerView添加头布局
-//        View v = LayoutInflater.from(getActivity()).inflate(R.layout.header_recycler, null);
-//        delayAdapter.addHeaderView(v);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.header_recycler, null);
+        currentDayAdapter.addHeaderView(v);
     }
 
     @Override
@@ -116,12 +104,12 @@ public class DelayFragment extends BaseFragment<DelayPresenter> implements Delay
 
     @Override
     public void onRefresh() {
-        delayAdapter.setEnableLoadMore(false);
+        currentDayAdapter.setEnableLoadMore(false);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 swipeRefresh.setRefreshing(false);
-                delayAdapter.setEnableLoadMore(true);
+                currentDayAdapter.setEnableLoadMore(true);
             }
         }, 1000);
     }
@@ -135,12 +123,12 @@ public class DelayFragment extends BaseFragment<DelayPresenter> implements Delay
             @Override
             public void run() {
                 if (count % 3 == 0) {
-//                    delayAdapter.loadMoreEnd(true);
-                    delayAdapter.loadMoreComplete();
+//                    currentDayAdapter.loadMoreEnd(true);
+                    currentDayAdapter.loadMoreComplete();
                 } else if (count % 3 == 1) {
-                    delayAdapter.loadMoreComplete();
+                    currentDayAdapter.loadMoreComplete();
                 } else {
-                    delayAdapter.loadMoreFail();
+                    currentDayAdapter.loadMoreFail();
                 }
                 swipeRefresh.setEnabled(true);
                 count++;

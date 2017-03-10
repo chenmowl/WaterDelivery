@@ -1,6 +1,7 @@
 package com.eme.waterdelivery.ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,18 +27,22 @@ import com.eme.waterdelivery.tools.Util;
 import com.eme.waterdelivery.ui.adapter.HomeFragmentAdapter;
 import com.eme.waterdelivery.ui.fragment.DelayFragment;
 import com.eme.waterdelivery.ui.fragment.SendingFragment;
+import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by dijiaoliang on 17/3/7.
  */
 
-public class HomeActivity extends BaseActivity<HomePresenter> implements HomeContract.View, View.OnClickListener {
+public class HomeActivity extends BaseActivity<HomePresenter> implements HomeContract.View {
 
 
     @BindView(R.id.nav_view)
@@ -87,7 +92,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
             navigationView.setBackgroundColor(Color.WHITE);
             headerLayout.setPadding(0, Util.getStatusBarHeight(), 0, 0);
         }
-
         /**
          * 去除滚动条
          */
@@ -97,8 +101,8 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
                 contentView.setVerticalScrollBarEnabled(false);
             }
         }
-        //这里设置点击事件
-        headerLayout.findViewById(R.id.ll_quit).setOnClickListener(this);
+        //设置NavigationView子控件的点击事件
+        initNavClickListener(headerLayout);
 
         fragments.add(new DelayFragment());
         fragments.add(new SendingFragment());
@@ -108,6 +112,63 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         tabMain.setupWithViewPager(vpMain, true);
         tabMain.getTabAt(0).setText(tabTitle[0]);
         tabMain.getTabAt(1).setText(tabTitle[1]);
+    }
+
+    /**
+     * 侧边栏监听事件
+     *
+     * @param headerLayout
+     */
+    private void initNavClickListener(View headerLayout) {
+        //这里设置点击事件
+//        headerLayout.findViewById(R.id.ll_quit).setOnClickListener(this);
+        RxView.clicks(headerLayout.findViewById(R.id.ll_quit))
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        alertQuitDialog();
+                    }
+                });
+        RxView.clicks(headerLayout.findViewById(R.id.rl_day_order))
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Intent intent = new Intent(HomeActivity.this, CompleteActivity.class);
+                        intent.putExtra(CompleteActivity.TAB, CompleteActivity.TAB_0);
+                        startActivity(intent);
+                    }
+                });
+        RxView.clicks(headerLayout.findViewById(R.id.rl_apply))
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        Intent intent = new Intent(HomeActivity.this, MyApplyActivity.class);
+                        intent.putExtra(CompleteActivity.TAB, CompleteActivity.TAB_0);
+                        startActivity(intent);
+                    }
+                });
+    }
+
+    /**
+     * 退出框
+     */
+    private void alertQuitDialog() {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setTitle("退出当前应用");
+        builder.setMessage("确定退出GeekNews吗");
+        builder.setNegativeButton("取消", null);
+        builder.setPositiveButton("退出", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        builder.show();
     }
 
     @Override
@@ -149,21 +210,4 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         return super.dispatchKeyEvent(event);
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ll_quit:
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-                builder.setTitle("退出当前应用");
-                builder.setMessage("确定退出GeekNews吗");
-                builder.setNegativeButton("取消", null);
-                builder.setPositiveButton("退出", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-                builder.show();
-                break;
-        }
-    }
 }

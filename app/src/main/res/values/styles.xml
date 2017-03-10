@@ -44,4 +44,9 @@
         <item name="indicatorName">BallPulseIndicator</item>
     </style>
 
+    <!--可以在样式中设置TabLayout的字体大小-->
+    <style name="TabLayoutTextStyle">
+        <item name="android:textSize">@dimen/tab_text_size</item>
+    </style>
+
 </resources>

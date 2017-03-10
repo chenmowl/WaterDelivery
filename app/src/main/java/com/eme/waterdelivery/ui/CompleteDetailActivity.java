@@ -1,6 +1,5 @@
 package com.eme.waterdelivery.ui;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,8 +21,8 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
-import com.eme.waterdelivery.contract.SendingDetailContract;
-import com.eme.waterdelivery.presenter.SendingDetailPresenter;
+import com.eme.waterdelivery.contract.CompleteDetailContract;
+import com.eme.waterdelivery.presenter.CompleteDetailPresenter;
 import com.eme.waterdelivery.ui.adapter.SendingGoodAdapter;
 import com.eme.waterdelivery.widget.FullyLinearLayoutManager;
 import com.eme.waterdelivery.widget.MapContainer;
@@ -43,7 +42,7 @@ import rx.functions.Action1;
  * <p>
  * Created by dijiaoliang on 17/3/8.
  */
-public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> implements SendingDetailContract.View {
+public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter> implements CompleteDetailContract.View {
 
     @BindView(R.id.back)
     LinearLayout back;
@@ -108,6 +107,8 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
 
     @Override
     protected void initEventAndData(Bundle savedInstanceState) {
+        btnSign.setVisibility(View.GONE);
+
         map.onCreate(savedInstanceState);
         //初始化地图控制器对象
         if (aMap == null) {
@@ -162,33 +163,6 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
                         checkShowAll();
                     }
                 });
-        RxView.clicks(btnSign)
-                .throttleFirst(1, TimeUnit.SECONDS)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Void>() {
-                    @Override
-                    public void call(Void aVoid) {
-                        alertConfirm();
-                    }
-                });
-
-    }
-
-    /**
-     * 确定收款签收弹出框
-     */
-    public void alertConfirm(){
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-        builder.setTitle("确定收款／水票");
-        builder.setMessage("金额: 186.8元 水票: 3张");
-        builder.setNegativeButton("取消", null);
-        builder.setPositiveButton("退出", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-        builder.show();
     }
 
     /**

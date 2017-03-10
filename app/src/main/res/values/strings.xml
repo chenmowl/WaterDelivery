@@ -18,6 +18,7 @@
     <string name="num_order_today">今日接单</string>
     <string name="num_month_today">月接单</string>
     <string name="num_month_invalid_record">月无效接单</string>
+    <string name="my_apply">我的申请</string>
     <string name="num_total_record">总接单量</string>
     <string name="water_station">水站:</string>
     <string name="navigation_drawer_open">侧开</string>
@@ -40,5 +41,11 @@
     <string name="order_detail_title_open_surplus">展开剩余商品</string>
 
 
+    <!--已完成-->
+    <string name="complete">已完成</string>
+
+    <!--我的申请-->
+    <string name="add_procurement">添加采购项</string>
+    <string name="commit_apply">提交申请</string>
 
 </resources>

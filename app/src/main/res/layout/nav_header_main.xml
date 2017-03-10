@@ -10,46 +10,13 @@
         android:layout_height="wrap_content"
         android:background="@color/bg_gray">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/profile_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:src="@mipmap/ic_launcher"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="2dp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="30dp"
-            android:layout_toRightOf="@+id/profile_image"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="小哥" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="工号:1001" />
-
-        </LinearLayout>
-
         <LinearLayout
             android:id="@+id/ll_quit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@android:color/transparent"
-            android:orientation="vertical"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp">
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/btn_left_draw_quit"
@@ -58,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="false"
                 android:gravity="center"
+                android:padding="0dp"
                 android:text="@string/quit"
                 android:textColor="@color/text_color_bar"
                 android:textSize="14sp" />
@@ -65,10 +33,53 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:orientation="horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:src="@mipmap/flower"
+                app:civ_border_color="@color/text_color_gray"
+                app:civ_border_width="2dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="30dp"
+                android:layout_toRightOf="@+id/profile_image"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="小哥"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="工号:1001"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/ll_money"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_image"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/ll_head"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
@@ -83,16 +94,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="15dp"
                     android:text="@string/main_money"
-                    android:textColor="@color/text_color_bar" />
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="500.2元"
-                    android:textColor="@color/main_color_red" />
+                    android:textColor="@color/main_color_red"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -107,14 +120,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="@string/water_coupon"
-                    android:textColor="@color/text_color_bar" />
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:text="50张"
-                    android:textColor="@color/main_color_red" />
+                    android:textColor="@color/main_color_red"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -125,7 +140,6 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_below="@+id/ll_money"
-            android:layout_marginTop="15dp"
             android:background="@color/cline_deep" />
 
         <RelativeLayout
@@ -166,6 +180,30 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/rl_apply"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/my_apply"
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/cline_deep" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_day_order"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:paddingLeft="15dp"
@@ -187,7 +225,7 @@
                     android:gravity="center_vertical"
                     android:text="15"
                     android:textColor="@color/main_color_red"
-                    android:textSize="14sp" />
+                    android:textSize="13sp" />
 
                 <View
                     android:layout_width="match_parent"
@@ -198,6 +236,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_month_order"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:paddingLeft="15dp"
@@ -219,7 +258,7 @@
                     android:gravity="center_vertical"
                     android:text="15"
                     android:textColor="@color/main_color_red"
-                    android:textSize="14sp" />
+                    android:textSize="13sp" />
 
                 <View
                     android:layout_width="match_parent"
@@ -230,38 +269,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="@string/num_month_invalid_record"
-                    android:textColor="@color/text_color_bar"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_month_invalid_record"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:gravity="center_vertical"
-                    android:text="15"
-                    android:textColor="@color/main_color_red"
-                    android:textSize="14sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/cline_deep" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
+                android:id="@+id/rl_total_order"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:paddingLeft="15dp"
@@ -283,7 +291,7 @@
                     android:gravity="center_vertical"
                     android:text="15"
                     android:textColor="@color/main_color_red"
-                    android:textSize="14sp" />
+                    android:textSize="13sp" />
 
                 <View
                     android:layout_width="match_parent"
@@ -301,6 +309,7 @@
                 android:paddingRight="15dp">
 
                 <TextView
+                    android:id="@+id/tv_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -312,7 +321,8 @@
                     android:id="@+id/tv_station_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/tv_phone"
                     android:gravity="center_vertical"
                     android:text="400-2432-13"
                     android:textColor="@color/main_color_blue"
