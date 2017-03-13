@@ -47,7 +47,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/rl_bottom"
-        android:layout_below="@id/include_tb" />
+        android:layout_below="@id/include_tb"
+        android:background="@color/activity_bg"
+        android:scrollbars="vertical" />
 
     <include layout="@layout/net_loading" />
 

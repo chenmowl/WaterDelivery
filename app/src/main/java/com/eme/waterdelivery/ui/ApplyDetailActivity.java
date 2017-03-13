@@ -71,7 +71,7 @@ public class ApplyDetailActivity extends BaseActivity<ApplyDetailPresenter> impl
         rvApplyRecord.setLayoutManager(manager);
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         rvApplyRecord.setHasFixedSize(true);
-//        rvApplyRecord.addItemDecoration(new SpacesItemDecoration(4));
+//        rvApplyRecord.addItemDecoration(new SpacesItemDecoration(10));
         rvApplyRecord.setAdapter(adapter);
         headerView = LayoutInflater.from(this).inflate(R.layout.header_apply_detail, null, false);
         footerView = LayoutInflater.from(this).inflate(R.layout.footer_apply_detail, null, false);

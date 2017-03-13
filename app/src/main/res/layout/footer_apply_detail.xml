@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:background="@color/activity_bg"
-    android:lineSpacingExtra="4dp"
-    android:padding="10dp"
-    android:text="备注说明: \n 请尽量帮我在上午5点前送达,谢谢～"
-    android:textColor="@color/text_color_bar"
-    android:textSize="12sp" />
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:lineSpacingExtra="4dp"
+        android:padding="10dp"
+        android:text="备注说明: \n 请尽量帮我在上午5点前送达,谢谢～"
+        android:textColor="@color/text_color_bar"
+        android:textSize="12sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:background="@android:color/white"
+        />
+
+</LinearLayout>
+
