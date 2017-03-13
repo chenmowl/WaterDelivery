@@ -58,6 +58,8 @@
     <string name="apply_count">采购数量</string>
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>
+    <string name="apply_list">申请清单</string>
+    <string name="order_tempo">订单进度</string>
 
 
     <array name="product_types">

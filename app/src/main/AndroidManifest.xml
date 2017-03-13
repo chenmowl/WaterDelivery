@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
-    
+
 
     //地图包、搜索包需要的基础权限
     <!--允许程序打开网络套接字-->
@@ -50,7 +50,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MyApplyActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".ui.ApplyDetailActivity"
             android:screenOrientation="portrait" />
 
         <meta-data

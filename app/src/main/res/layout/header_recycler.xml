@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_one"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -16,6 +17,7 @@
         android:textSize="12sp" />
 
     <TextView
+        android:id="@+id/tv_two"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -25,6 +27,7 @@
         android:textSize="12sp" />
 
     <TextView
+        android:id="@+id/tv_three"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"

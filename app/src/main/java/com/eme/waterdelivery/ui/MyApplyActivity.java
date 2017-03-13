@@ -13,7 +13,7 @@ import com.eme.waterdelivery.contract.MyApplyContract;
 import com.eme.waterdelivery.presenter.MyApplyPresenter;
 import com.eme.waterdelivery.ui.adapter.HomeFragmentAdapter;
 import com.eme.waterdelivery.ui.fragment.ApplyFragment;
-import com.eme.waterdelivery.ui.fragment.CurrentDayFragment;
+import com.eme.waterdelivery.ui.fragment.ApplyRecordFragment;
 import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
     @Override
     protected void initEventAndData(Bundle savedInstanceState) {
         fragments.add(new ApplyFragment());
-        fragments.add(new CurrentDayFragment());
+        fragments.add(new ApplyRecordFragment());
         homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
         vpMain.setAdapter(homeFragmentAdapter);
         //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序

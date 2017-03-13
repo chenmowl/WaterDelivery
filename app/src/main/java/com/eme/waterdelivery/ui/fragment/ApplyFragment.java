@@ -32,6 +32,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 /**
+ * 申请采购 Fragment
+ *
  * Created by dijiaoliang on 17/3/9.
  */
 public class ApplyFragment extends BaseFragment<ApplyPresenter> implements ApplyContract.View, View.OnClickListener {
