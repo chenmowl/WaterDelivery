@@ -6,6 +6,8 @@ import com.eme.waterdelivery.injector.component.AppComponent;
 import com.eme.waterdelivery.injector.component.DaggerAppComponent;
 import com.eme.waterdelivery.injector.module.AppModule;
 import com.eme.waterdelivery.injector.module.NetModule;
+import com.eme.waterdelivery.model.sp.SPBase;
+import com.eme.waterdelivery.model.sp.SpConstant;
 
 import me.yokeyword.fragmentation.Fragmentation;
 
@@ -27,6 +29,9 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         app = this;
+//        初始化cookiesig cookieuid
+        SPBase.setContent(this, SpConstant.HEAD_FILE_NAME,SpConstant.HEAD_COOKIE_UID,"admin");
+        SPBase.setContent(this, SpConstant.HEAD_FILE_NAME,SpConstant.HEAD_COOKIE_SIG,"123");
         appComponent= DaggerAppComponent.builder().appModule(new AppModule()).netModule(new NetModule()).build();
         Fragmentation.builder().stackViewMode(Fragmentation.BUBBLE).debug(true).install();
     }

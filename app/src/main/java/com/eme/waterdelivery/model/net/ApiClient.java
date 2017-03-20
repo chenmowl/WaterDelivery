@@ -22,7 +22,7 @@ public class ApiClient {
             synchronized (ApiClient.class){
                 if(retrofit==null){
                     OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-                    if (ApiConstant.DEBUG) {
+                    if (ApiConfig.DEBUG) {
                         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
                         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
                         builder.addInterceptor(httpLoggingInterceptor).addNetworkInterceptor(new StethoInterceptor());
@@ -30,7 +30,7 @@ public class ApiClient {
                     OkHttpClient client = builder.build();
 
                     retrofit = new Retrofit.Builder()
-                            .baseUrl(ApiConstant.API_HOST)
+                            .baseUrl(ApiConfig.API_HOST)
                             .addConverterFactory(FastJsonConverterFactory.create())
                             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                             .client(client)

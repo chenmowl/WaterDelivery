@@ -3,6 +3,7 @@ package com.eme.waterdelivery.injector.module;
 
 import com.eme.waterdelivery.App;
 import com.eme.waterdelivery.model.net.RetrofitHelper;
+import com.eme.waterdelivery.model.net.api.WaterApi;
 import com.eme.waterdelivery.model.net.api.ZhihuApi;
 
 import javax.inject.Singleton;
@@ -24,7 +25,7 @@ public class AppModule {
 
     @Singleton
     @Provides
-    RetrofitHelper provideRetrofitHelper(ZhihuApi zhihuApi) {
-        return new RetrofitHelper(zhihuApi);
+    RetrofitHelper provideRetrofitHelper(ZhihuApi zhihuApi, WaterApi waterApi) {
+        return new RetrofitHelper(zhihuApi,waterApi);
     }
 }

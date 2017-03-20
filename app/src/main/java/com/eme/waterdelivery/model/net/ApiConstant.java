@@ -1,28 +1,11 @@
 package com.eme.waterdelivery.model.net;
 
-
-import com.eme.waterdelivery.App;
-
-import java.io.File;
-
 /**
- * net
- *
- * Created by dijiaoliang on 17/3/2.
+ * Created by dijiaoliang on 17/3/20.
  */
-public final class ApiConstant {
 
-    //主机名
-    public static final String API_HOST="http://news-at.zhihu.com";//知乎
+public class ApiConstant {
 
-    //端口
-    public static final String PORT="";
-
-    //正式发布时要做修改
-    public static final boolean DEBUG = Boolean.parseBoolean("true");
-
-    public static final String PATH_DATA = App.getAppInstance().getCacheDir().getAbsolutePath() + File.separator + "data";
-
-    public static final String PATH_CACHE = PATH_DATA + "/NetCache";
-
+    //数据请求成功同时业务逻辑正常
+    public static final String CODE_COMPLETE="10000";
 }

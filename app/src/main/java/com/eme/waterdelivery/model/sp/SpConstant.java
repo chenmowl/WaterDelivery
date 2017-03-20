@@ -19,11 +19,11 @@ public class SpConstant {
      */
     public static final String HEAD_FILE_NAME="headerInfo";
 
+    public static final String HEAD_COOKIE_UID = "cookieUid";
+    public static final String HEAD_COOKIE_SIG = "cookieSig";
     public static final String HEAD_VERSION_KEY = "version";
-    public static final String HEAD_USER_ID_KEY = "cookie_uid";
     public static final String HEAD_Message_ID_KEY = "messageid";
     public static final String HEAD_DEVICE_ID_KEY = "deviceid";
-    public static final String HEAD_COOKIE_SIG = "cookie_sig";
     public static final String HEAD_SYSTEM = "system";
 
     /**

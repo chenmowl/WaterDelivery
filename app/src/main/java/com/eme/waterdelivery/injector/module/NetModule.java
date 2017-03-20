@@ -1,10 +1,14 @@
 package com.eme.waterdelivery.injector.module;
 
 import com.eme.waterdelivery.App;
+import com.eme.waterdelivery.injector.WaterQual;
 import com.eme.waterdelivery.injector.ZhihuQual;
-import com.eme.waterdelivery.model.net.ApiConstant;
+import com.eme.waterdelivery.model.net.ApiConfig;
+import com.eme.waterdelivery.model.net.api.WaterApi;
 import com.eme.waterdelivery.model.net.api.ZhihuApi;
 import com.eme.waterdelivery.model.net.converter.FastJsonConverterFactory;
+import com.eme.waterdelivery.model.sp.SPBase;
+import com.eme.waterdelivery.model.sp.SpConstant;
 import com.eme.waterdelivery.tools.NetworkUtils;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
@@ -48,19 +52,26 @@ public class NetModule {
     @Singleton
     @Provides
     Retrofit provideZhihuRetrofit(Retrofit.Builder builder,OkHttpClient client){
-        return createRetrofit(builder,client, ApiConstant.API_HOST);
+        return createRetrofit(builder,client, ApiConfig.API_HOST);
+    }
+
+    @WaterQual
+    @Singleton
+    @Provides
+    Retrofit provideWaterRetrofit(Retrofit.Builder builder,OkHttpClient client){
+        return createRetrofit(builder,client, ApiConfig.WATER_HOST);
     }
 
     @Singleton
     @Provides
     OkHttpClient provideOkhttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
-        if (ApiConstant.DEBUG) {
+        if (ApiConfig.DEBUG) {
             HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(httpLoggingInterceptor).addNetworkInterceptor(new StethoInterceptor());
         }
-        File cacheFile = new File(ApiConstant.PATH_CACHE);
+        File cacheFile = new File(ApiConfig.PATH_CACHE);
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 50);
         Interceptor cacheInterceptor = new Interceptor() {
             @Override
@@ -90,18 +101,19 @@ public class NetModule {
                 return response;
             }
         };
-        //        Interceptor apikey = new Interceptor() {
-//            @Override
-//            public Response intercept(Chain chain) throws IOException {
-//                Request request = chain.request();
-//                request = request.newBuilder()
-//                        .addHeader("apikey",Constants.KEY_API)
-//                        .build();
-//                return chain.proceed(request);
-//            }
-//        }
+        Interceptor apikey = new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request request = chain.request();
+                request = request.newBuilder()
+                        .addHeader(SpConstant.HEAD_COOKIE_UID, SPBase.getContent(App.getAppInstance(),SpConstant.HEAD_FILE_NAME,SpConstant.HEAD_COOKIE_UID))
+                        .addHeader(SpConstant.HEAD_COOKIE_SIG,SPBase.getContent(App.getAppInstance(),SpConstant.HEAD_FILE_NAME,SpConstant.HEAD_COOKIE_SIG))
+                        .build();
+                return chain.proceed(request);
+            }
+        };
 //        设置统一的请求头部参数
-//        builder.addInterceptor(apikey);
+        builder.addInterceptor(apikey);
         //设置缓存
         builder.addNetworkInterceptor(cacheInterceptor);
         builder.addInterceptor(cacheInterceptor);
@@ -134,6 +146,12 @@ public class NetModule {
     @Provides
     ZhihuApi provideZhihuService(@ZhihuQual Retrofit retrofit){
         return retrofit.create(ZhihuApi.class);
+    }
+
+    @Singleton
+    @Provides
+    WaterApi provideWaterService(@WaterQual Retrofit retrofit){
+        return retrofit.create(WaterApi.class);
     }
 
 

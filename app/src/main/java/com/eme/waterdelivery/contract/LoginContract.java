@@ -17,6 +17,8 @@ public interface LoginContract {
 
         void toHome();
 
+        void showRequestError(String info);
+
     }
 
     interface Presenter extends BasePresenter {

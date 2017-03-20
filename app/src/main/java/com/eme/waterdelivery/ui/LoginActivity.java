@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.LoginContract;
@@ -117,6 +118,17 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void toHome() {
         startActivity(new Intent(this,HomeActivity.class));
+    }
+
+    @Override
+    public void showRequestError(String info) {
+        if(!TextUtils.isEmpty(info)){
+            ToastUtil.shortToast(this,info);
+            etLoginPassword.setText(Constant.STR_EMPTY);
+        }else{
+            ToastUtil.shortToast(this,getText(R.string.error_request).toString());
+            etLoginPassword.setText(Constant.STR_EMPTY);
+        }
     }
 
     @OnTextChanged({R.id.et_login_username,R.id.et_login_password})

@@ -155,6 +155,12 @@
 
             </LinearLayout>
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/cline_low" />
+
             <TextView
                 android:id="@+id/tv_receiver"
                 android:layout_width="match_parent"
@@ -182,13 +188,13 @@
                 android:id="@+id/btn_receiving"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/btn_gray"
-                android:text="扫码接单"
+                android:text="接单"
                 android:textColor="@color/text_color_bar"
                 android:textSize="12sp" />
 
