@@ -14,7 +14,7 @@ import com.eme.waterdelivery.presenter.MyApplyPresenter;
 import com.eme.waterdelivery.ui.adapter.HomeFragmentAdapter;
 import com.eme.waterdelivery.ui.fragment.ApplyFragment;
 import com.eme.waterdelivery.ui.fragment.ApplyRecordFragment;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 /**
  * 我的申请页面
@@ -76,9 +76,9 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
         RxView.clicks(back)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Void>() {
+                .subscribe(new Consumer<Object>() {
                     @Override
-                    public void call(Void aVoid) {
+                    public void accept(Object o) throws Exception {
                         MyApplyActivity.this.finish();
                     }
                 });

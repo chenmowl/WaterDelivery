@@ -3,24 +3,27 @@ package com.eme.waterdelivery.ui.fragment;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseFragment;
-import com.eme.waterdelivery.contract.DelayContract;
-import com.eme.waterdelivery.model.bean.DelayBean;
-import com.eme.waterdelivery.presenter.DelayPresenter;
+import com.eme.waterdelivery.contract.DelayFragContract;
+import com.eme.waterdelivery.model.bean.entity.OrderSumBo;
+import com.eme.waterdelivery.model.bean.entity.WaitingOrderBo;
+import com.eme.waterdelivery.presenter.DelayFragPresenter;
+import com.eme.waterdelivery.tools.ToastUtil;
+import com.eme.waterdelivery.ui.HomeActivity;
 import com.eme.waterdelivery.ui.adapter.DelayAdapter;
 
 import java.util.ArrayList;
@@ -32,8 +35,9 @@ import butterknife.ButterKnife;
 /**
  * Created by dijiaoliang on 17/3/7.
  */
-public class DelayFragment extends BaseFragment<DelayPresenter> implements DelayContract.View, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class DelayFragment extends BaseFragment<DelayFragPresenter> implements DelayFragContract.View, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
+    private static final String TAG = DelayFragment.class.getSimpleName();
 
     @BindView(R.id.rv_content)
     RecyclerView rvContent;
@@ -43,7 +47,7 @@ public class DelayFragment extends BaseFragment<DelayPresenter> implements Delay
     SwipeRefreshLayout swipeRefresh;
 
     private DelayAdapter delayAdapter;
-    private List<DelayBean> delayData;
+    private List<WaitingOrderBo> delayData;
 
     @Override
     protected void initInject() {
@@ -61,19 +65,19 @@ public class DelayFragment extends BaseFragment<DelayPresenter> implements Delay
         swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
         rvContent.setLayoutManager(new LinearLayoutManager(getActivity()));
         delayData = new ArrayList<>();
-        delayAdapter = new DelayAdapter(delayData);
-        delayAdapter.setOnLoadMoreListener(this);
+        delayAdapter = new DelayAdapter(getActivity(), delayData);
+        delayAdapter.setAutoLoadMoreSize(5);
 //        delayAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         rvContent.setAdapter(delayAdapter);
+        delayAdapter.setOnLoadMoreListener(this);
         rvContent.addOnItemTouchListener(new OnItemClickListener() {
 
             @Override
             public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
-                Toast.makeText(getActivity(), Integer.toString(position), Toast.LENGTH_LONG).show();
             }
 
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, final int position) {
                 super.onItemChildClick(adapter, view, position);
                 switch (view.getId()) {
                     case R.id.btn_receiving:
@@ -83,27 +87,15 @@ public class DelayFragment extends BaseFragment<DelayPresenter> implements Delay
                         builder.setPositiveButton("接单", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                String orderId = delayData.get(position).getOrderId();
+                                mPresenter.receiveOrder(orderId);
                             }
                         });
                         builder.show();
-//                        Toast.makeText(getActivity(), "订单已接收", Toast.LENGTH_LONG).show();
                         break;
                 }
             }
         });
-
-        delayData.add(new DelayBean("123", 1));
-        delayData.add(new DelayBean("销量", 1));
-        delayData.add(new DelayBean("你哈", 1));
-        delayData.add(new DelayBean("亚麻", 1));
-        delayData.add(new DelayBean("司法", 1));
-        delayData.add(new DelayBean("是个", 1));
-        delayData.add(new DelayBean("极为", 1));
-        delayAdapter.notifyDataSetChanged();
-
-        //// TODO: 2017/3/7 RecyclerView添加头布局
-//        View v = LayoutInflater.from(getActivity()).inflate(R.layout.header_recycler, null);
-//        delayAdapter.addHeaderView(v);
     }
 
     @Override
@@ -117,35 +109,93 @@ public class DelayFragment extends BaseFragment<DelayPresenter> implements Delay
     @Override
     public void onRefresh() {
         delayAdapter.setEnableLoadMore(false);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefresh.setRefreshing(false);
-                delayAdapter.setEnableLoadMore(true);
-            }
-        }, 1000);
+        mPresenter.requestData(Constant.REFRESH_DOWN);
     }
-
-    int count;
 
     @Override
     public void onLoadMoreRequested() {
         swipeRefresh.setEnabled(false);
-        rvContent.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (count % 3 == 0) {
-//                    delayAdapter.loadMoreEnd(true);
-                    delayAdapter.loadMoreComplete();
-                } else if (count % 3 == 1) {
-                    delayAdapter.loadMoreComplete();
-                } else {
-                    delayAdapter.loadMoreFail();
-                }
-                swipeRefresh.setEnabled(true);
-                count++;
-            }
+        mPresenter.requestData(Constant.REFRESH_UP_LOADMORE);
+    }
 
-        }, 1000);
+    @Override
+    public void showProgress(boolean b) {
+        isShowLayer(llAvLoadingTransparent44, b);
+    }
+
+    @Override
+    public void requestFailure(int flag, String message) {
+        switch (flag) {
+            case Constant.REFRESH_NORMAL:
+                isShowLayer(llAvLoadingTransparent44, false);
+                break;
+            case Constant.REFRESH_DOWN:
+                swipeRefresh.setRefreshing(false);
+                delayAdapter.setEnableLoadMore(true);
+                break;
+            case Constant.REFRESH_UP_LOADMORE:
+                delayAdapter.loadMoreFail();
+                swipeRefresh.setEnabled(true);
+                break;
+        }
+        if (message == null) {
+            ToastUtil.shortToast(getActivity(), getText(R.string.request_error).toString());
+        } else {
+            ToastUtil.shortToast(getActivity(), message);
+        }
+    }
+
+    @Override
+    public void updateUi(List<WaitingOrderBo> data, int flag) {
+        switch (flag) {
+            case Constant.REFRESH_NORMAL:
+                delayData.clear();
+                isShowLayer(llAvLoadingTransparent44, false);
+                break;
+            case Constant.REFRESH_DOWN:
+                delayData.clear();
+                swipeRefresh.setRefreshing(false);
+                delayAdapter.setEnableLoadMore(true);
+                break;
+            case Constant.REFRESH_UP_LOADMORE:
+                delayAdapter.loadMoreFail();
+                swipeRefresh.setEnabled(true);
+                break;
+        }
+        delayData.addAll(data);
+        delayAdapter.notifyDataSetChanged();
+        if (delayData.size() < 3) {
+            delayAdapter.loadMoreEnd(true);
+        }
+    }
+
+    @Override
+    public void notifyNoData() {
+        ToastUtil.shortToast(getActivity(), getText(R.string.no_data).toString());
+//        delayAdapter.loadMoreEnd();
+//        swipeRefresh.setEnabled(false);
+//        delayAdapter.setEnableLoadMore(false);
+    }
+
+    @Override
+    public void updateOrderSum(OrderSumBo orderSumBo) {
+        ((HomeActivity) getActivity()).updateOrderSum(Constant.ORDER_DELAY, orderSumBo.getWaitingOrderSum());
+    }
+
+    @Override
+    public void showOrderSumError() {
+        ToastUtil.shortToast(getActivity(), getText(R.string.order_sum_error).toString());
+    }
+
+    @Override
+    public void showReceiveOrderStatus(String message) {
+        if (TextUtils.isEmpty(message)) {
+            message = getText(R.string.receive_order_success).toString();
+        }
+        ToastUtil.shortToast(getActivity(), message);
+    }
+
+    public void refreshPage(){
+        mPresenter.requestData(Constant.REFRESH_DOWN);
     }
 }

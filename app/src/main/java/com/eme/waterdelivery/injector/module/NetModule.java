@@ -11,6 +11,7 @@ import com.eme.waterdelivery.model.sp.SPBase;
 import com.eme.waterdelivery.model.sp.SpConstant;
 import com.eme.waterdelivery.tools.NetworkUtils;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +29,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 
 /**
  * Created by dijiaoliang on 17/3/6.
@@ -137,7 +137,7 @@ public class NetModule {
     Retrofit createRetrofit(Retrofit.Builder builder, OkHttpClient client, String host) {
         return builder.baseUrl(host)
                 .addConverterFactory(FastJsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .build();
     }

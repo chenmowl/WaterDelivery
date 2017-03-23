@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,17 +15,19 @@ import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.LoginContract;
+import com.eme.waterdelivery.model.bean.entity.LoginBo;
 import com.eme.waterdelivery.presenter.LoginPresenter;
 import com.eme.waterdelivery.tools.ToastUtil;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnTextChanged;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+
 
 /**
  * 用户登录
@@ -79,15 +80,12 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         RxView.clicks(btnLogin)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Void>() {
+                .subscribe(new Consumer<Object>() {
                     @Override
-                    public void call(Void aVoid) {
-                        Log.i(TAG, "----button clicked----");
-                        // TODO: 17/3/6 请求后台登录
+                    public void accept(Object o) throws Exception {
                         mPresenter.login(etLoginUsername.getText().toString(),etLoginPassword.getText().toString());
                     }
                 });
-
     }
 
     @Override
@@ -116,8 +114,14 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
     @Override
-    public void toHome() {
-        startActivity(new Intent(this,HomeActivity.class));
+    public void toHome(LoginBo info) {
+        Intent intent=new Intent(this,HomeActivity.class);
+        Bundle bundle=new Bundle();
+        bundle.putParcelable(Constant.LOGIN_INFO,info);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        mPresenter.unSubscribe();
+        finish();
     }
 
     @Override
@@ -129,6 +133,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             ToastUtil.shortToast(this,getText(R.string.error_request).toString());
             etLoginPassword.setText(Constant.STR_EMPTY);
         }
+    }
+
+    @Override
+    public void showProgress(boolean b) {
+        isShowLayer(llAvLoadingTransparent44,b);
     }
 
     @OnTextChanged({R.id.et_login_username,R.id.et_login_password})

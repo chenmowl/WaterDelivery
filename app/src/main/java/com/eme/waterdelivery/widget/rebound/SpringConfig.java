@@ -11,7 +11,7 @@
 package com.eme.waterdelivery.widget.rebound;
 
 /**
- * Data structure for storing spring configuration.
+ * Business structure for storing spring configuration.
  */
 public class SpringConfig {
     public double friction;

@@ -6,9 +6,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.eme.waterdelivery.App;
+import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.injector.component.DaggerViewComponent;
 import com.eme.waterdelivery.injector.component.ViewComponent;
 import com.eme.waterdelivery.injector.module.ViewModule;
+import com.eme.waterdelivery.tools.ToastUtil;
 
 import javax.inject.Inject;
 
@@ -31,9 +33,9 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
         setContentView(getLayout());
         mUnBinder = ButterKnife.bind(this);
         initInject();
+        initEventAndData(savedInstanceState);
         if (mPresenter != null)
             mPresenter.subscribe();
-        initEventAndData(savedInstanceState);
     }
 
     protected void setToolBar(Toolbar toolbar, String title) {
@@ -81,6 +83,13 @@ public abstract class BaseActivity<T extends BasePresenter> extends SupportActiv
                 v.setVisibility(View.GONE);
             }
         }
+    }
+
+    /**
+     * 网络不可用提示异常
+     */
+    public void showNetError(){
+        ToastUtil.shortToast(this,getText(R.string.net_error).toString());
     }
 
     protected abstract void initInject();

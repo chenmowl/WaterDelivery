@@ -91,10 +91,10 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
         applyRecordAdapter.notifyDataSetChanged();
 
         //// TODO: 2017/3/7 RecyclerView添加头布局
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.header_recycler, null);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.header_apply, null);
         TextView tvOne = (TextView) v.findViewById(R.id.tv_one);
         TextView tvTwo = (TextView) v.findViewById(R.id.tv_two);
-        TextView tvThree = (TextView) v.findViewById(R.id.tv_three);
+        TextView tvThree = (TextView) v.findViewById(R.id.tv_there);
         tvOne.setText("今日申请1次");
         tvTwo.setText("当月申请30次");
         tvThree.setText("历史申请510次");

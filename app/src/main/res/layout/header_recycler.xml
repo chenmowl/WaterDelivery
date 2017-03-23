@@ -11,28 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="25dp"
+        android:visibility="gone"
         android:layout_marginTop="10dp"
         android:text="饮用水:  50桶"
-        android:textColor="@color/text_color_bar"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/tv_two"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="25dp"
-        android:text="饮水机:  5台"
-        android:textColor="@color/text_color_bar"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/tv_three"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="25dp"
-        android:text="水票:   500张"
         android:textColor="@color/text_color_bar"
         android:textSize="12sp" />
 

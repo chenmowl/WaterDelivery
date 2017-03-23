@@ -4,16 +4,20 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.CompleteContract;
 import com.eme.waterdelivery.presenter.CompletePresenter;
 import com.eme.waterdelivery.ui.adapter.HomeFragmentAdapter;
+import com.eme.waterdelivery.ui.fragment.AllOrderFragment;
 import com.eme.waterdelivery.ui.fragment.CurrentDayFragment;
-import com.jakewharton.rxbinding.view.RxView;
+import com.eme.waterdelivery.ui.fragment.MonthOrderFragment;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +25,15 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 /**
  * 已完成订单页面
  * <p>
  * Created by dijiaoliang on 17/3/9.
  */
-public class CompleteActivity extends BaseActivity<CompletePresenter> implements CompleteContract.View {
+public class CompleteActivity extends BaseActivity<CompletePresenter> implements CompleteContract.View, ViewPager.OnPageChangeListener {
 
 
     public static final String TAB = "TAB";
@@ -45,6 +49,10 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
     TabLayout tabMain;
     @BindView(R.id.vp_main)
     ViewPager vpMain;
+
+    private CurrentDayFragment currentDayFragment;
+    private MonthOrderFragment monthOrderFragment;
+    private AllOrderFragment allOrderFragment;
 
     public static String[] tabTitle = new String[]{"今日接单 (12)", "当月接单 (34)", "历史接单 (34)"};
     List<Fragment> fragments = new ArrayList<>();
@@ -62,9 +70,12 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
 
     @Override
     protected void initEventAndData(Bundle savedInstanceState) {
-        fragments.add(new CurrentDayFragment());
-        fragments.add(new CurrentDayFragment());
-        fragments.add(new CurrentDayFragment());
+        currentDayFragment=new CurrentDayFragment();
+        monthOrderFragment=new MonthOrderFragment();
+        allOrderFragment=new AllOrderFragment();
+        fragments.add(currentDayFragment);
+        fragments.add(monthOrderFragment);
+        fragments.add(allOrderFragment);
         homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
         vpMain.setAdapter(homeFragmentAdapter);
         //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
@@ -87,15 +98,17 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
                 vpMain.setCurrentItem(2);
                 break;
         }
+
+        vpMain.setOnPageChangeListener(this);
     }
 
     private void initListener() {
         RxView.clicks(back)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Void>() {
+                .subscribe(new Consumer<Object>() {
                     @Override
-                    public void call(Void aVoid) {
+                    public void accept(Object o) throws Exception {
                         CompleteActivity.this.finish();
                     }
                 });
@@ -106,5 +119,44 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+    }
+
+    public void updateOrderSum(String flag,int sum){
+            switch (flag){
+            case Constant.ORDER_TODAY:
+                tabMain.getTabAt(0).setText(TextUtils.concat(getText(R.string.today_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
+                break;
+            case Constant.ORDER_MONTH:
+                tabMain.getTabAt(1).setText(TextUtils.concat(getText(R.string.month_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
+                break;
+            case Constant.ORDER_ALL:
+                tabMain.getTabAt(2).setText(TextUtils.concat(getText(R.string.all_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
+                break;
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        switch (position){
+            case Constant.ZERO:
+                currentDayFragment.refreshPage();
+                break;
+            case Constant.ONE:
+                monthOrderFragment.refreshPage();
+                break;
+            case Constant.TWO:
+                allOrderFragment.refreshPage();
+                break;
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

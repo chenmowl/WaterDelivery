@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">WaterDelivery</string>
 
+
+    <!--网络-->
+    <string name="net_error">网络异常</string>
+    <string name="request_error">请求数据失败</string>
+    <string name="no_data">没有更多数据</string>
+
+    <!--toast-->
+    <string name="order_sum_error">订单数量信息获取失败</string>
+    <string name="order_info_error">订单信息异常</string>
+
     <!--登陆页面-->
     <string name="input_username">输入账户名</string>
     <string name="input_password">输入密码</string>
@@ -26,9 +36,22 @@
     <string name="navigation_drawer_close">侧关</string>
     <string name="product">产品:</string>
     <string name="reach_time">送达时间</string>
+    <string name="yuan">元</string>
+    <string name="waiting">待接单 (</string>
+    <string name="sending">配送中 (</string>
+    <string name="today_receive">今日接单 (</string>
+    <string name="month_receive">当月接单 (</string>
+    <string name="all_receive">历史接单 (</string>
+    <string name="sign">)</string>
+    <string name="tip">:  </string>
+
+    <!--delay-->
+    <string name="receive_order_failure">接单失败</string>
+    <string name="receive_order_success">接单成功</string>
 
     <!--sending-->
     <string name="call">电话</string>
+    <string name="no_phone">未搜到联系方式</string>
     <string name="place_time">下单时间</string>
     <string name="pay_mode">付款方式</string>
     <string name="used_time">已用时间</string>

@@ -14,20 +14,25 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.HomeContract;
+import com.eme.waterdelivery.model.bean.entity.LoginBo;
+import com.eme.waterdelivery.model.sp.SPBase;
+import com.eme.waterdelivery.model.sp.SpConstant;
 import com.eme.waterdelivery.presenter.HomePresenter;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.tools.Util;
 import com.eme.waterdelivery.ui.adapter.HomeFragmentAdapter;
 import com.eme.waterdelivery.ui.fragment.DelayFragment;
 import com.eme.waterdelivery.ui.fragment.SendingFragment;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +40,14 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by dijiaoliang on 17/3/7.
  */
 
-public class HomeActivity extends BaseActivity<HomePresenter> implements HomeContract.View {
+public class HomeActivity extends BaseActivity<HomePresenter> implements HomeContract.View, ViewPager.OnPageChangeListener {
 
 
     @BindView(R.id.nav_view)
@@ -58,9 +63,12 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
-    public static String[] tabTitle = new String[]{"待接单 (12)", "配送中 (34)"};
+    public static String[] tabTitle = new String[]{"待接单", "配送中"};
     List<Fragment> fragments = new ArrayList<>();
     private HomeFragmentAdapter homeFragmentAdapter;
+
+    private DelayFragment delayFragment;
+    private SendingFragment sendingFragment;
 
     @Override
     protected void initInject() {
@@ -104,14 +112,53 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         //设置NavigationView子控件的点击事件
         initNavClickListener(headerLayout);
 
-        fragments.add(new DelayFragment());
-        fragments.add(new SendingFragment());
+        /**处理侧边栏数据**/
+        LoginBo loginBo=getIntent().getExtras().getParcelable(Constant.LOGIN_INFO);
+        if(loginBo!=null){
+            //更新侧边栏信息
+            TextView tvName = (TextView) headerLayout.findViewById(R.id.tv_name);
+            TextView tvJobNumber = (TextView) headerLayout.findViewById(R.id.tv_job_number);
+            TextView tvCount = (TextView) headerLayout.findViewById(R.id.tv_count);
+            TextView tvTodayRecord = (TextView) headerLayout.findViewById(R.id.tv_today_record);
+            TextView tvMonthRecord = (TextView) headerLayout.findViewById(R.id.tv_month_record);
+            TextView tvTotalRecord = (TextView) headerLayout.findViewById(R.id.tv_total_record);
+            TextView tvStationPhone = (TextView) headerLayout.findViewById(R.id.tv_station_phone);
+            tvName.setText(loginBo.getCname());
+            tvCount.setText(TextUtils.concat(loginBo.getPaidAmount(),getText(R.string.yuan)));
+            tvTodayRecord.setText(String.valueOf(loginBo.getOrdersSumToday()));
+            tvMonthRecord.setText(String.valueOf(loginBo.getOrdersSumMonth()));
+            tvTotalRecord.setText(String.valueOf(loginBo.getOrdersSumTotal()));
+            tvStationPhone.setText(loginBo.getStorePhone());
+        }
+        delayFragment=new DelayFragment();
+        sendingFragment=new SendingFragment();
+        fragments.add(delayFragment);
+        fragments.add(sendingFragment);
         homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
         vpMain.setAdapter(homeFragmentAdapter);
         //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
         tabMain.setupWithViewPager(vpMain, true);
         tabMain.getTabAt(0).setText(tabTitle[0]);
         tabMain.getTabAt(1).setText(tabTitle[1]);
+
+        vpMain.setOnPageChangeListener(this);
+
+    }
+
+    /**
+     * 更新待接单和配送中数量
+     * @param flag
+     * @param distributingOrderSum
+     */
+    public void updateOrderSum(int flag,int distributingOrderSum){
+        switch (flag){
+            case Constant.ORDER_DELAY:
+                tabMain.getTabAt(0).setText(TextUtils.concat(getText(R.string.waiting).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
+                break;
+            case Constant.ORDER_SEND:
+                tabMain.getTabAt(1).setText(TextUtils.concat(getText(R.string.sending).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
+                break;
+        }
     }
 
     /**
@@ -125,29 +172,55 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         RxView.clicks(headerLayout.findViewById(R.id.ll_quit))
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Void>() {
+                .subscribe(new Consumer<Object>() {
+
                     @Override
-                    public void call(Void aVoid) {
+                    public void accept(Object o) throws Exception {
                         alertQuitDialog();
                     }
                 });
         RxView.clicks(headerLayout.findViewById(R.id.rl_day_order))
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Void>() {
+                .subscribe(new Consumer<Object>() {
+
                     @Override
-                    public void call(Void aVoid) {
+                    public void accept(Object o) throws Exception {
                         Intent intent = new Intent(HomeActivity.this, CompleteActivity.class);
                         intent.putExtra(CompleteActivity.TAB, CompleteActivity.TAB_0);
+                        startActivity(intent);
+                    }
+                });
+        RxView.clicks(headerLayout.findViewById(R.id.rl_month_order))
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Intent intent = new Intent(HomeActivity.this, CompleteActivity.class);
+                        intent.putExtra(CompleteActivity.TAB, CompleteActivity.TAB_1);
+                        startActivity(intent);
+                    }
+                });
+        RxView.clicks(headerLayout.findViewById(R.id.rl_total_order))
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Intent intent = new Intent(HomeActivity.this, CompleteActivity.class);
+                        intent.putExtra(CompleteActivity.TAB, CompleteActivity.TAB_2);
                         startActivity(intent);
                     }
                 });
         RxView.clicks(headerLayout.findViewById(R.id.rl_apply))
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Void>() {
+                .subscribe(new Consumer<Object>() {
                     @Override
-                    public void call(Void aVoid) {
+                    public void accept(Object o) throws Exception {
                         Intent intent = new Intent(HomeActivity.this, MyApplyActivity.class);
                         intent.putExtra(CompleteActivity.TAB, CompleteActivity.TAB_0);
                         startActivity(intent);
@@ -166,6 +239,11 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         builder.setPositiveButton("退出", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                SPBase.setContent(HomeActivity.this, SpConstant.HEAD_FILE_NAME,SpConstant.HEAD_COOKIE_UID, Constant.STR_EMPTY);
+                SPBase.setContent(HomeActivity.this, SpConstant.HEAD_FILE_NAME,SpConstant.HEAD_COOKIE_SIG, Constant.STR_EMPTY);
+                mPresenter.unSubscribe();
+                startActivity(new Intent(HomeActivity.this,LoginActivity.class));
+                finish();
             }
         });
         builder.show();
@@ -210,4 +288,25 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         return super.dispatchKeyEvent(event);
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        switch (position){
+            case Constant.ZERO:
+                delayFragment.refreshPage();
+                break;
+            case Constant.ONE:
+                sendingFragment.refreshPage();
+                break;
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

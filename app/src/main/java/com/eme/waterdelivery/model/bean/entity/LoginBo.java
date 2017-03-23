@@ -1,10 +1,13 @@
 package com.eme.waterdelivery.model.bean.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by dijiaoliang on 17/3/20.
  */
 
-public class LoginInfo {
+public class LoginBo implements Parcelable {
 
 
     /**
@@ -30,6 +33,53 @@ public class LoginInfo {
     private String storeId;
     private String storePhone;
     private String username;
+
+    public LoginBo() {
+    }
+
+    protected LoginBo(Parcel in) {
+        cname = in.readString();
+        img = in.readString();
+        ordersSumMonth = in.readInt();
+        ordersSumToday = in.readInt();
+        ordersSumTotal = in.readInt();
+        paidAmount = in.readString();
+        sig = in.readString();
+        storeId = in.readString();
+        storePhone = in.readString();
+        username = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(cname);
+        dest.writeString(img);
+        dest.writeInt(ordersSumMonth);
+        dest.writeInt(ordersSumToday);
+        dest.writeInt(ordersSumTotal);
+        dest.writeString(paidAmount);
+        dest.writeString(sig);
+        dest.writeString(storeId);
+        dest.writeString(storePhone);
+        dest.writeString(username);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<LoginBo> CREATOR = new Creator<LoginBo>() {
+        @Override
+        public LoginBo createFromParcel(Parcel in) {
+            return new LoginBo(in);
+        }
+
+        @Override
+        public LoginBo[] newArray(int size) {
+            return new LoginBo[size];
+        }
+    };
 
     public String getCname() {
         return cname;

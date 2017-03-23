@@ -1,14 +1,14 @@
 package com.eme.waterdelivery.model.bean;
 
 /**
- * Created by dijiaoliang on 17/3/20.
+ * Created by dijiaoliang on 17/3/21.
  */
 
 public class Result<T> {
 
     public boolean success;
 
-    public T data;
+    public Business<T> data;
 
     public boolean isSuccess() {
         return success;
@@ -18,19 +18,11 @@ public class Result<T> {
         this.success = success;
     }
 
-    public T getData() {
+    public Business<T> getData() {
         return data;
     }
 
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    @Override
-    public String toString() {
-        return "Result{" +
-                "success=" + success +
-                ", data=" + data +
-                '}';
+    public void setData(Business<T> business) {
+        this.data = business;
     }
 }

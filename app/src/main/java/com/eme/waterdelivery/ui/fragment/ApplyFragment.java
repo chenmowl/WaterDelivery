@@ -19,7 +19,7 @@ import com.eme.waterdelivery.presenter.ApplyPresenter;
 import com.eme.waterdelivery.tools.KeyboardUtils;
 import com.eme.waterdelivery.ui.adapter.ApplyMenuAdapter;
 import com.eme.waterdelivery.widget.decoration.SpacesItemDecoration;
-import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding2.view.RxView;
 import com.weiwangcn.betterspinner.library.BetterSpinner;
 
 import java.util.ArrayList;
@@ -28,8 +28,8 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 
 /**
  * 申请采购 Fragment
@@ -110,18 +110,18 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
         RxView.clicks(headerView.findViewById(R.id.tv_add))
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Void>() {
+                .subscribe(new Consumer<Object>() {
                     @Override
-                    public void call(Void aVoid) {
+                    public void accept(Object o) throws Exception {
                         alertApplyDialog();
                     }
                 });
         RxView.clicks(tvAdd)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Void>() {
+                .subscribe(new Consumer<Object>() {
                     @Override
-                    public void call(Void aVoid) {
+                    public void accept(Object o) throws Exception {
                         alertApplyDialog();
                     }
                 });

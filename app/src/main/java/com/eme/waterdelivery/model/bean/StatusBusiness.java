@@ -1,14 +1,13 @@
-package com.eme.waterdelivery.model.bean.entity;
+package com.eme.waterdelivery.model.bean;
 
 /**
- * Created by dijiaoliang on 17/3/20.
+ * Created by dijiaoliang on 17/3/21.
  */
 
-public class LoginVo {
+public class StatusBusiness {
 
     private String code;
     private String message;
-    private LoginInfo info;
 
     public String getCode() {
         return code;
@@ -26,11 +25,4 @@ public class LoginVo {
         this.message = message;
     }
 
-    public LoginInfo getInfo() {
-        return info;
-    }
-
-    public void setInfo(LoginInfo info) {
-        this.info = info;
-    }
 }

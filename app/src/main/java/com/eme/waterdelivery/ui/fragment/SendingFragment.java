@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,11 +14,16 @@ import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseFragment;
-import com.eme.waterdelivery.contract.SendingContract;
-import com.eme.waterdelivery.model.bean.DelayBean;
-import com.eme.waterdelivery.presenter.SendingPresenter;
+import com.eme.waterdelivery.contract.SendingFragContract;
+import com.eme.waterdelivery.model.bean.entity.OrderSumBo;
+import com.eme.waterdelivery.model.bean.entity.WaitingOrderBo;
+import com.eme.waterdelivery.presenter.SendingFragPresenter;
+import com.eme.waterdelivery.tools.NetworkUtils;
+import com.eme.waterdelivery.tools.ToastUtil;
+import com.eme.waterdelivery.ui.HomeActivity;
 import com.eme.waterdelivery.ui.SendingDetailActivity;
 import com.eme.waterdelivery.ui.adapter.SendingAdapter;
 
@@ -32,7 +36,7 @@ import butterknife.ButterKnife;
 /**
  * Created by dijiaoliang on 17/3/7.
  */
-public class SendingFragment extends BaseFragment<SendingPresenter> implements SendingContract.View, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class SendingFragment extends BaseFragment<SendingFragPresenter> implements SendingFragContract.View, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
 
     @BindView(R.id.rv_content)
@@ -43,7 +47,7 @@ public class SendingFragment extends BaseFragment<SendingPresenter> implements S
     SwipeRefreshLayout swipeRefresh;
 
     private SendingAdapter sendingAdapter;
-    private List<DelayBean> delayData;
+    private List<WaitingOrderBo> sendData;
 
     @Override
     protected void initInject() {
@@ -60,17 +64,28 @@ public class SendingFragment extends BaseFragment<SendingPresenter> implements S
         swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
         rvContent.setLayoutManager(new LinearLayoutManager(getActivity()));
-        delayData = new ArrayList<>();
-        sendingAdapter = new SendingAdapter(delayData);
+        sendData = new ArrayList<>();
+        sendingAdapter = new SendingAdapter(getActivity(),sendData);
         sendingAdapter.setOnLoadMoreListener(this);
+        sendingAdapter.setAutoLoadMoreSize(5);
         sendingAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         rvContent.setAdapter(sendingAdapter);
         rvContent.addOnItemTouchListener(new OnItemClickListener() {
 
             @Override
             public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
-//                Toast.makeText(getActivity(), Integer.toString(position), Toast.LENGTH_LONG).show();
-                startActivity(new Intent(getActivity(), SendingDetailActivity.class));
+                if(!NetworkUtils.isConnected(getActivity())){
+                    ToastUtil.shortToast(getActivity(),getText(R.string.net_error).toString());
+                    return;
+                }
+                WaitingOrderBo bo=sendData.get(position);
+                if(bo!=null && bo.getOrderId()!=null){
+                    Intent intent=new Intent(getActivity(), SendingDetailActivity.class);
+                    intent.putExtra(Constant.ORDER_ID,bo.getOrderId());
+                    startActivity(intent);
+                }else {
+                    ToastUtil.shortToast(getActivity(),getText(R.string.order_info_error).toString());
+                }
             }
 
             @Override
@@ -78,22 +93,18 @@ public class SendingFragment extends BaseFragment<SendingPresenter> implements S
                 super.onItemChildClick(adapter, view, position);
                 switch (view.getId()) {
                     case R.id.btn_call:
-                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + "10086-1"));
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                        WaitingOrderBo bo=sendData.get(position);
+                        if(bo!=null && bo.getMemberPhone()!=null){
+                            Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + bo.getMemberPhone()));
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }else{
+                            ToastUtil.shortToast(getActivity(),getText(R.string.no_phone).toString());
+                        }
                         break;
                 }
             }
         });
-
-        delayData.add(new DelayBean("123", 1));
-        delayData.add(new DelayBean("销量", 1));
-        delayData.add(new DelayBean("你哈", 1));
-        delayData.add(new DelayBean("亚麻", 1));
-        delayData.add(new DelayBean("司法", 1));
-        delayData.add(new DelayBean("是个", 1));
-        delayData.add(new DelayBean("极为", 1));
-        sendingAdapter.notifyDataSetChanged();
 
         //// TODO: 2017/3/7 RecyclerView添加头布局
 //        View v = LayoutInflater.from(getActivity()).inflate(R.layout.header_recycler, null);
@@ -111,35 +122,85 @@ public class SendingFragment extends BaseFragment<SendingPresenter> implements S
     @Override
     public void onRefresh() {
         sendingAdapter.setEnableLoadMore(false);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefresh.setRefreshing(false);
-                sendingAdapter.setEnableLoadMore(true);
-            }
-        }, 1000);
+        mPresenter.requestData(Constant.REFRESH_DOWN);
     }
-
-    int count;
 
     @Override
     public void onLoadMoreRequested() {
         swipeRefresh.setEnabled(false);
-        rvContent.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (count % 3 == 0) {
-//                    sendingAdapter.loadMoreEnd(true);
-                    sendingAdapter.loadMoreComplete();
-                } else if (count % 3 == 1) {
-                    sendingAdapter.loadMoreComplete();
-                } else {
-                    sendingAdapter.loadMoreFail();
-                }
-                swipeRefresh.setEnabled(true);
-                count++;
-            }
+        mPresenter.requestData(Constant.REFRESH_UP_LOADMORE);
+    }
 
-        }, 1000);
+    @Override
+    public void showProgress(boolean b) {
+        isShowLayer(llAvLoadingTransparent44, b);
+    }
+
+    @Override
+    public void requestFailure(int flag, String message) {
+        switch (flag) {
+            case Constant.REFRESH_NORMAL:
+                isShowLayer(llAvLoadingTransparent44, false);
+                break;
+            case Constant.REFRESH_DOWN:
+                swipeRefresh.setRefreshing(false);
+                sendingAdapter.setEnableLoadMore(true);
+                break;
+            case Constant.REFRESH_UP_LOADMORE:
+                sendingAdapter.loadMoreFail();
+                swipeRefresh.setEnabled(true);
+                break;
+        }
+        if (message == null) {
+            ToastUtil.shortToast(getActivity(), getText(R.string.request_error).toString());
+        } else {
+            ToastUtil.shortToast(getActivity(), message);
+        }
+    }
+
+    @Override
+    public void updateUi(List<WaitingOrderBo> data, int flag) {
+        switch (flag) {
+            case Constant.REFRESH_NORMAL:
+                sendData.clear();
+                isShowLayer(llAvLoadingTransparent44, false);
+                break;
+            case Constant.REFRESH_DOWN:
+                sendData.clear();
+                swipeRefresh.setRefreshing(false);
+                sendingAdapter.setEnableLoadMore(true);
+                break;
+            case Constant.REFRESH_UP_LOADMORE:
+                sendingAdapter.loadMoreFail();
+                swipeRefresh.setEnabled(true);
+                break;
+        }
+        sendData.addAll(data);
+        sendingAdapter.notifyDataSetChanged();
+        if (sendData.size() < 5) {
+            sendingAdapter.loadMoreEnd(true);
+        }
+    }
+
+    @Override
+    public void notifyNoData() {
+        ToastUtil.shortToast(getActivity(), getText(R.string.no_data).toString());
+//        sendingAdapter.loadMoreEnd();
+//        swipeRefresh.setEnabled(false);
+//        sendingAdapter.setEnableLoadMore(false);
+    }
+
+    @Override
+    public void updateOrderSum(OrderSumBo orderSumBo) {
+        ((HomeActivity) getActivity()).updateOrderSum(Constant.ORDER_SEND, orderSumBo.getDistributingOrderSum());
+    }
+
+    @Override
+    public void showOrderSumError() {
+        ToastUtil.shortToast(getActivity(), getText(R.string.order_sum_error).toString());
+    }
+
+    public void refreshPage(){
+        mPresenter.requestData(Constant.REFRESH_DOWN);
     }
 }

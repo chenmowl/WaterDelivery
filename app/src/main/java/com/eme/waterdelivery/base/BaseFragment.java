@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.eme.waterdelivery.App;
+import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.injector.component.DaggerViewComponent;
 import com.eme.waterdelivery.injector.component.ViewComponent;
 import com.eme.waterdelivery.injector.module.ViewModule;
+import com.eme.waterdelivery.tools.ToastUtil;
 
 import javax.inject.Inject;
 
@@ -101,6 +103,13 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
                 v.setVisibility(View.GONE);
             }
         }
+    }
+
+    /**
+     * 网络不可用提示异常
+     */
+    public void showNetError(){
+        ToastUtil.shortToast(getActivity(),getText(R.string.net_error).toString());
     }
 
     protected abstract void initInject();

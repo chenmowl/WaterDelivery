@@ -88,7 +88,7 @@ abstract class AndroidSpringLooperFactory {
     }
 
     /**
-     * The Jelly Bean and up implementation of the spring looper that uses Android's
+     * The Jelly Result and up implementation of the spring looper that uses Android's
      * {@link Choreographer} instead of a {@link Handler}
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
