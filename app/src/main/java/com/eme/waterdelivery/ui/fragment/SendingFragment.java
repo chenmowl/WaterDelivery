@@ -102,6 +102,8 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
                             ToastUtil.shortToast(getActivity(),getText(R.string.no_phone).toString());
                         }
                         break;
+                    default:
+                        break;
                 }
             }
         });
@@ -150,6 +152,8 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
                 sendingAdapter.loadMoreFail();
                 swipeRefresh.setEnabled(true);
                 break;
+            default:
+                break;
         }
         if (message == null) {
             ToastUtil.shortToast(getActivity(), getText(R.string.request_error).toString());
@@ -173,6 +177,8 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
             case Constant.REFRESH_UP_LOADMORE:
                 sendingAdapter.loadMoreFail();
                 swipeRefresh.setEnabled(true);
+                break;
+            default:
                 break;
         }
         sendData.addAll(data);

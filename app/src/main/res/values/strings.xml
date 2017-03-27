@@ -41,10 +41,15 @@
     <string name="reach_time">送达时间</string>
     <string name="yuan">元</string>
     <string name="waiting">待接单 (</string>
+    <string name="waiting_home">待接单</string>
     <string name="sending">配送中 (</string>
+    <string name="sending_home">配送中</string>
     <string name="today_receive">今日接单 (</string>
+    <string name="today_receives">今日接单</string>
     <string name="month_receive">当月接单 (</string>
+    <string name="month_receives">当月接单</string>
     <string name="all_receive">历史接单 (</string>
+    <string name="all_receives">历史接单</string>
     <string name="sign">)</string>
     <string name="tip">:  </string>
 
@@ -79,6 +84,8 @@
     <string name="complete">已完成</string>
 
     <!--我的申请-->
+    <string name="apply_purchases">申请采购</string>
+    <string name="record_procurement">采购记录</string>
     <string name="add_procurement">添加采购项</string>
     <string name="commit_apply">提交申请</string>
     <string name="remark">备注说明</string>

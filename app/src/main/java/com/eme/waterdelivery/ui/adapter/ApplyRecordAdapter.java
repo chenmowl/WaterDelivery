@@ -44,6 +44,8 @@ public class ApplyRecordAdapter extends BaseQuickAdapter<PurchaseBo, BaseViewHol
             case Constant.APPLY_RECORD_STATUS_COMPLETE:
                 helper.setText(R.id.tv_record_status, "已完结");
                 break;
+            default:
+                break;
         }
         LinearLayout llContainer= (LinearLayout) helper.itemView.findViewById(R.id.ll_container);
         llContainer.removeAllViews();

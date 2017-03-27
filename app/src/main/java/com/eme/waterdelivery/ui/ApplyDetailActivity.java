@@ -166,6 +166,8 @@ public class ApplyDetailActivity extends BaseActivity<ApplyDetailPresenter> impl
                 ((TextView) headerView.findViewById(R.id.tv_order_detail_status_three_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getSendTime()),format));
                 ((TextView) headerView.findViewById(R.id.tv_order_detail_status_four_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getConfirmTime()),format));
                 break;
+            default:
+                break;
         }
         data.clear();
         adapter.setStatus(applyDetailVo.getStatus());

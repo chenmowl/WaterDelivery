@@ -1,6 +1,5 @@
 package com.eme.waterdelivery.model.net;
 
-import com.eme.waterdelivery.model.net.api.ZhihuApi;
 import com.eme.waterdelivery.model.net.converter.FastJsonConverterFactory;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -39,12 +38,5 @@ public class ApiClient {
             }
         }
     }
-
-
-    public static ZhihuApi getZhihuApi() {
-        checkInstance();
-        return retrofit.create(ZhihuApi.class);
-    }
-
 
 }

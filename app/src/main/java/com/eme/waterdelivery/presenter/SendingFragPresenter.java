@@ -133,6 +133,8 @@ public class SendingFragPresenter implements SendingFragContract.Presenter {
                                 case Constant.REFRESH_UP_LOADMORE:
                                     pageNum++;
                                     break;
+                                default:
+                                    break;
                             }
                         } else {
                             view.requestFailure(refreshFlag, waitingOrderBoListResult.getData().getMessage());
@@ -159,10 +161,6 @@ public class SendingFragPresenter implements SendingFragContract.Presenter {
                 .subscribe(new Consumer<Result<WaitingOrderVo>>() {
                     @Override
                     public void accept(Result<WaitingOrderVo> waitingOrderVoResult) throws Exception {
-                        if (waitingOrderVoResult == null) {
-                            view.requestFailure(Constant.REFRESH_NORMAL, null);
-                            return;
-                        }
                         if (waitingOrderVoResult != null && waitingOrderVoResult.isSuccess() && waitingOrderVoResult.getData() != null && Constant.CODE_COMPLETE.equals(waitingOrderVoResult.getData().getCode())) {
                             hasMoreData = waitingOrderVoResult.getData().getInfo().isHasMore();
                             view.updateUi(waitingOrderVoResult.getData().getInfo().getList(), Constant.REFRESH_NORMAL);

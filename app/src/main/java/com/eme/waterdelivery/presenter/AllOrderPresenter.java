@@ -130,6 +130,8 @@ public class AllOrderPresenter implements AllOrderContract.Presenter {
                                 case Constant.REFRESH_UP_LOADMORE:
                                     pageNum++;
                                     break;
+                                default:
+                                    break;
                             }
                         } else {
                             view.requestFailure(refreshFlag, waitingOrderBoListResult.getData().getMessage());

@@ -3,7 +3,6 @@ package com.eme.waterdelivery.model.net;
 
 import com.eme.waterdelivery.model.bean.Result;
 import com.eme.waterdelivery.model.bean.StatusResult;
-import com.eme.waterdelivery.model.bean.ZhihuDaily;
 import com.eme.waterdelivery.model.bean.entity.ApplyDetailVo;
 import com.eme.waterdelivery.model.bean.entity.ApplyOneLevelBo;
 import com.eme.waterdelivery.model.bean.entity.ApplyTwoLevelGoodBo;
@@ -15,7 +14,6 @@ import com.eme.waterdelivery.model.bean.entity.OrderDetailBo;
 import com.eme.waterdelivery.model.bean.entity.OrderSumBo;
 import com.eme.waterdelivery.model.bean.entity.WaitingOrderVo;
 import com.eme.waterdelivery.model.net.api.WaterApi;
-import com.eme.waterdelivery.model.net.api.ZhihuApi;
 
 import io.reactivex.Observable;
 
@@ -24,17 +22,10 @@ import io.reactivex.Observable;
  */
 public class RetrofitHelper {
 
-    private ZhihuApi zhihuApi;
-
     private WaterApi waterApi;
 
-    public RetrofitHelper(ZhihuApi zhihuApi, WaterApi waterApi) {
-        this.zhihuApi = zhihuApi;
+    public RetrofitHelper(WaterApi waterApi) {
         this.waterApi = waterApi;
-    }
-
-    public Observable<ZhihuDaily> getLastDaily() {
-        return zhihuApi.getLastDaily();
     }
 
     /**

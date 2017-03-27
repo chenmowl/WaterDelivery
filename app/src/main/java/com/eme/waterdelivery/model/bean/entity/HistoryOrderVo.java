@@ -36,7 +36,7 @@ public class HistoryOrderVo {
         this.historySellSum = historySellSum;
     }
 
-    public class SellRecord{
+    public static class SellRecord{
 
         /**
          * categoryId : 3

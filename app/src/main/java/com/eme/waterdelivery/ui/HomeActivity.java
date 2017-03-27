@@ -63,7 +63,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
-    public static String[] tabTitle = new String[]{"待接单", "配送中"};
     List<Fragment> fragments = new ArrayList<>();
     private HomeFragmentAdapter homeFragmentAdapter;
 
@@ -138,8 +137,8 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         vpMain.setAdapter(homeFragmentAdapter);
         //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
         tabMain.setupWithViewPager(vpMain, true);
-        tabMain.getTabAt(0).setText(tabTitle[0]);
-        tabMain.getTabAt(1).setText(tabTitle[1]);
+        tabMain.getTabAt(0).setText(getText(R.string.waiting_home).toString());
+        tabMain.getTabAt(1).setText(getText(R.string.sending_home).toString());
 
         vpMain.setOnPageChangeListener(this);
 
@@ -157,6 +156,8 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
                 break;
             case Constant.ORDER_SEND:
                 tabMain.getTabAt(1).setText(TextUtils.concat(getText(R.string.sending).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
+                break;
+            default:
                 break;
         }
     }
@@ -301,6 +302,8 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
                 break;
             case Constant.ONE:
                 sendingFragment.refreshPage();
+                break;
+            default:
                 break;
         }
     }

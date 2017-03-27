@@ -44,7 +44,6 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
     @BindView(R.id.vp_main)
     ViewPager vpMain;
 
-    public static String[] tabTitle = new String[]{"申请采购", "申请记录"};
     List<Fragment> fragments = new ArrayList<>();
     private HomeFragmentAdapter homeFragmentAdapter;
     ApplyRecordFragment applyRecordFragment;
@@ -68,8 +67,8 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
         vpMain.setAdapter(homeFragmentAdapter);
         //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
         tabMain.setupWithViewPager(vpMain, true);
-        tabMain.getTabAt(0).setText(tabTitle[0]);
-        tabMain.getTabAt(1).setText(tabTitle[1]);
+        tabMain.getTabAt(0).setText(getText(R.string.apply_purchases).toString());
+        tabMain.getTabAt(1).setText(getText(R.string.record_procurement).toString());
 
         tvTitle.setText(getText(R.string.my_apply));
         initListener();
@@ -106,6 +105,8 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
         switch (position){
             case Constant.ONE:
                 applyRecordFragment.refreshPage();
+                break;
+            default:
                 break;
         }
     }

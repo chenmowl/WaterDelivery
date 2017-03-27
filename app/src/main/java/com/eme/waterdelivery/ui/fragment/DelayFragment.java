@@ -94,6 +94,8 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
                         });
                         builder.show();
                         break;
+                    default:
+                        break;
                 }
             }
         });
@@ -138,6 +140,8 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
                 delayAdapter.loadMoreFail();
                 swipeRefresh.setEnabled(true);
                 break;
+            default:
+                break;
         }
         if (message == null) {
             ToastUtil.shortToast(getActivity(), getText(R.string.request_error).toString());
@@ -161,6 +165,8 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
             case Constant.REFRESH_UP_LOADMORE:
                 delayAdapter.loadMoreFail();
                 swipeRefresh.setEnabled(true);
+                break;
+            default:
                 break;
         }
         delayData.addAll(data);

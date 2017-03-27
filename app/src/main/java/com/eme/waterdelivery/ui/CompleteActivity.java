@@ -54,7 +54,6 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
     private MonthOrderFragment monthOrderFragment;
     private AllOrderFragment allOrderFragment;
 
-    public static String[] tabTitle = new String[]{"今日接单 ", "当月接单 ", "历史接单 "};
     List<Fragment> fragments = new ArrayList<>();
     private HomeFragmentAdapter homeFragmentAdapter;
 
@@ -81,9 +80,9 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
         vpMain.setAdapter(homeFragmentAdapter);
         //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
         tabMain.setupWithViewPager(vpMain, true);
-        tabMain.getTabAt(0).setText(tabTitle[0]);
-        tabMain.getTabAt(1).setText(tabTitle[1]);
-        tabMain.getTabAt(2).setText(tabTitle[2]);
+        tabMain.getTabAt(0).setText(getText(R.string.today_receives).toString());
+        tabMain.getTabAt(1).setText(getText(R.string.month_receives).toString());
+        tabMain.getTabAt(2).setText(getText(R.string.all_receives).toString());
 
         tvTitle.setText(getText(R.string.complete));
         initListener();
@@ -99,6 +98,8 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
                 break;
             case TAB_2:
                 vpMain.setCurrentItem(2);
+                break;
+            default:
                 break;
         }
     }
@@ -124,15 +125,17 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
 
     public void updateOrderSum(String flag,int sum){
             switch (flag){
-            case Constant.ORDER_TODAY:
-                tabMain.getTabAt(0).setText(TextUtils.concat(getText(R.string.today_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
-                break;
-            case Constant.ORDER_MONTH:
-                tabMain.getTabAt(1).setText(TextUtils.concat(getText(R.string.month_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
-                break;
-            case Constant.ORDER_ALL:
-                tabMain.getTabAt(2).setText(TextUtils.concat(getText(R.string.all_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
-                break;
+                case Constant.ORDER_TODAY:
+                    tabMain.getTabAt(0).setText(TextUtils.concat(getText(R.string.today_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
+                    break;
+                case Constant.ORDER_MONTH:
+                    tabMain.getTabAt(1).setText(TextUtils.concat(getText(R.string.month_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
+                    break;
+                case Constant.ORDER_ALL:
+                    tabMain.getTabAt(2).setText(TextUtils.concat(getText(R.string.all_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
+                    break;
+                default:
+                    break;
         }
     }
 
@@ -152,6 +155,8 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
                 break;
             case Constant.TWO:
                 allOrderFragment.refreshPage();
+                break;
+            default:
                 break;
         }
     }

@@ -148,6 +148,8 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
 //                applyRecordAdapter.loadMoreFail();
                 swipeRefresh.setEnabled(true);
                 break;
+            default:
+                break;
         }
         if (message == null) {
             ToastUtil.shortToast(getActivity(), getText(R.string.request_error).toString());
@@ -170,6 +172,8 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
                 break;
             case Constant.REFRESH_UP_LOADMORE:
                 swipeRefresh.setEnabled(true);
+                break;
+            default:
                 break;
         }
         applyRecordData.addAll(data.getList());
@@ -201,6 +205,8 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
                 break;
             case Constant.REFRESH_UP_LOADMORE:
                 swipeRefresh.setEnabled(true);
+                break;
+            default:
                 break;
         }
         ToastUtil.shortToast(getActivity(),getText(R.string.net_error).toString());

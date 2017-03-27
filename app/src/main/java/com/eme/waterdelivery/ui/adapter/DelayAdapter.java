@@ -41,6 +41,8 @@ public class DelayAdapter extends BaseQuickAdapter<WaitingOrderBo, BaseViewHolde
             case Constant.PAY_TYPE_WEIXIN:
                 helper.setText(R.id.tv_pay_type, "微信");
                 break;
+            default:
+                break;
         }
         LinearLayout llContainer= (LinearLayout) helper.itemView.findViewById(R.id.ll_container);
         llContainer.removeAllViews();

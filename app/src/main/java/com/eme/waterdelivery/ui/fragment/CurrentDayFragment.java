@@ -146,6 +146,8 @@ public class CurrentDayFragment extends BaseFragment<CurrentDayPresenter> implem
                 currentDayAdapter.loadMoreFail();
                 swipeRefresh.setEnabled(true);
                 break;
+            default:
+                break;
         }
         if (message == null) {
             ToastUtil.shortToast(getActivity(), getText(R.string.request_error).toString());
@@ -169,6 +171,8 @@ public class CurrentDayFragment extends BaseFragment<CurrentDayPresenter> implem
             case Constant.REFRESH_UP_LOADMORE:
                 currentDayAdapter.loadMoreFail();
                 swipeRefresh.setEnabled(true);
+                break;
+            default:
                 break;
         }
         currentDayData.addAll(data.getList());
@@ -213,6 +217,8 @@ public class CurrentDayFragment extends BaseFragment<CurrentDayPresenter> implem
                 break;
             case Constant.REFRESH_UP_LOADMORE:
                 swipeRefresh.setEnabled(true);
+                break;
+            default:
                 break;
         }
         ToastUtil.shortToast(getActivity(),getText(R.string.net_error).toString());

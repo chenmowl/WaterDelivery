@@ -116,6 +116,8 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
                         adapter.notifyDataSetChanged();
                         checkHasApplyItem();
                         break;
+                    default:
+                        break;
                 }
             }
         });
@@ -287,6 +289,8 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
                     ToastUtil.shortToast(getActivity(), getText(R.string.apply_choice_good).toString());
                 }
                 checkHasApplyItem();
+                break;
+            default:
                 break;
         }
     }

@@ -5,7 +5,6 @@ import com.eme.waterdelivery.injector.WaterQual;
 import com.eme.waterdelivery.injector.ZhihuQual;
 import com.eme.waterdelivery.model.net.ApiConfig;
 import com.eme.waterdelivery.model.net.api.WaterApi;
-import com.eme.waterdelivery.model.net.api.ZhihuApi;
 import com.eme.waterdelivery.model.net.converter.FastJsonConverterFactory;
 import com.eme.waterdelivery.model.sp.SPBase;
 import com.eme.waterdelivery.model.sp.SpConstant;
@@ -140,12 +139,6 @@ public class NetModule {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .build();
-    }
-
-    @Singleton
-    @Provides
-    ZhihuApi provideZhihuService(@ZhihuQual Retrofit retrofit){
-        return retrofit.create(ZhihuApi.class);
     }
 
     @Singleton
