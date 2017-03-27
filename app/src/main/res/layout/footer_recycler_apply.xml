@@ -17,6 +17,7 @@
         android:textSize="13sp" />
 
     <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/et_remark"
         style="@style/Base.V7.Widget.AppCompat.EditText"
         android:layout_width="match_parent"
         android:layout_height="100dp"

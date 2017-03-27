@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.eme.waterdelivery.App;
 import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseFragment;
@@ -37,7 +38,6 @@ import butterknife.ButterKnife;
  * Created by dijiaoliang on 17/3/7.
  */
 public class SendingFragment extends BaseFragment<SendingFragPresenter> implements SendingFragContract.View, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
-
 
     @BindView(R.id.rv_content)
     RecyclerView rvContent;
@@ -63,9 +63,9 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
     protected void initEventAndData() {
         swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
-        rvContent.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvContent.setLayoutManager(new LinearLayoutManager(App.getAppInstance()));
         sendData = new ArrayList<>();
-        sendingAdapter = new SendingAdapter(getActivity(),sendData);
+        sendingAdapter = new SendingAdapter(App.getAppInstance(),sendData);
         sendingAdapter.setOnLoadMoreListener(this);
         sendingAdapter.setAutoLoadMoreSize(5);
         sendingAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
@@ -82,7 +82,7 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
                 if(bo!=null && bo.getOrderId()!=null){
                     Intent intent=new Intent(getActivity(), SendingDetailActivity.class);
                     intent.putExtra(Constant.ORDER_ID,bo.getOrderId());
-                    startActivity(intent);
+                    startActivityForResult(intent,Constant.REQUEST_CODE);
                 }else {
                     ToastUtil.shortToast(getActivity(),getText(R.string.order_info_error).toString());
                 }
@@ -202,5 +202,13 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
 
     public void refreshPage(){
         mPresenter.requestData(Constant.REFRESH_DOWN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(Constant.REQUEST_CODE==requestCode && RESULT_OK==resultCode){
+            refreshPage();
+        }
     }
 }

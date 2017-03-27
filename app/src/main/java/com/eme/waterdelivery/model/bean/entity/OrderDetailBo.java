@@ -37,7 +37,7 @@ public class OrderDetailBo {
     private String orderMessage;
     private String orderShipperTime;
     private String orderState;
-    private int payType;
+    private String payType;
     private String servicePhone;
     private String shippingTime;
     private String storeId;
@@ -131,12 +131,11 @@ public class OrderDetailBo {
         this.orderShipperTime = orderShipperTime;
     }
 
-
-    public int getPayType() {
+    public String getPayType() {
         return payType;
     }
 
-    public void setPayType(int payType) {
+    public void setPayType(String payType) {
         this.payType = payType;
     }
 

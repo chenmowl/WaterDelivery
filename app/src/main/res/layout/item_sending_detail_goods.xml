@@ -8,7 +8,7 @@
 
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/sdv_iodg_icon"
+        android:id="@+id/sdv_good"
         android:layout_width="68dp"
         android:layout_height="68dp"
         android:layout_marginTop="10dp"
@@ -20,10 +20,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@id/sdv_iodg_icon"
-        android:layout_alignTop="@id/sdv_iodg_icon"
+        android:layout_alignBottom="@id/sdv_good"
+        android:layout_alignTop="@id/sdv_good"
         android:layout_marginLeft="12dp"
-        android:layout_toRightOf="@id/sdv_iodg_icon"
+        android:layout_toRightOf="@id/sdv_good"
         android:orientation="vertical"
         android:paddingBottom="4dp"
         android:paddingTop="4dp">
@@ -37,6 +37,7 @@
             android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/tv_good_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -50,7 +51,7 @@
             android:layout_alignParentBottom="true">
 
             <TextView
-                android:id="@+id/tv_iodg_price"
+                android:id="@+id/tv_good_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="￥666.00"
@@ -58,7 +59,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/tv_iodg_count"
+                android:id="@+id/tv_good_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -70,15 +71,11 @@
 
     </RelativeLayout>
 
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_below="@id/sdv_iodg_icon"
+        android:layout_below="@id/sdv_good"
         android:layout_marginTop="10dp"
-        android:background="@color/cline_low"
-
-        />
-
+        android:background="@color/cline_low" />
 
 </RelativeLayout>

@@ -24,6 +24,10 @@ public class Constant {
 
     public static final String ORDER_ID="ORDER_ID";
 
+    public static final String TRAFFIC_NO="TRAFFIC_NO";
+
+    public static final int REQUEST_CODE=1001;//跳转配送中商品详情的请求码
+
 
     //现金、微信
     public static final String PAY_TYPE_MONEY="1";
@@ -40,7 +44,10 @@ public class Constant {
     public static final int ORDER_SEND=1002;
 
 
-
+    //采购单状态 0待处理 1派送中 2完结
+    public static final String APPLY_RECORD_STATUS_UNHANDLE="0";
+    public static final String APPLY_RECORD_STATUS_DELIVERY="1";
+    public static final String APPLY_RECORD_STATUS_COMPLETE="2";
 
 
     /***************************  网络常量数据  *****************************/

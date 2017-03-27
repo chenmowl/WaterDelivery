@@ -3,10 +3,10 @@ package com.eme.waterdelivery.ui.fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +15,16 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.eme.waterdelivery.App;
+import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseFragment;
 import com.eme.waterdelivery.contract.ApplyRecordContract;
-import com.eme.waterdelivery.model.bean.DelayBean;
+import com.eme.waterdelivery.model.bean.entity.HistoryPurchaseVo;
+import com.eme.waterdelivery.model.bean.entity.PurchaseBo;
 import com.eme.waterdelivery.presenter.ApplyRecordPresenter;
+import com.eme.waterdelivery.tools.NetworkUtils;
+import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.ui.ApplyDetailActivity;
 import com.eme.waterdelivery.ui.adapter.ApplyRecordAdapter;
 
@@ -44,8 +49,12 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
 
+    TextView tvToday;
+    TextView tvMonth;
+    TextView tvAll;
+
     private ApplyRecordAdapter applyRecordAdapter;
-    private List<DelayBean> delayData;
+    private List<PurchaseBo> applyRecordData;
 
     @Override
     protected void initInject() {
@@ -59,11 +68,12 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
 
     @Override
     protected void initEventAndData() {
-        swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
-        rvContent.setLayoutManager(new LinearLayoutManager(getActivity()));
-        delayData = new ArrayList<>();
-        applyRecordAdapter = new ApplyRecordAdapter(delayData);
+        swipeRefresh.setOnRefreshListener(this);
+        rvContent.setLayoutManager(new LinearLayoutManager(App.getAppInstance()));
+        applyRecordData = new ArrayList<>();
+        applyRecordAdapter = new ApplyRecordAdapter(App.getAppInstance(),applyRecordData);
+//        applyRecordAdapter.setAutoLoadMoreSize(8);
         applyRecordAdapter.setOnLoadMoreListener(this);
 //        applyRecordAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         rvContent.setAdapter(applyRecordAdapter);
@@ -71,8 +81,18 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
 
             @Override
             public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
-//                Toast.makeText(getActivity(), Integer.toString(position), Toast.LENGTH_LONG).show();
-                startActivity(new Intent(getActivity(), ApplyDetailActivity.class));
+                if(!NetworkUtils.isConnected(getActivity())){
+                    ToastUtil.shortToast(getActivity(),getText(R.string.net_error).toString());
+                    return;
+                }
+                PurchaseBo bo=applyRecordData.get(position);
+                if(bo!=null && bo.getTrafficNo()!=null){
+                    Intent intent=new Intent(getActivity(), ApplyDetailActivity.class);
+                    intent.putExtra(Constant.TRAFFIC_NO,bo.getTrafficNo());
+                    startActivity(intent);
+                }else {
+                    ToastUtil.shortToast(getActivity(),getText(R.string.order_info_error).toString());
+                }
             }
 
             @Override
@@ -81,23 +101,11 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
             }
         });
 
-        delayData.add(new DelayBean("123", 1));
-        delayData.add(new DelayBean("销量", 1));
-        delayData.add(new DelayBean("你哈", 1));
-        delayData.add(new DelayBean("亚麻", 1));
-        delayData.add(new DelayBean("司法", 1));
-        delayData.add(new DelayBean("是个", 1));
-        delayData.add(new DelayBean("极为", 1));
-        applyRecordAdapter.notifyDataSetChanged();
-
         //// TODO: 2017/3/7 RecyclerView添加头布局
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.header_apply, null);
-        TextView tvOne = (TextView) v.findViewById(R.id.tv_one);
-        TextView tvTwo = (TextView) v.findViewById(R.id.tv_two);
-        TextView tvThree = (TextView) v.findViewById(R.id.tv_there);
-        tvOne.setText("今日申请1次");
-        tvTwo.setText("当月申请30次");
-        tvThree.setText("历史申请510次");
+        tvToday = (TextView) v.findViewById(R.id.tv_one);
+        tvMonth = (TextView) v.findViewById(R.id.tv_two);
+        tvAll = (TextView) v.findViewById(R.id.tv_there);
         applyRecordAdapter.addHeaderView(v);
     }
 
@@ -112,35 +120,93 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
     @Override
     public void onRefresh() {
         applyRecordAdapter.setEnableLoadMore(false);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefresh.setRefreshing(false);
-                applyRecordAdapter.setEnableLoadMore(true);
-            }
-        }, 1000);
+        mPresenter.requestData(Constant.REFRESH_DOWN);
     }
-
-    int count;
 
     @Override
     public void onLoadMoreRequested() {
         swipeRefresh.setEnabled(false);
-        rvContent.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (count % 3 == 0) {
-//                    applyRecordAdapter.loadMoreEnd(true);
-                    applyRecordAdapter.loadMoreComplete();
-                } else if (count % 3 == 1) {
-                    applyRecordAdapter.loadMoreComplete();
-                } else {
-                    applyRecordAdapter.loadMoreFail();
-                }
-                swipeRefresh.setEnabled(true);
-                count++;
-            }
+        mPresenter.requestData(Constant.REFRESH_UP_LOADMORE);
+    }
 
-        }, 1000);
+    @Override
+    public void showProgress(boolean b) {
+        isShowLayer(llAvLoadingTransparent44, b);
+    }
+
+    @Override
+    public void requestFailure(int flag, String message) {
+        switch (flag) {
+            case Constant.REFRESH_NORMAL:
+                isShowLayer(llAvLoadingTransparent44, false);
+                break;
+            case Constant.REFRESH_DOWN:
+                swipeRefresh.setRefreshing(false);
+                applyRecordAdapter.setEnableLoadMore(true);
+                break;
+            case Constant.REFRESH_UP_LOADMORE:
+//                applyRecordAdapter.loadMoreFail();
+                swipeRefresh.setEnabled(true);
+                break;
+        }
+        if (message == null) {
+            ToastUtil.shortToast(getActivity(), getText(R.string.request_error).toString());
+        } else {
+            ToastUtil.shortToast(getActivity(), message);
+        }
+    }
+
+    @Override
+    public void updateUi(HistoryPurchaseVo data, int flag) {
+        switch (flag) {
+            case Constant.REFRESH_NORMAL:
+                applyRecordData.clear();
+                isShowLayer(llAvLoadingTransparent44, false);
+                break;
+            case Constant.REFRESH_DOWN:
+                applyRecordData.clear();
+                swipeRefresh.setRefreshing(false);
+                applyRecordAdapter.setEnableLoadMore(true);
+                break;
+            case Constant.REFRESH_UP_LOADMORE:
+                swipeRefresh.setEnabled(true);
+                break;
+        }
+        applyRecordData.addAll(data.getList());
+        applyRecordAdapter.notifyDataSetChanged();
+        // TODO: 17/3/27 更新header
+        tvAll.setText(TextUtils.concat(getText(R.string.apply_all_title),String.valueOf(data.getPurchaseHistoryOrderSum().getPurchaseHistoryOrderAllSum()),getText(R.string.apply_today_second_rate)));
+        tvMonth.setText(TextUtils.concat(getText(R.string.apply_month_title),String.valueOf(data.getPurchaseHistoryOrderSum().getPurchaseHistoryOrderMonthSum()),getText(R.string.apply_today_second_rate)));
+        tvToday.setText(TextUtils.concat(getText(R.string.apply_today_title),String.valueOf(data.getPurchaseHistoryOrderSum().getPurchaseHistoryOrderDaySum()),getText(R.string.apply_today_second_rate)));
+//        if (applyRecordData.size() < 8) {
+//            applyRecordAdapter.loadMoreEnd(true);
+//        }
+    }
+
+    @Override
+    public void notifyNoData() {
+        ToastUtil.shortToast(getActivity(), getText(R.string.no_data).toString());
+        applyRecordAdapter.loadMoreEnd();
+//        applyRecordAdapter.setEnableLoadMore(false);
+        swipeRefresh.setEnabled(true);
+    }
+
+    @Override
+    public void netError(int flag) {
+        switch (flag) {
+            case Constant.REFRESH_NORMAL:
+                break;
+            case Constant.REFRESH_DOWN:
+                applyRecordAdapter.setEnableLoadMore(true);
+                break;
+            case Constant.REFRESH_UP_LOADMORE:
+                swipeRefresh.setEnabled(true);
+                break;
+        }
+        ToastUtil.shortToast(getActivity(),getText(R.string.net_error).toString());
+    }
+
+    public void refreshPage(){
+        mPresenter.requestData(Constant.REFRESH_DOWN);
     }
 }

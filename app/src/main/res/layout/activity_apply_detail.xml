@@ -22,6 +22,7 @@
             android:background="@color/cline_deep" />
 
         <TextView
+            android:id="@+id/tv_handle_station"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -31,6 +32,7 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tv_station_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

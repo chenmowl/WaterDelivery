@@ -17,6 +17,7 @@
     <color name="cline_low">#EBEBEB</color>//常用浅色分割线
     <color name="cline_deep">#DBDBDB</color>//常用深色分割线
     <color name="cline_bar">#E2E2E2</color>//标题栏分割线
+    <color name="progress_blue">#007AFF</color>//进度条颜色
 
     <!--背景色-->
     <color name="activity_bg">#F2F2F2</color>//背景颜色

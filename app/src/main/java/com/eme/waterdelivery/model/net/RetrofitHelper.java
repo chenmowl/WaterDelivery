@@ -4,8 +4,12 @@ package com.eme.waterdelivery.model.net;
 import com.eme.waterdelivery.model.bean.Result;
 import com.eme.waterdelivery.model.bean.StatusResult;
 import com.eme.waterdelivery.model.bean.ZhihuDaily;
+import com.eme.waterdelivery.model.bean.entity.ApplyDetailVo;
+import com.eme.waterdelivery.model.bean.entity.ApplyOneLevelBo;
+import com.eme.waterdelivery.model.bean.entity.ApplyTwoLevelGoodBo;
 import com.eme.waterdelivery.model.bean.entity.HistoryOrderSumBo;
 import com.eme.waterdelivery.model.bean.entity.HistoryOrderVo;
+import com.eme.waterdelivery.model.bean.entity.HistoryPurchaseVo;
 import com.eme.waterdelivery.model.bean.entity.LoginBo;
 import com.eme.waterdelivery.model.bean.entity.OrderDetailBo;
 import com.eme.waterdelivery.model.bean.entity.OrderSumBo;
@@ -120,4 +124,71 @@ public class RetrofitHelper {
     public Observable<Result<OrderDetailBo>> getOrderDetail(String orderId) {
         return waterApi.getOrderDetail(orderId);
     }
+
+    /**
+     * 订单签收
+     * @param orderId
+     * @return
+     */
+    public Observable<StatusResult> orderSign(String orderId) {
+        return waterApi.orderSign(orderId);
+    }
+
+    /**
+     * 获取申请的一级数据
+     * @return
+     */
+    public Observable<Result<ApplyOneLevelBo>> getApplyOneLevel() {
+        return waterApi.getApplyOneLevel();
+    }
+
+    /**
+     * 获取申请的二级数据
+     * @param parentId
+     * @return
+     */
+    public Observable<Result<ApplyOneLevelBo>> getApplyTwoLevel(String parentId) {
+        return waterApi.getApplyTwoLevel(parentId);
+    }
+
+    /**
+     * 拉取二级分类下商品接口
+     * @param categoryId
+     * @return
+     */
+    public Observable<Result<ApplyTwoLevelGoodBo>> getApplyTwoLevelGoods(String categoryId) {
+        return waterApi.getApplyTwoLevelGoods(categoryId);
+    }
+
+    /**
+     * 分页拉取历史订购单
+     * @param storeId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public Observable<Result<HistoryPurchaseVo>> getHistoryPurchaseOrders(String storeId,int pageNo,String pageSize) {
+        return waterApi.getHistoryPurchaseOrders(storeId,pageNo,pageSize);
+    }
+
+    /**
+     * 拉取订购单详情
+     * @param trafficNo
+     * @return
+     */
+    public Observable<Result<ApplyDetailVo>> getPurchaseOrderDetail(String trafficNo) {
+        return waterApi.getPurchaseOrderDetail(trafficNo);
+    }
+
+    /**
+     * 提交订购单
+     * @param storeId
+     * @param createMemo
+     * @param purchaseGoods
+     * @return
+     */
+    public Observable<StatusResult> submitApplications(String storeId,String createMemo,String purchaseGoods) {
+        return waterApi.submitApplications(storeId,createMemo,purchaseGoods);
+    }
+
 }

@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.MyApplyContract;
@@ -30,9 +31,9 @@ import io.reactivex.functions.Consumer;
  * <p>
  * Created by dijiaoliang on 17/3/9.
  */
-public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements MyApplyContract.View {
+public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements MyApplyContract.View, ViewPager.OnPageChangeListener {
 
-
+    public static final String TAG=MyApplyActivity.class.getSimpleName();
 
     @BindView(R.id.back)
     LinearLayout back;
@@ -46,6 +47,7 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
     public static String[] tabTitle = new String[]{"申请采购", "申请记录"};
     List<Fragment> fragments = new ArrayList<>();
     private HomeFragmentAdapter homeFragmentAdapter;
+    ApplyRecordFragment applyRecordFragment;
 
     @Override
     protected void initInject() {
@@ -59,8 +61,9 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
 
     @Override
     protected void initEventAndData(Bundle savedInstanceState) {
+        applyRecordFragment=new ApplyRecordFragment();
         fragments.add(new ApplyFragment());
-        fragments.add(new ApplyRecordFragment());
+        fragments.add(applyRecordFragment);
         homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
         vpMain.setAdapter(homeFragmentAdapter);
         //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
@@ -79,9 +82,11 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
+                        mPresenter.unSubscribe();
                         MyApplyActivity.this.finish();
                     }
                 });
+        vpMain.setOnPageChangeListener(this);
     }
 
     @Override
@@ -89,5 +94,24 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        switch (position){
+            case Constant.ONE:
+                applyRecordFragment.refreshPage();
+                break;
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

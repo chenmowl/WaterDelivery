@@ -10,6 +10,9 @@
     <!--toast-->
     <string name="order_sum_error">订单数量信息获取失败</string>
     <string name="order_info_error">订单信息异常</string>
+    <string name="order_sign_error">订单签收失败</string>
+    <string name="order_sign_success">订单签收成功</string>
+    <string name="submit_application_failure">采购单提交失败</string>
 
     <!--登陆页面-->
     <string name="input_username">输入账户名</string>
@@ -63,6 +66,13 @@
     <string name="specs_colon">规格</string>
     <string name="order_detail_title_close_surplus">隐藏商品</string>
     <string name="order_detail_title_open_surplus">展开剩余商品</string>
+    <string name="order_pay_mode_money">现金</string>
+    <string name="order_pay_mode_weixin">微信</string>
+    <string name="order_receiver_title">送件人: </string>
+    <string name="order_address_title">地址: </string>
+    <string name="order_balance_title">金额: ￥</string>
+    <string name="order_balance_title2">金额: </string>
+    <string name="order_confirm_sign">确定收款／水票</string>
 
 
     <!--已完成-->
@@ -84,6 +94,15 @@
     <string name="confirm">确定</string>
     <string name="apply_list">申请清单</string>
     <string name="order_tempo">订单进度</string>
+    <string name="apply_choice_good">未选择商品</string>
+    <string name="apply_no_input_sum">未填写商品数量</string>
+    <string name="apply_add_success">成功添加采购项</string>
+    <string name="apply_today_second_rate">次</string>
+    <string name="apply_today_title">今日申请: </string>
+    <string name="apply_month_title">当月申请: </string>
+    <string name="apply_all_title">历史申请: </string>
+    <string name="apply_order_number">订单编号: </string>
+    <string name="apply_detail_remark_title">备注说明: \n</string>
 
 
     <array name="product_types">

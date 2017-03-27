@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,11 +20,16 @@ import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.CameraPosition;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
+import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.CompleteDetailContract;
+import com.eme.waterdelivery.model.bean.entity.OrderDetailBo;
 import com.eme.waterdelivery.presenter.CompleteDetailPresenter;
-import com.eme.waterdelivery.ui.adapter.SendingGoodAdapter;
+import com.eme.waterdelivery.tools.ConstUtils;
+import com.eme.waterdelivery.tools.TimeUtils;
+import com.eme.waterdelivery.tools.ToastUtil;
+import com.eme.waterdelivery.ui.adapter.SendingDetailGoodAdapter;
 import com.eme.waterdelivery.widget.FullyLinearLayoutManager;
 import com.eme.waterdelivery.widget.MapContainer;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -91,8 +97,8 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
 
     private AMap aMap;
 
-    private List<String> mData;
-    private SendingGoodAdapter goodAdapter;
+    private List<OrderDetailBo.GoodsBean> mData;
+    private SendingDetailGoodAdapter goodAdapter;
     private boolean isShowAll;
 
     @Override
@@ -133,12 +139,12 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         rvContent.setLayoutManager(manager);
         mData = new ArrayList<>();
-        mData.add("1");
-        mData.add("1");
-        mData.add("1");
-        mData.add("1");
+        mData.add(new OrderDetailBo.GoodsBean());
+        mData.add(new OrderDetailBo.GoodsBean());
+        mData.add(new OrderDetailBo.GoodsBean());
+        mData.add(new OrderDetailBo.GoodsBean());
         isShowAll = false;//商品是否展开
-        goodAdapter = new SendingGoodAdapter(this, mData);
+        goodAdapter = new SendingDetailGoodAdapter(this, mData);
         rvContent.setAdapter(goodAdapter);
 
         if (mData.size() <= 2) {
@@ -152,8 +158,18 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
                 ivOrderDetailOpenSurplus.setImageResource(R.mipmap.xiala);
             }
         }
+        initListener();
 
-//        设置btn监听,防止连续的二次点击
+        String orderId=getIntent().getStringExtra(Constant.ORDER_ID);
+        tvTitle.setText(orderId);
+        mPresenter.requestData(orderId);//请求订单详情数据
+    }
+
+    /**
+     * 初始化监听
+     */
+    private void initListener() {
+        //        设置btn监听,防止连续的二次点击
         RxView.clicks(llOrderOpenSurplus)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -161,6 +177,16 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
                     @Override
                     public void accept(Object o) throws Exception {
                         checkShowAll();
+                    }
+                });
+        RxView.clicks(back)
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        mPresenter.unSubscribe();
+                        finish();
                     }
                 });
     }
@@ -216,5 +242,59 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
     protected void onDestroy() {
         map.onDestroy();
         super.onDestroy();
+    }
+
+    @Override
+    public void showProgress(boolean b) {
+        isShowLayer(llAvLoadingTransparent44,b);
+    }
+
+    @Override
+    public void showRequestMsg(String msg) {
+        if(TextUtils.isEmpty(msg)){
+            ToastUtil.shortToast(this,getText(R.string.request_error).toString());
+        }else{
+            ToastUtil.shortToast(this,msg);
+        }
+    }
+
+    @Override
+    public void updateUi(OrderDetailBo orderDetailBo) {
+        tvOrderDetailPlaceTime.setText(orderDetailBo.getCreateTime());
+        switch (orderDetailBo.getPayType()){
+            case Constant.PAY_TYPE_MONEY:
+                tvOrderDetailPayMode.setText(getText(R.string.order_pay_mode_money));
+                break;
+            case Constant.PAY_TYPE_WEIXIN:
+                tvOrderDetailPayMode.setText(getText(R.string.order_pay_mode_weixin));
+                break;
+            default:
+                tvOrderDetailPayMode.setText(Constant.STR_EMPTY);
+                break;
+        }
+        if(!TextUtils.isEmpty(orderDetailBo.getShippingTime())){
+            tvOrderDetailUsedTime.setText(TimeUtils.getIntervalTime(TimeUtils.getCurTimeString(), orderDetailBo.getShippingTime(), ConstUtils.TimeUnit.MIN) + "分钟");
+        }
+        tvReceiver.setText(getText(R.string.order_receiver_title) + orderDetailBo.getMemberName());
+        tvAddress.setText(getText(R.string.order_address_title) + orderDetailBo.getMemberAddress());
+        tvRemark.setText(orderDetailBo.getOrderMessage());
+        tvOrderDetailClientPhone.setText(orderDetailBo.getServicePhone());
+        tvOrderDetailCustomerPhone.setText(orderDetailBo.getMemberPhone());
+        List<OrderDetailBo.GoodsBean> data=orderDetailBo.getGoods();
+        mData.clear();
+        mData.addAll(data);
+        goodAdapter.notifyDataSetChanged();
+        if (mData.size() <= 2) {
+            llOrderOpenSurplus.setVisibility(View.GONE);
+        } else {
+            if (isShowAll) {
+                tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_close_surplus);
+                ivOrderDetailOpenSurplus.setImageResource(R.mipmap.shangla);
+            } else {
+                tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_open_surplus);
+                ivOrderDetailOpenSurplus.setImageResource(R.mipmap.xiala);
+            }
+        }
+        tvBalance.setText(getText(R.string.order_balance_title) +orderDetailBo.getOrderAmount());
     }
 }

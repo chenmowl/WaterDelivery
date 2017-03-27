@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.eme.waterdelivery.App;
 import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseFragment;
@@ -23,6 +24,7 @@ import com.eme.waterdelivery.model.bean.entity.HistoryOrderSumBo;
 import com.eme.waterdelivery.model.bean.entity.HistoryOrderVo;
 import com.eme.waterdelivery.model.bean.entity.WaitingOrderBo;
 import com.eme.waterdelivery.presenter.CurrentDayPresenter;
+import com.eme.waterdelivery.tools.NetworkUtils;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.ui.CompleteActivity;
 import com.eme.waterdelivery.ui.CompleteDetailActivity;
@@ -67,12 +69,12 @@ public class CurrentDayFragment extends BaseFragment<CurrentDayPresenter> implem
 
     @Override
     protected void initEventAndData() {
-        inflater=LayoutInflater.from(getActivity());
+        inflater=LayoutInflater.from(App.getAppInstance());
         swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
-        rvContent.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvContent.setLayoutManager(new LinearLayoutManager(App.getAppInstance()));
         currentDayData = new ArrayList<>();
-        currentDayAdapter = new CurrentDayAdapter(getActivity(),currentDayData);
+        currentDayAdapter = new CurrentDayAdapter(App.getAppInstance(),currentDayData);
         currentDayAdapter.setOnLoadMoreListener(this);
 //        currentDayAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         rvContent.setAdapter(currentDayAdapter);
@@ -80,7 +82,18 @@ public class CurrentDayFragment extends BaseFragment<CurrentDayPresenter> implem
 
             @Override
             public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
-                startActivity(new Intent(getActivity(), CompleteDetailActivity.class));
+                if(!NetworkUtils.isConnected(getActivity())){
+                    ToastUtil.shortToast(getActivity(),getText(R.string.net_error).toString());
+                    return;
+                }
+                WaitingOrderBo bo=currentDayData.get(position);
+                if(bo!=null && bo.getOrderId()!=null){
+                    Intent intent=new Intent(getActivity(), CompleteDetailActivity.class);
+                    intent.putExtra(Constant.ORDER_ID,bo.getOrderId());
+                    startActivity(intent);
+                }else {
+                    ToastUtil.shortToast(getActivity(),getText(R.string.order_info_error).toString());
+                }
             }
 
             @Override
@@ -208,4 +221,5 @@ public class CurrentDayFragment extends BaseFragment<CurrentDayPresenter> implem
     public void refreshPage(){
         mPresenter.requestData(Constant.REFRESH_DOWN);
     }
+
 }

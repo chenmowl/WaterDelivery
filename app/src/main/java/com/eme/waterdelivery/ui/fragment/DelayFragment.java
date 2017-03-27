@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.eme.waterdelivery.App;
 import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseFragment;
@@ -63,9 +64,9 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
     protected void initEventAndData() {
         swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
-        rvContent.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvContent.setLayoutManager(new LinearLayoutManager(App.getAppInstance()));
         delayData = new ArrayList<>();
-        delayAdapter = new DelayAdapter(getActivity(), delayData);
+        delayAdapter = new DelayAdapter(App.getAppInstance(), delayData);
         delayAdapter.setAutoLoadMoreSize(5);
 //        delayAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         rvContent.setAdapter(delayAdapter);

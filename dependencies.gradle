@@ -10,7 +10,7 @@ def aviVersion = "2.1.2"
 def circleimageviewVersion = "2.1.0"
 def fragmentationVersion = "0.10.1"
 def glideVersion = "3.7.0"
-def adapterVersion = "2.8.4"
+def adapterVersion = "2.9.1"
 def spinnerVersion = "1.1.0"
 
 project.ext {

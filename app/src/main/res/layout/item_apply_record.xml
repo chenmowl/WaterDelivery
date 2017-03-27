@@ -48,6 +48,7 @@
                 android:paddingRight="15dp">
 
                 <TextView
+                    android:id="@+id/tv_order_id"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -91,24 +92,21 @@
                     android:textColor="@color/text_color_bar"
                     android:textSize="12sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="4dp"
-                    android:text="桶装水:  1.8L纯净水(3桶)"
-                    android:textColor="@color/text_color_bar"
-                    android:textSize="12sp" />
+                <LinearLayout
+                    android:id="@+id/ll_container"
+                    android:paddingBottom="10dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="4dp"
-                    android:text="饮水机:  立冰YLR-5-V28W型(3台)"
-                    android:textColor="@color/text_color_bar"
-                    android:textSize="12sp" />
-
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginBottom="10dp"-->
+                    <!--android:layout_marginLeft="4dp"-->
+                    <!--android:text="桶装水:  1.8L纯净水(3桶)"-->
+                    <!--android:textColor="@color/text_color_bar"-->
+                    <!--android:textSize="12sp" />-->
 
             </LinearLayout>
 

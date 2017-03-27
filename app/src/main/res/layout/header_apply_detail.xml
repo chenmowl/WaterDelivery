@@ -33,7 +33,7 @@
                 android:layout_height="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:weightSum="8">
+                android:weightSum="6">
 
                 <ImageView
                     android:id="@+id/iv_line_left"
@@ -43,12 +43,12 @@
                     android:layout_weight="1"
                     android:background="@android:color/transparent" />
 
-                <ImageView
-                    android:id="@+id/iv_line_one"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="2"
-                    android:background="@color/cline_low" />
+                <!--<ImageView-->
+                    <!--android:id="@+id/iv_line_one"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:layout_weight="2"-->
+                    <!--android:background="@color/cline_low" />-->
 
                 <ImageView
                     android:id="@+id/iv_line_two"
@@ -65,10 +65,9 @@
                     android:background="@color/cline_low" />
 
                 <ImageView
-                    android:id="@+id/iv_line_right"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:background="@android:color/transparent" />
 
 
@@ -77,43 +76,43 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="4">
+                android:weightSum="3">
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                <!--<RelativeLayout-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1">-->
 
-                    <ImageView
-                        android:id="@+id/iv_order_detail_point_one"
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:layout_centerHorizontal="true"
-                        android:src="@mipmap/order_dian_blue" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/iv_order_detail_point_one"-->
+                        <!--android:layout_width="10dp"-->
+                        <!--android:layout_height="10dp"-->
+                        <!--android:layout_centerHorizontal="true"-->
+                        <!--android:src="@mipmap/order_dian_blue" />-->
 
-                    <TextView
-                        android:id="@+id/tv_order_detail_status_one"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/iv_order_detail_point_one"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="15dp"
-                        android:text="订单已提交"
-                        android:textColor="@color/hint_text_gray"
-                        android:textSize="12sp" />
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_order_detail_status_one"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_below="@id/iv_order_detail_point_one"-->
+                        <!--android:layout_centerHorizontal="true"-->
+                        <!--android:layout_marginTop="15dp"-->
+                        <!--android:text="订单已提交"-->
+                        <!--android:textColor="@color/hint_text_gray"-->
+                        <!--android:textSize="12sp" />-->
 
-                    <TextView
-                        android:id="@+id/tv_order_detail_status_one_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/tv_order_detail_status_one"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="5dp"
-                        android:text="10月20日 12:00"
-                        android:textColor="@color/text_color_gray"
-                        android:textSize="10sp" />
+                    <!--<TextView-->
+                        <!--android:id="@+id/tv_order_detail_status_one_time"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_below="@id/tv_order_detail_status_one"-->
+                        <!--android:layout_centerHorizontal="true"-->
+                        <!--android:layout_marginTop="5dp"-->
+                        <!--android:text="10月20日 12:00"-->
+                        <!--android:textColor="@color/text_color_gray"-->
+                        <!--android:textSize="10sp" />-->
 
-                </RelativeLayout>
+                <!--</RelativeLayout>-->
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -125,7 +124,7 @@
                         android:layout_width="10dp"
                         android:layout_height="10dp"
                         android:layout_centerHorizontal="true"
-                        android:src="@mipmap/order_dian_hui" />
+                        android:src="@mipmap/order_dian_blue" />
 
                     <TextView
                         android:id="@+id/tv_order_detail_status_two"

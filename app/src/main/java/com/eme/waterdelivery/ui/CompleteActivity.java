@@ -54,7 +54,7 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
     private MonthOrderFragment monthOrderFragment;
     private AllOrderFragment allOrderFragment;
 
-    public static String[] tabTitle = new String[]{"今日接单 (12)", "当月接单 (34)", "历史接单 (34)"};
+    public static String[] tabTitle = new String[]{"今日接单 ", "当月接单 ", "历史接单 "};
     List<Fragment> fragments = new ArrayList<>();
     private HomeFragmentAdapter homeFragmentAdapter;
 
@@ -77,6 +77,7 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
         fragments.add(monthOrderFragment);
         fragments.add(allOrderFragment);
         homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
+        vpMain.setOffscreenPageLimit(3);
         vpMain.setAdapter(homeFragmentAdapter);
         //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
         tabMain.setupWithViewPager(vpMain, true);
@@ -86,6 +87,8 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
 
         tvTitle.setText(getText(R.string.complete));
         initListener();
+
+        vpMain.setOnPageChangeListener(this);
 
         switch (getIntent().getStringExtra(TAB)) {
             case TAB_0:
@@ -98,8 +101,6 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
                 vpMain.setCurrentItem(2);
                 break;
         }
-
-        vpMain.setOnPageChangeListener(this);
     }
 
     private void initListener() {
