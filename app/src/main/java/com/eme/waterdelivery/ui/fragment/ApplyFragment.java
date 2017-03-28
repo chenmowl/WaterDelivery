@@ -95,8 +95,8 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
         rvApply.setHasFixedSize(true);
         rvApply.addItemDecoration(new SpacesItemDecoration(4));
         rvApply.setAdapter(adapter);
-        headerView = LayoutInflater.from(getActivity()).inflate(R.layout.header_recycler_apply, null, false);
-        footerView = LayoutInflater.from(getActivity()).inflate(R.layout.footer_recycler_apply, null, false);
+        headerView = LayoutInflater.from(mActivity).inflate(R.layout.header_recycler_apply, null, false);
+        footerView = LayoutInflater.from(mActivity).inflate(R.layout.footer_recycler_apply, null, false);
         etRemark = (AppCompatEditText) footerView.findViewById(R.id.et_remark);
         adapter.addHeaderView(headerView);
         adapter.addFooterView(footerView);
@@ -202,8 +202,8 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
      */
     private void alertApplyDialog(final List<ApplyOneLevelBo.ListBean> listBeen) {
         goodPosition = -1;
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_apply, null, false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+        dialogView = LayoutInflater.from(mActivity).inflate(R.layout.dialog_apply, null, false);
         etAmount = (AppCompatEditText) dialogView.findViewById(R.id.et_amount);
         etAmount.addTextChangedListener(new ZeroTextWatcher());
         typeSpinner = (BetterSpinner) dialogView.findViewById(R.id.ns_type);
@@ -215,9 +215,9 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
         for (ApplyOneLevelBo.ListBean bean : listBeen) {
             tempData.add(bean.getName());
         }
-        adapterType = new ArrayAdapter(getActivity(), R.layout.item_spinner_apply, tempData);
-        adapterSize = new ArrayAdapter(getActivity(), R.layout.item_spinner_apply, tempSize);
-        adapterGood = new ArrayAdapter(getActivity(), R.layout.item_spinner_apply, tempGood);
+        adapterType = new ArrayAdapter(mActivity, R.layout.item_spinner_apply, tempData);
+        adapterSize = new ArrayAdapter(mActivity, R.layout.item_spinner_apply, tempSize);
+        adapterGood = new ArrayAdapter(mActivity, R.layout.item_spinner_apply, tempGood);
         typeSpinner.setAdapter(adapterType);
         sizeSpinner.setAdapter(adapterSize);
         goodSpinner.setAdapter(adapterGood);
@@ -281,12 +281,12 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
                         listBean.setCount(Integer.parseInt(count));
                         data.add(listBean);
                         adapter.notifyDataSetChanged();
-                        ToastUtil.shortToast(getActivity(), getText(R.string.apply_add_success).toString());
+                        ToastUtil.shortToast(mActivity, getText(R.string.apply_add_success).toString());
                     } else {
-                        ToastUtil.shortToast(getActivity(), getText(R.string.apply_no_input_sum).toString());
+                        ToastUtil.shortToast(mActivity, getText(R.string.apply_no_input_sum).toString());
                     }
                 } else {
-                    ToastUtil.shortToast(getActivity(), getText(R.string.apply_choice_good).toString());
+                    ToastUtil.shortToast(mActivity, getText(R.string.apply_choice_good).toString());
                 }
                 checkHasApplyItem();
                 break;
@@ -338,7 +338,7 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
 
     @Override
     public void requestError() {
-        ToastUtil.shortToast(getActivity(), getText(R.string.request_error).toString());
+        ToastUtil.shortToast(mActivity, getText(R.string.request_error).toString());
     }
 
     @Override
@@ -353,12 +353,12 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
             data.clear();
             adapter.notifyDataSetChanged();
             checkHasApplyItem();
-            ToastUtil.shortToast(getActivity(),msg);
+            ToastUtil.shortToast(mActivity,msg);
         }else{
             if(TextUtils.isEmpty(msg)){
-                ToastUtil.shortToast(getActivity(),getText(R.string.submit_application_failure).toString());
+                ToastUtil.shortToast(mActivity,getText(R.string.submit_application_failure).toString());
             }else{
-                ToastUtil.shortToast(getActivity(),msg);
+                ToastUtil.shortToast(mActivity,msg);
             }
         }
         isShowLayer(llAvLoadingTransparent44,false);

@@ -74,17 +74,17 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
 
             @Override
             public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
-                if(!NetworkUtils.isConnected(getActivity())){
-                    ToastUtil.shortToast(getActivity(),getText(R.string.net_error).toString());
+                if(!NetworkUtils.isConnected(mActivity)){
+                    ToastUtil.shortToast(mActivity,getText(R.string.net_error).toString());
                     return;
                 }
                 WaitingOrderBo bo=sendData.get(position);
                 if(bo!=null && bo.getOrderId()!=null){
-                    Intent intent=new Intent(getActivity(), SendingDetailActivity.class);
+                    Intent intent=new Intent(mActivity, SendingDetailActivity.class);
                     intent.putExtra(Constant.ORDER_ID,bo.getOrderId());
                     startActivityForResult(intent,Constant.REQUEST_CODE);
                 }else {
-                    ToastUtil.shortToast(getActivity(),getText(R.string.order_info_error).toString());
+                    ToastUtil.shortToast(mActivity,getText(R.string.order_info_error).toString());
                 }
             }
 
@@ -99,7 +99,7 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                         }else{
-                            ToastUtil.shortToast(getActivity(),getText(R.string.no_phone).toString());
+                            ToastUtil.shortToast(mActivity,getText(R.string.no_phone).toString());
                         }
                         break;
                     default:
@@ -109,7 +109,7 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
         });
 
         //// TODO: 2017/3/7 RecyclerView添加头布局
-//        View v = LayoutInflater.from(getActivity()).inflate(R.layout.header_recycler, null);
+//        View v = LayoutInflater.from(mActivity).inflate(R.layout.header_recycler, null);
 //        sendingAdapter.addHeaderView(v);
     }
 
@@ -156,9 +156,9 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
                 break;
         }
         if (message == null) {
-            ToastUtil.shortToast(getActivity(), getText(R.string.request_error).toString());
+            ToastUtil.shortToast(mActivity, getText(R.string.request_error).toString());
         } else {
-            ToastUtil.shortToast(getActivity(), message);
+            ToastUtil.shortToast(mActivity, message);
         }
     }
 
@@ -190,7 +190,7 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
 
     @Override
     public void notifyNoData() {
-        ToastUtil.shortToast(getActivity(), getText(R.string.no_data).toString());
+        ToastUtil.shortToast(mActivity, getText(R.string.no_data).toString());
 //        sendingAdapter.loadMoreEnd();
 //        swipeRefresh.setEnabled(false);
 //        sendingAdapter.setEnableLoadMore(false);
@@ -198,12 +198,12 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
 
     @Override
     public void updateOrderSum(OrderSumBo orderSumBo) {
-        ((HomeActivity) getActivity()).updateOrderSum(Constant.ORDER_SEND, orderSumBo.getDistributingOrderSum());
+        ((HomeActivity) mActivity).updateOrderSum(Constant.ORDER_SEND, orderSumBo.getDistributingOrderSum());
     }
 
     @Override
     public void showOrderSumError() {
-        ToastUtil.shortToast(getActivity(), getText(R.string.order_sum_error).toString());
+        ToastUtil.shortToast(mActivity, getText(R.string.order_sum_error).toString());
     }
 
     public void refreshPage(){

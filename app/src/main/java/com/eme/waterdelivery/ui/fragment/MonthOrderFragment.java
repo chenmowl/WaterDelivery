@@ -69,7 +69,7 @@ public class MonthOrderFragment extends BaseFragment<MonthOrderPresenter> implem
 
     @Override
     protected void initEventAndData() {
-        inflater=LayoutInflater.from(getActivity());
+        inflater=LayoutInflater.from(mActivity);
         swipeRefresh.setOnRefreshListener(this);
         swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
         rvContent.setLayoutManager(new LinearLayoutManager(App.getAppInstance()));
@@ -82,17 +82,17 @@ public class MonthOrderFragment extends BaseFragment<MonthOrderPresenter> implem
 
             @Override
             public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
-                if(!NetworkUtils.isConnected(getActivity())){
-                    ToastUtil.shortToast(getActivity(),getText(R.string.net_error).toString());
+                if(!NetworkUtils.isConnected(mActivity)){
+                    ToastUtil.shortToast(mActivity,getText(R.string.net_error).toString());
                     return;
                 }
                 WaitingOrderBo bo=currentDayData.get(position);
                 if(bo!=null && bo.getOrderId()!=null){
-                    Intent intent=new Intent(getActivity(), CompleteDetailActivity.class);
+                    Intent intent=new Intent(mActivity, CompleteDetailActivity.class);
                     intent.putExtra(Constant.ORDER_ID,bo.getOrderId());
                     startActivity(intent);
                 }else {
-                    ToastUtil.shortToast(getActivity(),getText(R.string.order_info_error).toString());
+                    ToastUtil.shortToast(mActivity,getText(R.string.order_info_error).toString());
                 }
             }
 
@@ -103,7 +103,7 @@ public class MonthOrderFragment extends BaseFragment<MonthOrderPresenter> implem
         });
 
         //// TODO: 2017/3/7 RecyclerView添加头布局
-        llHeader = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.header_recycler, null);
+        llHeader = (LinearLayout) LayoutInflater.from(mActivity).inflate(R.layout.header_recycler, null);
         currentDayAdapter.addHeaderView(llHeader);
     }
 
@@ -150,9 +150,9 @@ public class MonthOrderFragment extends BaseFragment<MonthOrderPresenter> implem
                 break;
         }
         if (message == null) {
-            ToastUtil.shortToast(getActivity(), getText(R.string.request_error).toString());
+            ToastUtil.shortToast(mActivity, getText(R.string.request_error).toString());
         } else {
-            ToastUtil.shortToast(getActivity(), message);
+            ToastUtil.shortToast(mActivity, message);
         }
     }
 
@@ -191,7 +191,7 @@ public class MonthOrderFragment extends BaseFragment<MonthOrderPresenter> implem
 
     @Override
     public void notifyNoData() {
-        ToastUtil.shortToast(getActivity(), getText(R.string.no_data).toString());
+        ToastUtil.shortToast(mActivity, getText(R.string.no_data).toString());
 //        currentDayAdapter.loadMoreEnd();
 //        swipeRefresh.setEnabled(false);
 //        currentDayAdapter.setEnableLoadMore(false);
@@ -199,12 +199,12 @@ public class MonthOrderFragment extends BaseFragment<MonthOrderPresenter> implem
 
     @Override
     public void updateOrderSum(HistoryOrderSumBo orderSumBo) {
-        ((CompleteActivity) getActivity()).updateOrderSum(Constant.ORDER_MONTH, orderSumBo.getHistoryOrderMonthSum());
+        ((CompleteActivity) mActivity).updateOrderSum(Constant.ORDER_MONTH, orderSumBo.getHistoryOrderMonthSum());
     }
 
     @Override
     public void showOrderSumError() {
-        ToastUtil.shortToast(getActivity(), getText(R.string.order_sum_error).toString());
+        ToastUtil.shortToast(mActivity, getText(R.string.order_sum_error).toString());
     }
 
     @Override
@@ -221,7 +221,7 @@ public class MonthOrderFragment extends BaseFragment<MonthOrderPresenter> implem
             default:
                 break;
         }
-        ToastUtil.shortToast(getActivity(),getText(R.string.net_error).toString());
+        ToastUtil.shortToast(mActivity,getText(R.string.net_error).toString());
     }
 
     public void refreshPage(){

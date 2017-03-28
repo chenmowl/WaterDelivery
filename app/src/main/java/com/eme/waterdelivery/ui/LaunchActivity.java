@@ -1,5 +1,6 @@
 package com.eme.waterdelivery.ui;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.LinearLayout;
@@ -10,9 +11,12 @@ import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.LaunchContract;
 import com.eme.waterdelivery.model.bean.entity.LoginBo;
 import com.eme.waterdelivery.presenter.LaunchPresenter;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.functions.Consumer;
 
 /**
  * 启动页

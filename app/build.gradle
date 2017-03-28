@@ -61,6 +61,7 @@ dependencies {
     compile rootProject.ext.dependencies.getAt("adapter")
     compile rootProject.ext.dependencies.getAt("imagepicker")
     compile rootProject.ext.dependencies.getAt("spinner")
+    compile rootProject.ext.dependencies.getAt("rxpermissions2")
     //    compile rootProject.ext.dependencies.getAt("ormlite-android")
     //    compile rootProject.ext.dependencies.getAt("stream")
     compile 'org.glassfish:javax.annotation:10.0-b28'

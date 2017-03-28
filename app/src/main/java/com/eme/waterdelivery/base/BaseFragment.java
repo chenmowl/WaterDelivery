@@ -1,6 +1,7 @@
 package com.eme.waterdelivery.base;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -85,6 +86,20 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     public void onDestroy() {
         super.onDestroy();
         if (mPresenter != null) mPresenter.unSubscribe();
+    }
+
+    protected Activity mActivity;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mActivity=activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mActivity=null;
     }
 
     /**

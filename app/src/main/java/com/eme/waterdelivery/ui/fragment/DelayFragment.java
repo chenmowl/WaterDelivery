@@ -82,7 +82,7 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
                 super.onItemChildClick(adapter, view, position);
                 switch (view.getId()) {
                     case R.id.btn_receiving:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
                         builder.setMessage("是否接单？\n一旦接单将无法取消");
                         builder.setNegativeButton("取消", null);
                         builder.setPositiveButton("接单", new DialogInterface.OnClickListener() {
@@ -144,9 +144,9 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
                 break;
         }
         if (message == null) {
-            ToastUtil.shortToast(getActivity(), getText(R.string.request_error).toString());
+            ToastUtil.shortToast(mActivity, getText(R.string.request_error).toString());
         } else {
-            ToastUtil.shortToast(getActivity(), message);
+            ToastUtil.shortToast(mActivity, message);
         }
     }
 
@@ -178,7 +178,7 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
 
     @Override
     public void notifyNoData() {
-        ToastUtil.shortToast(getActivity(), getText(R.string.no_data).toString());
+        ToastUtil.shortToast(mActivity, getText(R.string.no_data).toString());
 //        delayAdapter.loadMoreEnd();
 //        swipeRefresh.setEnabled(false);
 //        delayAdapter.setEnableLoadMore(false);
@@ -186,12 +186,12 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
 
     @Override
     public void updateOrderSum(OrderSumBo orderSumBo) {
-        ((HomeActivity) getActivity()).updateOrderSum(Constant.ORDER_DELAY, orderSumBo.getWaitingOrderSum());
+        ((HomeActivity) mActivity).updateOrderSum(Constant.ORDER_DELAY, orderSumBo.getWaitingOrderSum());
     }
 
     @Override
     public void showOrderSumError() {
-        ToastUtil.shortToast(getActivity(), getText(R.string.order_sum_error).toString());
+        ToastUtil.shortToast(mActivity, getText(R.string.order_sum_error).toString());
     }
 
     @Override
@@ -199,7 +199,7 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
         if (TextUtils.isEmpty(message)) {
             message = getText(R.string.receive_order_success).toString();
         }
-        ToastUtil.shortToast(getActivity(), message);
+        ToastUtil.shortToast(mActivity, message);
     }
 
     public void refreshPage(){

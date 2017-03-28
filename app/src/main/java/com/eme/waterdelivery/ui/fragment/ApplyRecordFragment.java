@@ -81,17 +81,17 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
 
             @Override
             public void onSimpleItemClick(final BaseQuickAdapter adapter, final View view, final int position) {
-                if(!NetworkUtils.isConnected(getActivity())){
-                    ToastUtil.shortToast(getActivity(),getText(R.string.net_error).toString());
+                if(!NetworkUtils.isConnected(mActivity)){
+                    ToastUtil.shortToast(mActivity,getText(R.string.net_error).toString());
                     return;
                 }
                 PurchaseBo bo=applyRecordData.get(position);
                 if(bo!=null && bo.getTrafficNo()!=null){
-                    Intent intent=new Intent(getActivity(), ApplyDetailActivity.class);
+                    Intent intent=new Intent(mActivity, ApplyDetailActivity.class);
                     intent.putExtra(Constant.TRAFFIC_NO,bo.getTrafficNo());
                     startActivity(intent);
                 }else {
-                    ToastUtil.shortToast(getActivity(),getText(R.string.order_info_error).toString());
+                    ToastUtil.shortToast(mActivity,getText(R.string.order_info_error).toString());
                 }
             }
 
@@ -102,7 +102,7 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
         });
 
         //// TODO: 2017/3/7 RecyclerView添加头布局
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.header_apply, null);
+        View v = LayoutInflater.from(mActivity).inflate(R.layout.header_apply, null);
         tvToday = (TextView) v.findViewById(R.id.tv_one);
         tvMonth = (TextView) v.findViewById(R.id.tv_two);
         tvAll = (TextView) v.findViewById(R.id.tv_there);
@@ -152,9 +152,9 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
                 break;
         }
         if (message == null) {
-            ToastUtil.shortToast(getActivity(), getText(R.string.request_error).toString());
+            ToastUtil.shortToast(mActivity, getText(R.string.request_error).toString());
         } else {
-            ToastUtil.shortToast(getActivity(), message);
+            ToastUtil.shortToast(mActivity, message);
         }
     }
 
@@ -189,7 +189,7 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
 
     @Override
     public void notifyNoData() {
-        ToastUtil.shortToast(getActivity(), getText(R.string.no_data).toString());
+        ToastUtil.shortToast(mActivity, getText(R.string.no_data).toString());
         applyRecordAdapter.loadMoreEnd();
 //        applyRecordAdapter.setEnableLoadMore(false);
         swipeRefresh.setEnabled(true);
@@ -209,7 +209,7 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
             default:
                 break;
         }
-        ToastUtil.shortToast(getActivity(),getText(R.string.net_error).toString());
+        ToastUtil.shortToast(mActivity,getText(R.string.net_error).toString());
     }
 
     public void refreshPage(){
