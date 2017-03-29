@@ -80,7 +80,7 @@ public class ApplyDetailActivity extends BaseActivity<ApplyDetailPresenter> impl
         data = new ArrayList<>();
         adapter = new ApplyDetailMenuAdapter(data);
 //        adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
+        LinearLayoutManager manager = new LinearLayoutManager(App.getAppInstance());
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         rvApplyRecord.setLayoutManager(manager);
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能

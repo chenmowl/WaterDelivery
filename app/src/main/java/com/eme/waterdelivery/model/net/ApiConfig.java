@@ -14,10 +14,9 @@ public final class ApiConfig {
 
     //主机名
     public static final String API_HOST="http://news-at.zhihu.com";//知乎
-    public static final String WATER_HOST="http://192.168.50.247:8080";//知乎
-
-    //端口
-    public static final String PORT="";
+//    public static final String WATER_HOST="http://192.168.50.247:8080";
+//    public static final String WATER_HOST="http://192.168.1.17:8082";
+    public static final String WATER_HOST="http://xbzwater.com:8082";
 
     //正式发布时要做修改
     public static final boolean DEBUG = Boolean.parseBoolean("true");

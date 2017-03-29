@@ -153,6 +153,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
             ToastUtil.shortToast(this,getText(R.string.error_request).toString());
             etLoginPassword.setText(Constant.STR_EMPTY);
         }
+        showProgress(false);
     }
 
     @Override

@@ -12,7 +12,6 @@ import com.eme.waterdelivery.model.net.RetrofitHelper;
 import com.eme.waterdelivery.model.sp.SPBase;
 import com.eme.waterdelivery.model.sp.SpConstant;
 import com.eme.waterdelivery.tools.NetworkUtils;
-import com.eme.waterdelivery.ui.fragment.DelayFragment;
 
 import javax.inject.Inject;
 
@@ -70,7 +69,7 @@ public class SendingFragPresenter implements SendingFragContract.Presenter {
      */
     public void requestData(final int refreshFlag) {
         if(!NetworkUtils.isConnected(App.getAppInstance())){
-            ((DelayFragment)view).showNetError();
+            view.netError(refreshFlag);
             return;
         }
         int pNum = 0;

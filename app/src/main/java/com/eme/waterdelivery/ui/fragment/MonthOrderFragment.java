@@ -75,7 +75,7 @@ public class MonthOrderFragment extends BaseFragment<MonthOrderPresenter> implem
         rvContent.setLayoutManager(new LinearLayoutManager(App.getAppInstance()));
         currentDayData = new ArrayList<>();
         currentDayAdapter = new CurrentDayAdapter(App.getAppInstance(),currentDayData);
-        currentDayAdapter.setOnLoadMoreListener(this);
+        currentDayAdapter.setOnLoadMoreListener(this,rvContent);
 //        currentDayAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         rvContent.setAdapter(currentDayAdapter);
         rvContent.addOnItemTouchListener(new OnItemClickListener() {
@@ -169,7 +169,6 @@ public class MonthOrderFragment extends BaseFragment<MonthOrderPresenter> implem
                 currentDayAdapter.setEnableLoadMore(true);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
-                currentDayAdapter.loadMoreFail();
                 swipeRefresh.setEnabled(true);
                 break;
             default:
@@ -184,17 +183,16 @@ public class MonthOrderFragment extends BaseFragment<MonthOrderPresenter> implem
             tv.setText(TextUtils.concat(record.getCategoryName(),getText(R.string.tip),String.valueOf(record.getGoodsSum())));
             llHeader.addView(tv);
         }
-        if (currentDayData.size() < 5) {
-            currentDayAdapter.loadMoreEnd(true);
+        if(Constant.REFRESH_UP_LOADMORE==flag){
+            currentDayAdapter.loadMoreComplete();
         }
     }
 
     @Override
     public void notifyNoData() {
         ToastUtil.shortToast(mActivity, getText(R.string.no_data).toString());
-//        currentDayAdapter.loadMoreEnd();
-//        swipeRefresh.setEnabled(false);
-//        currentDayAdapter.setEnableLoadMore(false);
+        swipeRefresh.setEnabled(true);
+        currentDayAdapter.loadMoreEnd();
     }
 
     @Override
@@ -217,6 +215,7 @@ public class MonthOrderFragment extends BaseFragment<MonthOrderPresenter> implem
                 break;
             case Constant.REFRESH_UP_LOADMORE:
                 swipeRefresh.setEnabled(true);
+                currentDayAdapter.loadMoreFail();
                 break;
             default:
                 break;

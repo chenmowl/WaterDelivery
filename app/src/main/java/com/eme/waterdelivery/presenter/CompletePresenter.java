@@ -30,5 +30,7 @@ public class CompletePresenter implements CompleteContract.Presenter {
 
     @Override
     public void unSubscribe() {
+        view=null;
+        retrofitHelper=null;
     }
 }

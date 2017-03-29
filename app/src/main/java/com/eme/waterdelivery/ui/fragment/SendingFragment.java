@@ -66,8 +66,7 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
         rvContent.setLayoutManager(new LinearLayoutManager(App.getAppInstance()));
         sendData = new ArrayList<>();
         sendingAdapter = new SendingAdapter(App.getAppInstance(),sendData);
-        sendingAdapter.setOnLoadMoreListener(this);
-        sendingAdapter.setAutoLoadMoreSize(5);
+        sendingAdapter.setOnLoadMoreListener(this,rvContent);
         sendingAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         rvContent.setAdapter(sendingAdapter);
         rvContent.addOnItemTouchListener(new OnItemClickListener() {
@@ -175,7 +174,6 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
                 sendingAdapter.setEnableLoadMore(true);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
-                sendingAdapter.loadMoreFail();
                 swipeRefresh.setEnabled(true);
                 break;
             default:
@@ -183,17 +181,34 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
         }
         sendData.addAll(data);
         sendingAdapter.notifyDataSetChanged();
-        if (sendData.size() < 5) {
-            sendingAdapter.loadMoreEnd(true);
+        if(Constant.REFRESH_UP_LOADMORE==flag){
+            sendingAdapter.loadMoreComplete();
         }
     }
 
     @Override
     public void notifyNoData() {
         ToastUtil.shortToast(mActivity, getText(R.string.no_data).toString());
-//        sendingAdapter.loadMoreEnd();
-//        swipeRefresh.setEnabled(false);
-//        sendingAdapter.setEnableLoadMore(false);
+        swipeRefresh.setEnabled(true);
+        sendingAdapter.loadMoreEnd();
+    }
+
+    @Override
+    public void netError(int flag) {
+        switch (flag) {
+            case Constant.REFRESH_NORMAL:
+                break;
+            case Constant.REFRESH_DOWN:
+                sendingAdapter.setEnableLoadMore(true);
+                break;
+            case Constant.REFRESH_UP_LOADMORE:
+                swipeRefresh.setEnabled(true);
+                sendingAdapter.loadMoreFail();
+                break;
+            default:
+                break;
+        }
+        ToastUtil.shortToast(mActivity,getText(R.string.net_error).toString());
     }
 
     @Override

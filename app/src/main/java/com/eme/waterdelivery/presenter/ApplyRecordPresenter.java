@@ -48,7 +48,7 @@ public class ApplyRecordPresenter implements ApplyRecordContract.Presenter {
         hasMoreData = true;
         pageNum = Constant.ZERO;
         storeId = SPBase.getContent(App.getAppInstance(), SpConstant.USER_FILE_NAME, SpConstant.USER_STORE_ID);
-        requestData(Constant.REFRESH_NORMAL);
+//        requestData(Constant.REFRESH_NORMAL);
     }
 
     @Override

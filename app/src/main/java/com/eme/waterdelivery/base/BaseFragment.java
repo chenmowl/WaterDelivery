@@ -64,10 +64,10 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!isInited && !hidden) {
-            isInited = true;
-            initEventAndData();
-        }
+//        if (!isInited && !hidden) {
+//            isInited = true;
+//            initEventAndData();
+//        }
     }
 
     @Override

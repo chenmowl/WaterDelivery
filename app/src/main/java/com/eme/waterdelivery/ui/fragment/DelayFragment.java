@@ -70,7 +70,7 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
         delayAdapter.setAutoLoadMoreSize(5);
 //        delayAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         rvContent.setAdapter(delayAdapter);
-        delayAdapter.setOnLoadMoreListener(this);
+        delayAdapter.setOnLoadMoreListener(this,rvContent);
         rvContent.addOnItemTouchListener(new OnItemClickListener() {
 
             @Override
@@ -163,7 +163,6 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
                 delayAdapter.setEnableLoadMore(true);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
-                delayAdapter.loadMoreFail();
                 swipeRefresh.setEnabled(true);
                 break;
             default:
@@ -171,17 +170,34 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
         }
         delayData.addAll(data);
         delayAdapter.notifyDataSetChanged();
-        if (delayData.size() < 3) {
-            delayAdapter.loadMoreEnd(true);
+        if(Constant.REFRESH_UP_LOADMORE==flag){
+            delayAdapter.loadMoreComplete();
         }
     }
 
     @Override
     public void notifyNoData() {
         ToastUtil.shortToast(mActivity, getText(R.string.no_data).toString());
-//        delayAdapter.loadMoreEnd();
-//        swipeRefresh.setEnabled(false);
-//        delayAdapter.setEnableLoadMore(false);
+        swipeRefresh.setEnabled(true);
+        delayAdapter.loadMoreEnd();
+    }
+
+    @Override
+    public void netError(int flag) {
+        switch (flag) {
+            case Constant.REFRESH_NORMAL:
+                break;
+            case Constant.REFRESH_DOWN:
+                delayAdapter.setEnableLoadMore(true);
+                break;
+            case Constant.REFRESH_UP_LOADMORE:
+                swipeRefresh.setEnabled(true);
+                delayAdapter.loadMoreFail();
+                break;
+            default:
+                break;
+        }
+        ToastUtil.shortToast(mActivity,getText(R.string.net_error).toString());
     }
 
     @Override

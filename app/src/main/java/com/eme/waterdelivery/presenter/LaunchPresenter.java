@@ -1,5 +1,6 @@
 package com.eme.waterdelivery.presenter;
 
+import android.Manifest;
 import android.text.TextUtils;
 
 import com.eme.waterdelivery.App;
@@ -12,6 +13,9 @@ import com.eme.waterdelivery.model.net.RetrofitHelper;
 import com.eme.waterdelivery.model.sp.SPBase;
 import com.eme.waterdelivery.model.sp.SpConstant;
 import com.eme.waterdelivery.tools.NetworkUtils;
+import com.eme.waterdelivery.ui.LaunchActivity;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import javax.inject.Inject;
 
@@ -41,6 +45,21 @@ public class LaunchPresenter implements LaunchContract.Presenter {
 
     @Override
     public void subscribe() {
+        RxPermissions rxPermissions=new RxPermissions((LaunchActivity)view);
+        rxPermissions.requestEach(Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE)
+                .subscribe(new Consumer<Permission>() {
+                    @Override
+                    public void accept(Permission permission) throws Exception {
+                        if(permission.granted){
+                            // `permission.name` is granted !
+                        }else if(permission.shouldShowRequestPermissionRationale){
+                            // Denied permission without ask never again
+                        }else{
+                            // Denied permission with ask never again
+                            // Need to go to the settings
+                        }
+                    }
+                });
         //判断是否有cookie_uid和cookie_sig,有的话直接走cookie登录,如果没有直接进入密码登录页面
         String cookieUid = SPBase.getContent(App.getAppInstance(), SpConstant.HEAD_FILE_NAME, SpConstant.HEAD_COOKIE_UID);
         String cookieSig = SPBase.getContent(App.getAppInstance(), SpConstant.HEAD_FILE_NAME, SpConstant.HEAD_COOKIE_SIG);

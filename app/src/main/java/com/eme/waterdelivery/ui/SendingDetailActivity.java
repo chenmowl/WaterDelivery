@@ -21,6 +21,7 @@ import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.CameraPosition;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
+import com.eme.waterdelivery.App;
 import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
@@ -138,7 +139,7 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
 //        如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         rvContent.setHasFixedSize(true);
         rvContent.setNestedScrollingEnabled(false);
-        FullyLinearLayoutManager manager = new FullyLinearLayoutManager(this);
+        FullyLinearLayoutManager manager = new FullyLinearLayoutManager(App.getAppInstance());
         manager.setAutoMeasureEnabled(true);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         rvContent.setLayoutManager(manager);

@@ -67,7 +67,7 @@ public class MonthOrderPresenter implements MonthOrderContract.Presenter {
      */
     public void requestData(final int refreshFlag) {
         if(!NetworkUtils.isConnected(App.getAppInstance())){
-            (view).netError(refreshFlag);
+            view.netError(refreshFlag);
             return;
         }
         int pNum = 0;

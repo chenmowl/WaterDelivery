@@ -1,6 +1,7 @@
 package com.eme.waterdelivery.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -76,7 +77,7 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
         fragments.add(monthOrderFragment);
         fragments.add(allOrderFragment);
         homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
-        vpMain.setOffscreenPageLimit(3);
+        vpMain.setOffscreenPageLimit(2);
         vpMain.setAdapter(homeFragmentAdapter);
         //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
         tabMain.setupWithViewPager(vpMain, true);
@@ -89,19 +90,25 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
 
         vpMain.setOnPageChangeListener(this);
 
-        switch (getIntent().getStringExtra(TAB)) {
-            case TAB_0:
-                vpMain.setCurrentItem(0);
-                break;
-            case TAB_1:
-                vpMain.setCurrentItem(1);
-                break;
-            case TAB_2:
-                vpMain.setCurrentItem(2);
-                break;
-            default:
-                break;
-        }
+        // TODO: 17/3/29 延迟加载，因为fragment初始化需要时间
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switch (getIntent().getStringExtra(TAB)) {
+                    case TAB_0:
+                        vpMain.setCurrentItem(0);
+                        break;
+                    case TAB_1:
+                        vpMain.setCurrentItem(1);
+                        break;
+                    case TAB_2:
+                        vpMain.setCurrentItem(2);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        },200);
     }
 
     private void initListener() {

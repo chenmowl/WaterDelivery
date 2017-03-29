@@ -27,6 +27,8 @@ public interface DelayFragContract {
         void showOrderSumError();
 
         void showReceiveOrderStatus(String message);
+
+        void netError(int flag);
     }
 
     interface Presenter extends BasePresenter {

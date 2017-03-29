@@ -73,9 +73,8 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
         rvContent.setLayoutManager(new LinearLayoutManager(App.getAppInstance()));
         applyRecordData = new ArrayList<>();
         applyRecordAdapter = new ApplyRecordAdapter(App.getAppInstance(),applyRecordData);
-//        applyRecordAdapter.setAutoLoadMoreSize(8);
-        applyRecordAdapter.setOnLoadMoreListener(this);
 //        applyRecordAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+        applyRecordAdapter.setOnLoadMoreListener(this,rvContent);
         rvContent.setAdapter(applyRecordAdapter);
         rvContent.addOnItemTouchListener(new OnItemClickListener() {
 
@@ -100,9 +99,8 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
                 super.onItemChildClick(adapter, view, position);
             }
         });
-
-        //// TODO: 2017/3/7 RecyclerView添加头布局
-        View v = LayoutInflater.from(mActivity).inflate(R.layout.header_apply, null);
+        // TODO: 2017/3/7 RecyclerView添加头布局
+        View v = LayoutInflater.from(mActivity).inflate(R.layout.header_apply, (ViewGroup) rvContent.getParent(),false);
         tvToday = (TextView) v.findViewById(R.id.tv_one);
         tvMonth = (TextView) v.findViewById(R.id.tv_two);
         tvAll = (TextView) v.findViewById(R.id.tv_there);
@@ -142,11 +140,11 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
                 break;
             case Constant.REFRESH_DOWN:
                 swipeRefresh.setRefreshing(false);
-                applyRecordAdapter.setEnableLoadMore(true);
+                applyRecordAdapter.setEnableLoadMore(false);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
-//                applyRecordAdapter.loadMoreFail();
                 swipeRefresh.setEnabled(true);
+                applyRecordAdapter.loadMoreFail();
                 break;
             default:
                 break;
@@ -176,23 +174,22 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
             default:
                 break;
         }
-        applyRecordData.addAll(data.getList());
-        applyRecordAdapter.notifyDataSetChanged();
         // TODO: 17/3/27 更新header
         tvAll.setText(TextUtils.concat(getText(R.string.apply_all_title),String.valueOf(data.getPurchaseHistoryOrderSum().getPurchaseHistoryOrderAllSum()),getText(R.string.apply_today_second_rate)));
         tvMonth.setText(TextUtils.concat(getText(R.string.apply_month_title),String.valueOf(data.getPurchaseHistoryOrderSum().getPurchaseHistoryOrderMonthSum()),getText(R.string.apply_today_second_rate)));
         tvToday.setText(TextUtils.concat(getText(R.string.apply_today_title),String.valueOf(data.getPurchaseHistoryOrderSum().getPurchaseHistoryOrderDaySum()),getText(R.string.apply_today_second_rate)));
-//        if (applyRecordData.size() < 8) {
-//            applyRecordAdapter.loadMoreEnd(true);
-//        }
+        applyRecordData.addAll(data.getList());
+        applyRecordAdapter.notifyDataSetChanged();
+        if(Constant.REFRESH_UP_LOADMORE==flag){
+            applyRecordAdapter.loadMoreComplete();
+        }
     }
 
     @Override
     public void notifyNoData() {
         ToastUtil.shortToast(mActivity, getText(R.string.no_data).toString());
-        applyRecordAdapter.loadMoreEnd();
-//        applyRecordAdapter.setEnableLoadMore(false);
         swipeRefresh.setEnabled(true);
+        applyRecordAdapter.loadMoreEnd();
     }
 
     @Override
@@ -201,10 +198,11 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
             case Constant.REFRESH_NORMAL:
                 break;
             case Constant.REFRESH_DOWN:
-                applyRecordAdapter.setEnableLoadMore(true);
+                applyRecordAdapter.setEnableLoadMore(false);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
                 swipeRefresh.setEnabled(true);
+                applyRecordAdapter.loadMoreFail();
                 break;
             default:
                 break;

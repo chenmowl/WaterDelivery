@@ -25,6 +25,8 @@ public interface SendingFragContract {
         void updateOrderSum(OrderSumBo orderSumBo);
 
         void showOrderSumError();
+
+        void netError(int flag);
     }
 
     interface Presenter extends BasePresenter {
