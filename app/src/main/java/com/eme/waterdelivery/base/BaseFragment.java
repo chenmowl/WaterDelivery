@@ -73,6 +73,8 @@ public abstract class BaseFragment<T extends BasePresenter> extends SupportFragm
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mPresenter != null)
+            mPresenter.unSubscribe();
         mUnBinder.unbind();
     }
 

@@ -47,6 +47,7 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
     List<Fragment> fragments = new ArrayList<>();
     private HomeFragmentAdapter homeFragmentAdapter;
     ApplyRecordFragment applyRecordFragment;
+    ApplyFragment applyFragment;
 
     @Override
     protected void initInject() {
@@ -61,7 +62,8 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
     @Override
     protected void initEventAndData(Bundle savedInstanceState) {
         applyRecordFragment=new ApplyRecordFragment();
-        fragments.add(new ApplyFragment());
+        applyFragment=new ApplyFragment();
+        fragments.add(applyFragment);
         fragments.add(applyRecordFragment);
         homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
         vpMain.setAdapter(homeFragmentAdapter);
@@ -113,6 +115,14 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
 
     @Override
     public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        applyFragment=null;
+        applyRecordFragment=null;
 
     }
 }

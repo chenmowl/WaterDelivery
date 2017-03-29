@@ -250,6 +250,8 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
 
     @Override
     public void onDestroy() {
+        etAmount=null;
+        dialogView=null;
         super.onDestroy();
     }
 

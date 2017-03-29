@@ -140,7 +140,6 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
         bundle.putParcelable(Constant.LOGIN_INFO,info);
         intent.putExtras(bundle);
         startActivity(intent);
-        mPresenter.unSubscribe();
         finish();
     }
 

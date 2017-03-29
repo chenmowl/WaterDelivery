@@ -187,4 +187,14 @@ public class ApplyDetailActivity extends BaseActivity<ApplyDetailPresenter> impl
             ToastUtil.shortToast(this, msg);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        adapter.removeAllFooterView();
+        adapter.removeAllHeaderView();
+        headerView=null;
+        footerView=null;
+        adapter=null;
+        super.onDestroy();
+    }
 }
