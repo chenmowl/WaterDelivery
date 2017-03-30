@@ -29,11 +29,11 @@
     <string name="main_money">上缴金额:</string>
     <string name="water_coupon">水票:</string>
     <string name="begin_make_order">开始接单</string>
-    <string name="num_order_today">今日接单</string>
-    <string name="num_month_today">月接单</string>
+    <string name="num_order_today">今日完成</string>
+    <string name="num_month_today">月完成</string>
+    <string name="num_total_record">历史完成</string>
     <string name="num_month_invalid_record">月无效接单</string>
     <string name="my_apply">我的申请</string>
-    <string name="num_total_record">总接单量</string>
     <string name="water_station">水站:</string>
     <string name="navigation_drawer_open">侧开</string>
     <string name="navigation_drawer_close">侧关</string>

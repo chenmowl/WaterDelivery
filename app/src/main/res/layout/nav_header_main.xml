@@ -196,7 +196,8 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:gravity="center_vertical"
                     android:text="@string/my_apply"
                     android:textColor="@color/text_color_bar"
@@ -207,6 +208,14 @@
                     android:layout_height="0.5dp"
                     android:layout_alignParentBottom="true"
                     android:background="@color/cline_deep" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="15dp"
+                    android:src="@mipmap/mine_item_right"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    />
 
             </RelativeLayout>
 
@@ -219,19 +228,30 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:gravity="center_vertical"
                     android:text="@string/num_order_today"
                     android:textColor="@color/text_color_bar"
                     android:textSize="14sp" />
 
+                <ImageView
+                    android:id="@+id/iv_today"
+                    android:layout_width="10dp"
+                    android:layout_height="15dp"
+                    android:src="@mipmap/mine_item_right"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    />
+
                 <TextView
+                    android:layout_toLeftOf="@+id/iv_today"
                     android:id="@+id/tv_today_record"
+                    android:layout_marginRight="16dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
                     android:gravity="center_vertical"
-                    android:text="15"
+                    android:text="0"
                     android:textColor="@color/main_color_red"
                     android:textSize="13sp" />
 
@@ -252,19 +272,30 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:gravity="center_vertical"
                     android:text="@string/num_month_today"
                     android:textColor="@color/text_color_bar"
                     android:textSize="14sp" />
 
+                <ImageView
+                    android:id="@+id/iv_month"
+                    android:layout_width="10dp"
+                    android:layout_height="15dp"
+                    android:src="@mipmap/mine_item_right"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    />
+
                 <TextView
+                    android:layout_toLeftOf="@+id/iv_month"
+                    android:layout_marginRight="16dp"
                     android:id="@+id/tv_month_record"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
                     android:gravity="center_vertical"
-                    android:text="15"
+                    android:text="0"
                     android:textColor="@color/main_color_red"
                     android:textSize="13sp" />
 
@@ -285,19 +316,30 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:gravity="center_vertical"
                     android:text="@string/num_total_record"
                     android:textColor="@color/text_color_bar"
                     android:textSize="14sp" />
 
+                <ImageView
+                    android:id="@+id/iv_total"
+                    android:layout_width="10dp"
+                    android:layout_height="15dp"
+                    android:src="@mipmap/mine_item_right"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    />
+
                 <TextView
                     android:id="@+id/tv_total_record"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
+                    android:layout_toLeftOf="@+id/iv_total"
+                    android:layout_marginRight="16dp"
                     android:gravity="center_vertical"
-                    android:text="15"
+                    android:text="0"
                     android:textColor="@color/main_color_red"
                     android:textSize="13sp" />
 
