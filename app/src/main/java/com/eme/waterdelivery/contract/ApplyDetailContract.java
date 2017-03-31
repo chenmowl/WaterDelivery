@@ -17,10 +17,14 @@ public interface ApplyDetailContract {
         void updateUi(ApplyDetailVo applyDetailVo);
 
         void showRequestMsg(String msg);
+
+        void showReceiveOrderStatus(boolean isSuccess,String msg);
     }
 
     interface Presenter extends BasePresenter {
         void requestData(String trafficNo);
+
+        void confirmPurchase(String trafficNo);
     }
 
 }

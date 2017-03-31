@@ -49,6 +49,9 @@ public class Constant {
     public static final String APPLY_RECORD_STATUS_DELIVERY="1";
     public static final String APPLY_RECORD_STATUS_COMPLETE="2";
 
+    //采购单确认收货的结果码
+    public static final int REQUEST_CODE_PURCHASE_DETAIL=2001;
+    public static final int CONFIRM_PURCHASE_SUCCESS=200;
 
     /***************************  网络常量数据  *****************************/
     //数据请求成功同时业务逻辑正常

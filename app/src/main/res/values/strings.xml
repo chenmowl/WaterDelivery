@@ -44,14 +44,16 @@
     <string name="waiting_home">待接单</string>
     <string name="sending">配送中 (</string>
     <string name="sending_home">配送中</string>
-    <string name="today_receive">今日接单 (</string>
-    <string name="today_receives">今日接单</string>
-    <string name="month_receive">当月接单 (</string>
-    <string name="month_receives">当月接单</string>
-    <string name="all_receive">历史接单 (</string>
-    <string name="all_receives">历史接单</string>
+    <string name="today_receive">今日完成 (</string>
+    <string name="today_receives">今日完成</string>
+    <string name="month_receive">月完成 (</string>
+    <string name="month_receives">月完成</string>
+    <string name="all_receive">历史完成 (</string>
+    <string name="all_receives">历史完成</string>
     <string name="sign">)</string>
     <string name="tip">:  </string>
+    <string name="quit_app">退出当前应用</string>
+    <string name="quit_app_message">确定退出WaterDelivery吗</string>
 
     <!--delay-->
     <string name="receive_order_failure">接单失败</string>
@@ -73,7 +75,7 @@
     <string name="order_detail_title_open_surplus">展开剩余商品</string>
     <string name="order_pay_mode_money">现金</string>
     <string name="order_pay_mode_weixin">微信</string>
-    <string name="order_receiver_title">送件人: </string>
+    <string name="order_receiver_title">收件人: </string>
     <string name="order_address_title">地址: </string>
     <string name="order_balance_title">金额: ￥</string>
     <string name="order_balance_title2">金额: </string>
@@ -90,9 +92,9 @@
     <string name="commit_apply">提交申请</string>
     <string name="remark">备注说明</string>
     <string name="add_apply">添加采购项</string>
-    <string name="product_type">产品品类</string>
-    <string name="product_name">产品名称</string>
-    <string name="product_size">产品规格</string>
+    <string name="product_type">一级品类</string>
+    <string name="product_name">二级品类</string>
+    <string name="product_size">产品名称</string>
     <string name="choice_type">请选择品类</string>
     <string name="choice_name">请选择名称</string>
     <string name="choice_size">请选择规格</string>
@@ -110,6 +112,11 @@
     <string name="apply_all_title">历史申请: </string>
     <string name="apply_order_number">订单编号: </string>
     <string name="apply_detail_remark_title">备注说明: \n</string>
+    <string name="apply_confirm_receive">确认送达</string>
+    <string name="apply_is_confirm_purchase">是否确认收货?</string>
+    <string name="apply_confirm_purchase">确认收货</string>
+    <string name="apply_confirm_purchase_success">确认收货成功</string>
+    <string name="apply_confirm_purchase_failure">确认收货失败</string>
 
 
     <array name="product_types">

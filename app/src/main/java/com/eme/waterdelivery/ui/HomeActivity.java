@@ -234,15 +234,14 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
      */
     private void alertQuitDialog() {
         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-        builder.setTitle("退出当前应用");
-        builder.setMessage("确定退出GeekNews吗");
-        builder.setNegativeButton("取消", null);
-        builder.setPositiveButton("退出", new DialogInterface.OnClickListener() {
+        builder.setTitle(getText(R.string.quit_app));
+        builder.setMessage(getText(R.string.quit_app_message));
+        builder.setNegativeButton(getText(R.string.cancel), null);
+        builder.setPositiveButton(getText(R.string.quit), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 SPBase.setContent(HomeActivity.this, SpConstant.HEAD_FILE_NAME,SpConstant.HEAD_COOKIE_UID, Constant.STR_EMPTY);
                 SPBase.setContent(HomeActivity.this, SpConstant.HEAD_FILE_NAME,SpConstant.HEAD_COOKIE_SIG, Constant.STR_EMPTY);
-                mPresenter.unSubscribe();
                 startActivity(new Intent(HomeActivity.this,LoginActivity.class));
                 finish();
             }

@@ -26,6 +26,7 @@
     <color name="border_gray">#ACACAC</color> //按钮的边框色
     <color name="color_useless">#B2B2B2</color> //失效的颜色 登陆按钮不能点击的灰色
     <color name="color_cancel">#CCCCCC</color> //cancel 按钮颜色
+    <color name="color_confirm_purchase">#7FE61717</color> //cancel 按钮颜色
 
 </resources>
 

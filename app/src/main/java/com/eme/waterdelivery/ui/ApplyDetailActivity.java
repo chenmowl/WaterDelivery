@@ -1,5 +1,6 @@
 package com.eme.waterdelivery.ui;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,12 +59,16 @@ public class ApplyDetailActivity extends BaseActivity<ApplyDetailPresenter> impl
     TextView tvHandleStation;
     @BindView(R.id.tv_station_phone)
     TextView tvStationPhone;
+    @BindView(R.id.btn_confirm_purchase)
+    TextView btnConfirmPurchase;
 
     private ApplyDetailMenuAdapter adapter;
     private List<PurchaseGoodBo> data;
 
     private View headerView;
     private View footerView;
+
+    private String purchaseId;
 
     @Override
     protected void initInject() {
@@ -106,12 +111,12 @@ public class ApplyDetailActivity extends BaseActivity<ApplyDetailPresenter> impl
 
         initListener();
 
-        String orderId = getIntent().getStringExtra(Constant.TRAFFIC_NO);
-        tvTitle.setText(TextUtils.concat(getText(R.string.apply_order_number), orderId));
+        purchaseId = getIntent().getStringExtra(Constant.TRAFFIC_NO);
+        tvTitle.setText(TextUtils.concat(getText(R.string.apply_order_number), purchaseId));
         if (!NetworkUtils.isConnected(App.getAppInstance())) {
             showNetError();
         } else {
-            mPresenter.requestData(orderId);//请求订单详情数据
+            mPresenter.requestData(purchaseId);//请求订单详情数据
         }
     }
 
@@ -122,7 +127,6 @@ public class ApplyDetailActivity extends BaseActivity<ApplyDetailPresenter> impl
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        mPresenter.unSubscribe();
                         finish();
                     }
                 });
@@ -142,29 +146,43 @@ public class ApplyDetailActivity extends BaseActivity<ApplyDetailPresenter> impl
 
     @Override
     public void updateUi(ApplyDetailVo applyDetailVo) {
-        SimpleDateFormat format=new SimpleDateFormat("MM月dd日 HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("MM月dd日 HH:mm");
         //更新进度条状态
-        switch (applyDetailVo.getStatus()) {
+        String status=applyDetailVo.getStatus();
+        switch (status) {
             case Constant.APPLY_RECORD_STATUS_UNHANDLE:
+                btnConfirmPurchase.setVisibility(View.GONE);
                 headerView.findViewById(R.id.iv_line_two).setBackgroundResource(R.color.cline_low);
                 headerView.findViewById(R.id.iv_line_three).setBackgroundResource(R.color.cline_low);
-                ((TextView) headerView.findViewById(R.id.tv_order_detail_status_two_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getCreateTime()),format));
+                ((TextView) headerView.findViewById(R.id.tv_order_detail_status_two_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getCreateTime()), format));
                 break;
             case Constant.APPLY_RECORD_STATUS_DELIVERY:
                 headerView.findViewById(R.id.iv_line_two).setBackgroundResource(R.color.progress_blue);
                 headerView.findViewById(R.id.iv_line_three).setBackgroundResource(R.color.cline_low);
-                ((ImageView)headerView.findViewById(R.id.iv_order_detail_point_three)).setImageResource(R.mipmap.order_dian_blue);
-                ((TextView) headerView.findViewById(R.id.tv_order_detail_status_two_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getCreateTime()),format));
-                ((TextView) headerView.findViewById(R.id.tv_order_detail_status_three_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getSendTime()),format));
+                ((ImageView) headerView.findViewById(R.id.iv_order_detail_point_three)).setImageResource(R.mipmap.order_dian_blue);
+                ((TextView) headerView.findViewById(R.id.tv_order_detail_status_two_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getCreateTime()), format));
+                ((TextView) headerView.findViewById(R.id.tv_order_detail_status_three_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getSendTime()), format));
+                //对确认收货按钮进行初始化
+                btnConfirmPurchase.setVisibility(View.VISIBLE);
+                RxView.clicks(btnConfirmPurchase)
+                        .throttleFirst(1, TimeUnit.SECONDS)
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<Object>() {
+                            @Override
+                            public void accept(Object o) throws Exception {
+                                alertConfirmDialog();
+                            }
+                        });
                 break;
             case Constant.APPLY_RECORD_STATUS_COMPLETE:
+                btnConfirmPurchase.setVisibility(View.GONE);
                 headerView.findViewById(R.id.iv_line_two).setBackgroundResource(R.color.progress_blue);
                 headerView.findViewById(R.id.iv_line_three).setBackgroundResource(R.color.progress_blue);
-                ((ImageView)headerView.findViewById(R.id.iv_order_detail_point_three)).setImageResource(R.mipmap.order_dian_blue);
-                ((ImageView)headerView.findViewById(R.id.iv_order_detail_point_four)).setImageResource(R.mipmap.order_dian_blue);
-                ((TextView) headerView.findViewById(R.id.tv_order_detail_status_two_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getCreateTime()),format));
-                ((TextView) headerView.findViewById(R.id.tv_order_detail_status_three_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getSendTime()),format));
-                ((TextView) headerView.findViewById(R.id.tv_order_detail_status_four_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getConfirmTime()),format));
+                ((ImageView) headerView.findViewById(R.id.iv_order_detail_point_three)).setImageResource(R.mipmap.order_dian_blue);
+                ((ImageView) headerView.findViewById(R.id.iv_order_detail_point_four)).setImageResource(R.mipmap.order_dian_blue);
+                ((TextView) headerView.findViewById(R.id.tv_order_detail_status_two_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getCreateTime()), format));
+                ((TextView) headerView.findViewById(R.id.tv_order_detail_status_three_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getSendTime()), format));
+                ((TextView) headerView.findViewById(R.id.tv_order_detail_status_four_time)).setText(TimeUtils.milliseconds2String(TimeUtils.string2Milliseconds(applyDetailVo.getConfirmTime()), format));
                 break;
             default:
                 break;
@@ -177,6 +195,21 @@ public class ApplyDetailActivity extends BaseActivity<ApplyDetailPresenter> impl
         ((TextView) footerView.findViewById(R.id.tv_remark)).setText(TextUtils.concat(getText(R.string.apply_detail_remark_title), applyDetailVo.getCreateMemo()));
         tvHandleStation.setText(applyDetailVo.getStationName());
         tvStationPhone.setText(applyDetailVo.getStationPhone());
+
+    }
+
+    private void alertConfirmDialog() {
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+        builder.setTitle(getText(R.string.apply_confirm_purchase));
+        builder.setMessage(getText(R.string.apply_is_confirm_purchase));
+        builder.setNegativeButton(getText(R.string.cancel), null);
+        builder.setPositiveButton(getText(R.string.confirm), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mPresenter.confirmPurchase(purchaseId);
+            }
+        });
+        builder.show();
     }
 
     @Override
@@ -189,12 +222,28 @@ public class ApplyDetailActivity extends BaseActivity<ApplyDetailPresenter> impl
     }
 
     @Override
+    public void showReceiveOrderStatus(boolean isSuccess,String message) {
+        if (TextUtils.isEmpty(message)) {
+            if(isSuccess){
+                message = getText(R.string.apply_confirm_purchase_success).toString();
+            }else{
+                message = getText(R.string.apply_confirm_purchase_failure).toString();
+            }
+        }
+        ToastUtil.shortToast(this, message);
+        if(isSuccess){
+            setResult(Constant.CONFIRM_PURCHASE_SUCCESS);
+            finish();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         adapter.removeAllFooterView();
         adapter.removeAllHeaderView();
-        headerView=null;
-        footerView=null;
-        adapter=null;
+        headerView = null;
+        footerView = null;
+        adapter = null;
         super.onDestroy();
     }
 }

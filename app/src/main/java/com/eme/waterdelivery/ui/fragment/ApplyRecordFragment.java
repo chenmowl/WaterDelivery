@@ -88,7 +88,11 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
                 if(bo!=null && bo.getTrafficNo()!=null){
                     Intent intent=new Intent(mActivity, ApplyDetailActivity.class);
                     intent.putExtra(Constant.TRAFFIC_NO,bo.getTrafficNo());
-                    startActivity(intent);
+                    if(Constant.APPLY_RECORD_STATUS_DELIVERY.equals(bo.getStatus())){
+                        startActivityForResult(intent,Constant.REQUEST_CODE_PURCHASE_DETAIL);
+                    }else{
+                        startActivity(intent);
+                    }
                 }else {
                     ToastUtil.shortToast(mActivity,getText(R.string.order_info_error).toString());
                 }
@@ -212,5 +216,13 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
 
     public void refreshPage(){
         mPresenter.requestData(Constant.REFRESH_DOWN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(Constant.REQUEST_CODE_PURCHASE_DETAIL==requestCode && Constant.CONFIRM_PURCHASE_SUCCESS==resultCode){
+            refreshPage();
+        }
     }
 }

@@ -191,7 +191,7 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
     List<String> tempData;
     List<String> tempSize;
     List<String> tempGood;
-    List<ApplyTwoLevelGoodBo.ListBean> listBeen;
+    List<ApplyTwoLevelGoodBo.ListBean> goodListBeen;
     ArrayAdapter<String> adapterType;
     ArrayAdapter<String> adapterSize;
     ArrayAdapter<String> adapterGood;
@@ -202,6 +202,9 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
      */
     private void alertApplyDialog(final List<ApplyOneLevelBo.ListBean> listBeen) {
         goodPosition = -1;
+        if(goodListBeen==null){
+            goodListBeen=new ArrayList<>();
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         dialogView = LayoutInflater.from(mActivity).inflate(R.layout.dialog_apply, null, false);
         etAmount = (AppCompatEditText) dialogView.findViewById(R.id.et_amount);
@@ -209,9 +212,21 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
         typeSpinner = (BetterSpinner) dialogView.findViewById(R.id.ns_type);
         sizeSpinner = (BetterSpinner) dialogView.findViewById(R.id.ns_size);
         goodSpinner = (BetterSpinner) dialogView.findViewById(R.id.ns_good);
-        tempData = new ArrayList<>();
-        tempSize = new ArrayList<>();
-        tempGood = new ArrayList<>();
+        if(tempData!=null){
+            tempData.clear();
+        }else{
+            tempData = new ArrayList<>();
+        }
+        if(tempSize!=null){
+            tempSize.clear();
+        }else{
+            tempSize = new ArrayList<>();
+        }
+        if(tempGood!=null){
+            tempGood.clear();
+        }else{
+            tempGood = new ArrayList<>();
+        }
         for (ApplyOneLevelBo.ListBean bean : listBeen) {
             tempData.add(bean.getName());
         }
@@ -228,6 +243,18 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
                     showNetError();
                     return;
                 }
+                goodListBeen.clear();
+                goodPosition = -1;
+                sizeSpinner.setText(Constant.STR_EMPTY);
+                goodSpinner.setText(Constant.STR_EMPTY);
+                sizeSpinner.setOnItemClickListener(null);
+                goodSpinner.setOnItemClickListener(null);
+                tempSize.clear();
+                tempGood.clear();
+                adapterSize = new ArrayAdapter(mActivity, R.layout.item_spinner_apply, tempSize);
+                adapterGood = new ArrayAdapter(mActivity, R.layout.item_spinner_apply, tempGood);
+                sizeSpinner.setAdapter(adapterSize);
+                goodSpinner.setAdapter(adapterGood);
                 mPresenter.requestApplyTwoLevel(listBeen.get(i).getId());
             }
         });
@@ -250,6 +277,13 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
 
     @Override
     public void onDestroy() {
+        tempData=null;
+        tempSize=null;
+        tempGood=null;
+        goodListBeen=null;
+        adapterType=null;
+        adapterSize=null;
+        adapterGood=null;
         etAmount=null;
         dialogView=null;
         super.onDestroy();
@@ -279,9 +313,18 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
                 if (goodPosition != -1) {
                     String count = etAmount.getText().toString();
                     if (!TextUtils.isEmpty(count)) {
-                        ApplyTwoLevelGoodBo.ListBean listBean = listBeen.get(goodPosition);
-                        listBean.setCount(Integer.parseInt(count));
-                        data.add(listBean);
+                        boolean hasRepeat=false;//标识符，代表列表是否有相同的商品
+                        ApplyTwoLevelGoodBo.ListBean listBean = goodListBeen.get(goodPosition);
+                        for(ApplyTwoLevelGoodBo.ListBean bean: data){
+                            if(bean.getGoodsId().equals(listBean.getGoodsId())){
+                                bean.setCount(bean.getCount()+Integer.parseInt(count));
+                                hasRepeat=true;
+                            }
+                        }
+                        if(!hasRepeat){
+                            listBean.setCount(Integer.parseInt(count));
+                            data.add(listBean);
+                        }
                         adapter.notifyDataSetChanged();
                         ToastUtil.shortToast(mActivity, getText(R.string.apply_add_success).toString());
                     } else {
@@ -324,7 +367,13 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
 
     @Override
     public void updateTwoLevelGoods(List<ApplyTwoLevelGoodBo.ListBean> listBeen) {
-        this.listBeen = listBeen;
+//        this.goodListBeen = listBeen;
+        if(goodListBeen==null){
+            goodListBeen=new ArrayList<>();
+        }else{
+            goodListBeen.clear();
+        }
+        goodListBeen.addAll(listBeen);
         tempGood.clear();
         for (ApplyTwoLevelGoodBo.ListBean bean : listBeen) {
             tempGood.add(bean.getGoodsName());

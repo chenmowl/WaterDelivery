@@ -182,4 +182,13 @@ public class RetrofitHelper {
         return waterApi.submitApplications(storeId,createMemo,purchaseGoods);
     }
 
+    /**
+     * 订购单确认收货接口
+     * @param trafficNo
+     * @return
+     */
+    public Observable<StatusResult> confirmPurchaseOrder(String trafficNo) {
+        return waterApi.confirmPurchaseOrder(trafficNo);
+    }
+
 }

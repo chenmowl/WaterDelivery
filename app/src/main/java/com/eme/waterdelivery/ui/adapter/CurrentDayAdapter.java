@@ -59,7 +59,7 @@ public class CurrentDayAdapter extends BaseQuickAdapter<WaitingOrderBo, BaseView
         }else{
             helper.setText(R.id.tv_delivery_time, TimeUtils.date2String(TimeUtils.string2Date(time),new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault())));
         }
-        helper.setText(R.id.tv_receiver, "送件人: "+item.getMemberName());
+        helper.setText(R.id.tv_receiver, "收件人: "+item.getMemberName());
         helper.setText(R.id.tv_address, "地址: "+item.getMemberAddress());
     }
 }

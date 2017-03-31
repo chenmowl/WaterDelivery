@@ -1,9 +1,12 @@
 package com.eme.waterdelivery.presenter;
 
+import android.text.TextUtils;
+
 import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.base.BaseView;
 import com.eme.waterdelivery.contract.ApplyDetailContract;
 import com.eme.waterdelivery.model.bean.Result;
+import com.eme.waterdelivery.model.bean.StatusResult;
 import com.eme.waterdelivery.model.bean.entity.ApplyDetailVo;
 import com.eme.waterdelivery.model.net.RetrofitHelper;
 
@@ -77,6 +80,45 @@ public class ApplyDetailPresenter implements ApplyDetailContract.Presenter {
                         view.showProgress(false);
                     }
                 })
+        );
+    }
+
+    @Override
+    public void confirmPurchase(String trafficNo) {
+        disposables.add(
+                retrofitHelper.confirmPurchaseOrder(trafficNo)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        view.showProgress(true);
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        new Consumer<StatusResult>() {
+                            @Override
+                            public void accept(StatusResult statusResult) throws Exception {
+                                view.showProgress(false);
+                                if(statusResult!=null && statusResult.isSuccess() &&statusResult.getData()!=null&& Constant.CODE_COMPLETE.equals(statusResult.getData().getCode())){
+                                    view.showReceiveOrderStatus(true,statusResult.getData().getMessage());
+                                }else{
+                                    if(statusResult!=null && statusResult.getData()!=null && !TextUtils.isEmpty(statusResult.getData().getMessage())){
+                                        view.showReceiveOrderStatus(false,statusResult.getData().getMessage());
+                                    }else{
+                                        view.showReceiveOrderStatus(false,null);
+                                    }
+                                }
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                view.showProgress(false);
+                                view.showReceiveOrderStatus(false,null);
+                            }
+                        }
+                )
         );
     }
 }

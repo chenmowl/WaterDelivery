@@ -60,7 +60,7 @@ public class SendingAdapter extends BaseQuickAdapter<WaitingOrderBo, BaseViewHol
                 }
             }
         }
-        helper.setText(R.id.tv_receiver, "送件人: " + item.getMemberName());
+        helper.setText(R.id.tv_receiver, "收件人: " + item.getMemberName());
         helper.setText(R.id.tv_address, "地址: " + item.getMemberAddress());
     }
 }

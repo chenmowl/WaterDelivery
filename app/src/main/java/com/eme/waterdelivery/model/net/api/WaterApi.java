@@ -167,4 +167,13 @@ public interface WaterApi {
     @POST("/xbz-api/purchase/submitPurchaseOrder")
     Observable<StatusResult> submitApplications(@Field("storeId")String storeId, @Field("createMemo")String createMemo, @Field("purchaseGoods")String purchaseGoods);
 
+    /**
+     * 订购单确认收货接口
+     * @param trafficNo
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/xbz-api/purchase/confirmPurchaseOrder")
+    Observable<StatusResult> confirmPurchaseOrder(@Field("trafficNo")String trafficNo);
+
 }
