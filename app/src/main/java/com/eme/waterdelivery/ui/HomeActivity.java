@@ -23,10 +23,13 @@ import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.HomeContract;
+import com.eme.waterdelivery.event.CompleteNumEvent;
+import com.eme.waterdelivery.model.bean.entity.HistoryOrderSumBo;
 import com.eme.waterdelivery.model.bean.entity.LoginBo;
 import com.eme.waterdelivery.model.sp.SPBase;
 import com.eme.waterdelivery.model.sp.SpConstant;
 import com.eme.waterdelivery.presenter.HomePresenter;
+import com.eme.waterdelivery.tools.ImageLoader;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.tools.Util;
 import com.eme.waterdelivery.ui.adapter.HomeFragmentAdapter;
@@ -40,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
@@ -65,9 +69,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
 
     List<Fragment> fragments = new ArrayList<>();
     private HomeFragmentAdapter homeFragmentAdapter;
-
-    private DelayFragment delayFragment;
-    private SendingFragment sendingFragment;
 
     @Override
     protected void initInject() {
@@ -115,6 +116,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         LoginBo loginBo=getIntent().getExtras().getParcelable(Constant.LOGIN_INFO);
         if(loginBo!=null){
             //更新侧边栏信息
+            CircleImageView ivHeader = (CircleImageView) headerLayout.findViewById(R.id.profile_image);
             TextView tvName = (TextView) headerLayout.findViewById(R.id.tv_name);
             TextView tvJobNumber = (TextView) headerLayout.findViewById(R.id.tv_job_number);
             TextView tvCount = (TextView) headerLayout.findViewById(R.id.tv_count);
@@ -124,13 +126,17 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
             TextView tvStationPhone = (TextView) headerLayout.findViewById(R.id.tv_station_phone);
             tvName.setText(loginBo.getCname());
             tvCount.setText(TextUtils.concat(loginBo.getPaidAmount(),getText(R.string.yuan)));
+            tvJobNumber.setText(TextUtils.concat(getText(R.string.number_job),loginBo.getUserId()));
             tvTodayRecord.setText(String.valueOf(loginBo.getOrdersSumToday()));
             tvMonthRecord.setText(String.valueOf(loginBo.getOrdersSumMonth()));
             tvTotalRecord.setText(String.valueOf(loginBo.getOrdersSumTotal()));
             tvStationPhone.setText(loginBo.getStorePhone());
+            if(!TextUtils.isEmpty(loginBo.getImg())){
+                ImageLoader.load(this,loginBo.getImg(),ivHeader);
+            }
         }
-        delayFragment=new DelayFragment();
-        sendingFragment=new SendingFragment();
+        DelayFragment delayFragment=new DelayFragment();
+        SendingFragment sendingFragment=new SendingFragment();
         fragments.add(delayFragment);
         fragments.add(sendingFragment);
         homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
@@ -279,7 +285,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
                 drawer.closeDrawer(GravityCompat.START);
             } else {
                 if (System.currentTimeMillis() - mExitTime > 3000) {
-                    ToastUtil.shortToast(this, "再按一次退出程序");
+                    ToastUtil.shortToast(this, getText(R.string.quit_app_again).toString());
                     mExitTime = System.currentTimeMillis();
                     return true;
                 }
@@ -297,10 +303,14 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     public void onPageSelected(int position) {
         switch (position){
             case Constant.ZERO:
-                delayFragment.refreshPage();
+                if(fragments.get(0)!=null){
+                    ((DelayFragment)fragments.get(0)).refreshPage();
+                }
                 break;
             case Constant.ONE:
-                sendingFragment.refreshPage();
+                if(fragments.get(1)!=null){
+                    ((SendingFragment)fragments.get(1)).refreshPage();
+                }
                 break;
             default:
                 break;
@@ -310,5 +320,53 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+
+    public void requestCompleteNumber(){
+        mPresenter.requestCompleteNumber();
+    }
+
+    @Override
+    public void updateOrderSum(HistoryOrderSumBo historyOrderSumBo) {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerLayout = navigationView.getHeaderView(0);
+        TextView tvTodayRecord = (TextView) headerLayout.findViewById(R.id.tv_today_record);
+        TextView tvMonthRecord = (TextView) headerLayout.findViewById(R.id.tv_month_record);
+        TextView tvTotalRecord = (TextView) headerLayout.findViewById(R.id.tv_total_record);
+        tvTodayRecord.setText(String.valueOf(historyOrderSumBo.getHistoryOrderDaySum()));
+        tvMonthRecord.setText(String.valueOf(historyOrderSumBo.getHistoryOrderMonthSum()));
+        tvTotalRecord.setText(String.valueOf(historyOrderSumBo.getHistoryOrderAllSum()));
+    }
+
+    @Override
+    public void updateNavSum(CompleteNumEvent completeNumEvent) {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerLayout = navigationView.getHeaderView(0);
+        switch (completeNumEvent.getFlag()){
+            case Constant.ORDER_TODAY:
+                TextView tvTodayRecord = (TextView) headerLayout.findViewById(R.id.tv_today_record);
+                tvTodayRecord.setText(String.valueOf(completeNumEvent.getSum()));
+                break;
+            case Constant.ORDER_MONTH:
+                TextView tvMonthRecord = (TextView) headerLayout.findViewById(R.id.tv_month_record);
+                tvMonthRecord.setText(String.valueOf(completeNumEvent.getSum()));
+                break;
+            case Constant.ORDER_ALL:
+                TextView tvTotalRecord = (TextView) headerLayout.findViewById(R.id.tv_total_record);
+                tvTotalRecord.setText(String.valueOf(completeNumEvent.getSum()));
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        fragments.get(0).onDestroy();
+        fragments.get(1).onDestroy();
+        homeFragmentAdapter=null;
+        fragments.clear();
+        super.onDestroy();
     }
 }

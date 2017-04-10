@@ -39,7 +39,9 @@
     <string name="navigation_drawer_close">侧关</string>
     <string name="product">产品:</string>
     <string name="reach_time">送达时间</string>
+    <string name="reach_cast_time">送达用间</string>
     <string name="yuan">元</string>
+    <string name="number_job">工号:</string>
     <string name="waiting">待接单 (</string>
     <string name="waiting_home">待接单</string>
     <string name="sending">配送中 (</string>
@@ -54,6 +56,7 @@
     <string name="tip">:  </string>
     <string name="quit_app">退出当前应用</string>
     <string name="quit_app_message">确定退出WaterDelivery吗</string>
+    <string name="quit_app_again">再按一次退出程序</string>
 
     <!--delay-->
     <string name="receive_order_failure">接单失败</string>
@@ -80,6 +83,7 @@
     <string name="order_balance_title">金额: ￥</string>
     <string name="order_balance_title2">金额: </string>
     <string name="order_confirm_sign">确定收款／水票</string>
+    <string name="order_pay_mode_other">其它</string>
 
 
     <!--已完成-->

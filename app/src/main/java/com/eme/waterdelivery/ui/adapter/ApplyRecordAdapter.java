@@ -29,11 +29,11 @@ public class ApplyRecordAdapter extends BaseQuickAdapter<PurchaseBo, BaseViewHol
 
     @Override
     protected void convert(BaseViewHolder helper, PurchaseBo item) {
-        helper.setText(R.id.tv_time_one, "申请时间:" + item.getCreateTime());
-        helper.setText(R.id.tv_order_id, "订单号:" + item.getTrafficNo());
-        helper.setText(R.id.tv_apply_people, "申请人:" + item.getApplicantName());
-        helper.setText(R.id.tv_process_station, "处理站点:" + item.getStationName());
-        helper.setText(R.id.tv_phone, item.getStationPhone());
+        helper.setText(R.id.tv_time_one, TextUtils.concat("申请时间: " , TextUtils.isEmpty(item.getCreateTime())?Constant.STR_EMPTY:item.getCreateTime()));
+        helper.setText(R.id.tv_order_id, TextUtils.concat("订单号: " ,TextUtils.isEmpty(item.getTrafficNo())?Constant.STR_EMPTY:item.getTrafficNo()));
+        helper.setText(R.id.tv_apply_people, TextUtils.concat("申请人: " ,TextUtils.isEmpty(item.getApplicantName())?Constant.STR_EMPTY:item.getApplicantName()));
+        helper.setText(R.id.tv_process_station, TextUtils.concat("处理站点: " ,TextUtils.isEmpty(item.getStationName())?Constant.STR_EMPTY:item.getStationName()));
+        helper.setText(R.id.tv_phone, TextUtils.isEmpty(item.getStationPhone())?Constant.STR_EMPTY:item.getStationPhone());
         switch (item.getStatus()){
             case Constant.APPLY_RECORD_STATUS_UNHANDLE:
                 helper.setText(R.id.tv_record_status, "待处理");

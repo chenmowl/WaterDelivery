@@ -13,7 +13,9 @@ import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.CompleteContract;
+import com.eme.waterdelivery.event.CompleteNumEvent;
 import com.eme.waterdelivery.presenter.CompletePresenter;
+import com.eme.waterdelivery.tools.RxBus2;
 import com.eme.waterdelivery.ui.adapter.HomeFragmentAdapter;
 import com.eme.waterdelivery.ui.fragment.AllOrderFragment;
 import com.eme.waterdelivery.ui.fragment.CurrentDayFragment;
@@ -131,7 +133,7 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
     }
 
     public void updateOrderSum(String flag,int sum){
-            switch (flag){
+        switch (flag){
                 case Constant.ORDER_TODAY:
                     tabMain.getTabAt(0).setText(TextUtils.concat(getText(R.string.today_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
                     break;
@@ -144,6 +146,7 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
                 default:
                     break;
         }
+        RxBus2.getInstance().post(new CompleteNumEvent(flag,sum));
     }
 
     @Override

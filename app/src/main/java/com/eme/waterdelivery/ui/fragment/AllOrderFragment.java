@@ -37,7 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * 当日接单
+ * 历史总接单
  *
  * Created by dijiaoliang on 17/3/7.
  */
@@ -113,6 +113,17 @@ public class AllOrderFragment extends BaseFragment<AllOrderPresenter> implements
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         ButterKnife.bind(this, rootView);
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        llHeader=null;
+        currentDayAdapter=null;
+        if(rvContent!=null){
+            rvContent.removeAllViews();
+            rvContent=null;
+        }
+        super.onDestroy();
     }
 
     @Override

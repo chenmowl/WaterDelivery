@@ -33,9 +33,11 @@ public class LoginBo implements Parcelable {
     private String storeId;
     private String storePhone;
     private String username;
+    private String userId;
 
     public LoginBo() {
     }
+
 
     protected LoginBo(Parcel in) {
         cname = in.readString();
@@ -48,6 +50,7 @@ public class LoginBo implements Parcelable {
         storeId = in.readString();
         storePhone = in.readString();
         username = in.readString();
+        userId = in.readString();
     }
 
     @Override
@@ -62,6 +65,7 @@ public class LoginBo implements Parcelable {
         dest.writeString(storeId);
         dest.writeString(storePhone);
         dest.writeString(username);
+        dest.writeString(userId);
     }
 
     @Override
@@ -80,6 +84,14 @@ public class LoginBo implements Parcelable {
             return new LoginBo[size];
         }
     };
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getCname() {
         return cname;

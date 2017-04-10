@@ -65,7 +65,6 @@ public class LaunchActivity extends BaseActivity<LaunchPresenter> implements Lau
     @Override
     public void toLoginPage() {
         startActivity(new Intent(this, LoginActivity.class));
-        mPresenter.unSubscribe();
         finish();
     }
 
@@ -76,7 +75,6 @@ public class LaunchActivity extends BaseActivity<LaunchPresenter> implements Lau
         bundle.putParcelable(Constant.LOGIN_INFO,loginBo);
         intent.putExtras(bundle);
         startActivity(intent);
-        mPresenter.unSubscribe();
         finish();
     }
 }

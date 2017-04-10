@@ -11,9 +11,6 @@ import com.eme.waterdelivery.model.bean.entity.LoginBo;
 import com.eme.waterdelivery.model.net.RetrofitHelper;
 import com.eme.waterdelivery.model.sp.SPBase;
 import com.eme.waterdelivery.model.sp.SpConstant;
-import com.eme.waterdelivery.tools.KeyboardUtils;
-import com.eme.waterdelivery.tools.NetworkUtils;
-import com.eme.waterdelivery.ui.LoginActivity;
 
 import javax.inject.Inject;
 
@@ -49,10 +46,6 @@ public class LoginPresenter implements LoginContract.Presenter {
     }
 
     private void doLogin(String uid,String password) {
-        if(!NetworkUtils.isConnected(App.getAppInstance())){
-            ((LoginActivity)view).showNetError();
-            return;
-        }
         disposables.add(retrofitHelper.pwdLogin(uid,password)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -118,7 +111,7 @@ public class LoginPresenter implements LoginContract.Presenter {
     @Override
     public void login(String username, String password) {
         //首先隐藏软键盘
-        KeyboardUtils.hideSoftInput((LoginActivity)view);
+        view.hideSoftboard();
         //判断数据是否为空
         if(TextUtils.isEmpty(username)){
             view.showUsernameError(true);

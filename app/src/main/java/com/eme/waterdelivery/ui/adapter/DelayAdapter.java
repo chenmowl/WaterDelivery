@@ -32,8 +32,8 @@ public class DelayAdapter extends BaseQuickAdapter<WaitingOrderBo, BaseViewHolde
     @Override
     protected void convert(BaseViewHolder helper, WaitingOrderBo item) {
         helper.addOnClickListener(R.id.btn_receiving);
-        helper.setText(R.id.tv_time_one, "下单时间:"+item.getCreateTime());
-        helper.setText(R.id.tv_order_number, "订单号:"+item.getOrderId());
+        helper.setText(R.id.tv_time_one, TextUtils.concat("下单时间:",(TextUtils.isEmpty(item.getCreateTime())?Constant.STR_EMPTY:item.getCreateTime())));
+        helper.setText(R.id.tv_order_number, TextUtils.concat("订单号:",(TextUtils.isEmpty(item.getOrderId())?Constant.STR_EMPTY:item.getOrderId())));
         switch (item.getPayType()){
             case Constant.PAY_TYPE_MONEY:
                 helper.setText(R.id.tv_pay_type, "现金");
@@ -42,6 +42,7 @@ public class DelayAdapter extends BaseQuickAdapter<WaitingOrderBo, BaseViewHolde
                 helper.setText(R.id.tv_pay_type, "微信");
                 break;
             default:
+                helper.setText(R.id.tv_pay_type, "其它");
                 break;
         }
         LinearLayout llContainer= (LinearLayout) helper.itemView.findViewById(R.id.ll_container);
@@ -58,7 +59,7 @@ public class DelayAdapter extends BaseQuickAdapter<WaitingOrderBo, BaseViewHolde
         }else{
             helper.setText(R.id.tv_delivery_time, TimeUtils.date2String(TimeUtils.string2Date(time),new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault())));
         }
-        helper.setText(R.id.tv_receiver, "收件人: "+item.getMemberName());
-        helper.setText(R.id.tv_address, "地址: "+item.getMemberAddress());
+        helper.setText(R.id.tv_receiver, TextUtils.concat("收件人: ",(TextUtils.isEmpty(item.getMemberName())?Constant.STR_EMPTY:item.getMemberName())));
+        helper.setText(R.id.tv_address, TextUtils.concat("地址: ",(TextUtils.isEmpty(item.getMemberAddress())?Constant.STR_EMPTY:item.getMemberAddress())));
     }
 }

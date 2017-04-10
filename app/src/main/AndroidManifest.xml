@@ -62,9 +62,9 @@
             android:name=".ui.ApplyDetailActivity"
             android:screenOrientation="portrait" />
 
-        <meta-business
+        <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="915066c133f4fc142b0cf6db48f501db" />
+            android:value="541e2f138a53d1cf980566948915eb65"/>
     </application>
 
 </manifest>

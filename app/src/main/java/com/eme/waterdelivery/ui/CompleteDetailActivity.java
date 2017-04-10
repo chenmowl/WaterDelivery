@@ -121,14 +121,14 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
         if (aMap == null) {
             aMap = map.getMap();
         }
-        // TODO: 17/3/8  改变可视区域,添加坐标点 
-        changeCamera(
-                CameraUpdateFactory.newCameraPosition(new CameraPosition(
-                        new LatLng(39.983456, 116.3154950), 18, 30, 30)));
-        aMap.clear();
-        aMap.addMarker(new MarkerOptions().position(new LatLng(39.983456, 116.3154950))
-                .icon(BitmapDescriptorFactory
-                        .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+//        // TODO: 17/3/8  改变可视区域,添加坐标点
+//        changeCamera(
+//                CameraUpdateFactory.newCameraPosition(new CameraPosition(
+//                        new LatLng(39.983456, 116.3154950), 18, 30, 30)));
+//        aMap.clear();
+//        aMap.addMarker(new MarkerOptions().position(new LatLng(39.983456, 116.3154950))
+//                .icon(BitmapDescriptorFactory
+//                        .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
         mapContainer.setScrollView(sv);//MapContainer关联ScrollView 解决地图和ScrollView的事件冲突
 
@@ -261,7 +261,7 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
 
     @Override
     public void updateUi(OrderDetailBo orderDetailBo) {
-        tvOrderDetailPlaceTime.setText(orderDetailBo.getCreateTime());
+        tvOrderDetailPlaceTime.setText(TextUtils.isEmpty(orderDetailBo.getCreateTime())?Constant.STR_EMPTY:orderDetailBo.getCreateTime());
         switch (orderDetailBo.getPayType()){
             case Constant.PAY_TYPE_MONEY:
                 tvOrderDetailPayMode.setText(getText(R.string.order_pay_mode_money));
@@ -270,17 +270,17 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
                 tvOrderDetailPayMode.setText(getText(R.string.order_pay_mode_weixin));
                 break;
             default:
-                tvOrderDetailPayMode.setText(Constant.STR_EMPTY);
+                tvOrderDetailPayMode.setText(getText(R.string.order_pay_mode_other));
                 break;
         }
         if(!TextUtils.isEmpty(orderDetailBo.getShippingTime())){
             tvOrderDetailUsedTime.setText(TimeUtils.getIntervalTime(TimeUtils.getCurTimeString(), orderDetailBo.getShippingTime(), ConstUtils.TimeUnit.MIN) + "分钟");
         }
-        tvReceiver.setText(getText(R.string.order_receiver_title) + orderDetailBo.getMemberName());
-        tvAddress.setText(getText(R.string.order_address_title) + orderDetailBo.getMemberAddress());
-        tvRemark.setText(orderDetailBo.getOrderMessage());
-        tvOrderDetailClientPhone.setText(orderDetailBo.getServicePhone());
-        tvOrderDetailCustomerPhone.setText(orderDetailBo.getMemberPhone());
+        tvReceiver.setText(getText(R.string.order_receiver_title) + (TextUtils.isEmpty(orderDetailBo.getMemberName())?Constant.STR_EMPTY:orderDetailBo.getMemberName()));
+        tvAddress.setText(getText(R.string.order_address_title) + (TextUtils.isEmpty(orderDetailBo.getMemberAddress())?Constant.STR_EMPTY:orderDetailBo.getMemberAddress()));
+        tvRemark.setText(TextUtils.isEmpty(orderDetailBo.getOrderMessage())?Constant.STR_EMPTY:orderDetailBo.getOrderMessage());
+        tvOrderDetailClientPhone.setText(TextUtils.isEmpty(orderDetailBo.getServicePhone())?Constant.STR_EMPTY:orderDetailBo.getServicePhone());
+        tvOrderDetailCustomerPhone.setText(TextUtils.isEmpty(orderDetailBo.getMemberPhone())?Constant.STR_EMPTY:orderDetailBo.getMemberPhone());
         List<OrderDetailBo.GoodsBean> data=orderDetailBo.getGoods();
         mData.clear();
         mData.addAll(data);
@@ -296,6 +296,18 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
                 ivOrderDetailOpenSurplus.setImageResource(R.mipmap.xiala);
             }
         }
-        tvBalance.setText(getText(R.string.order_balance_title) +orderDetailBo.getOrderAmount());
+        tvBalance.setText(getText(R.string.order_balance_title) +(TextUtils.isEmpty(orderDetailBo.getOrderAmount())?Constant.STR_EMPTY:orderDetailBo.getOrderAmount()));
+        // TODO: 17/4/10 更新地图坐标
+        float memberLat=orderDetailBo.getMemberLat();
+        float memberLng=orderDetailBo.getMemberLng();
+        if(memberLat==0 || memberLng==0){
+            memberLat=39.983456f;
+            memberLng=116.3154950f;
+        }
+        changeCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(memberLat, memberLng), 18, 30, 30)));
+        aMap.clear();
+        aMap.addMarker(new MarkerOptions().position(new LatLng(memberLat, memberLng))
+                .icon(BitmapDescriptorFactory
+                        .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
     }
 }

@@ -1,5 +1,8 @@
 package com.eme.waterdelivery.tools;
 
+import android.text.TextUtils;
+
+import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.tools.ConstUtils.TimeUnit;
 
 import java.text.ParseException;
@@ -7,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.amap.api.col.x.m;
 import static com.eme.waterdelivery.tools.ConstUtils.DAY;
 import static com.eme.waterdelivery.tools.ConstUtils.HOUR;
 import static com.eme.waterdelivery.tools.ConstUtils.MIN;
@@ -496,5 +500,50 @@ public class TimeUtils {
      */
     public static boolean isLeapYear(int year) {
         return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
+    }
+
+    /**
+     * 计算时间差
+     *
+     * @param starTime
+     *            开始时间
+     * @param endTime
+     *            结束时间
+     * @param type
+     *            返回类型 ==1----天，时，分。 ==2----时
+     * @return 返回时间差
+     */
+    public static String getTimeDifference(String starTime, String endTime) {
+        String timeString = "";
+
+        try {
+            Date parse = DEFAULT_SDF.parse(starTime);
+            Date parse1 = DEFAULT_SDF.parse(endTime);
+
+            long diff = parse1.getTime() - parse.getTime();
+
+            long day = diff / (24 * 60 * 60 * 1000);
+            long hour = (diff / (60 * 60 * 1000) - day * 24);
+            long min = ((diff / (60 * 1000)) - day * 24 * 60 - hour * 60);
+            long s = (diff / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
+            long ms = (diff - day * 24 * 60 * 60 * 1000 - hour * 60 * 60 * 1000
+                    - min * 60 * 1000 - s * 1000);
+            // System.out.println(day + "天" + hour + "小时" + min + "分" + s +
+            // "秒");
+            if(diff>0 && diff<1000*60){
+                timeString= "1分钟";
+            }else if(diff>=1000*60 && diff<1000*60*60){
+                timeString= TextUtils.concat(String.valueOf(min),"分钟").toString();
+            }else if(diff>=1000*60*60 && diff<1000*60*60*24){
+                timeString= TextUtils.concat(String.valueOf(hour),"小时",min==0? Constant.STR_EMPTY:String.valueOf(min),"分钟").toString();
+            }else {
+                timeString= TextUtils.concat(String.valueOf(day),"天",hour==0? Constant.STR_EMPTY:String.valueOf(hour),"小时",min==0? Constant.STR_EMPTY:String.valueOf(min),"分钟").toString();
+            }
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return timeString;
     }
 }

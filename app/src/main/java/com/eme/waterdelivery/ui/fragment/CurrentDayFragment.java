@@ -116,6 +116,17 @@ public class CurrentDayFragment extends BaseFragment<CurrentDayPresenter> implem
     }
 
     @Override
+    public void onDestroy() {
+        llHeader=null;
+        currentDayAdapter=null;
+        if(rvContent!=null){
+            rvContent.removeAllViews();
+            rvContent=null;
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onRefresh() {
         currentDayAdapter.setEnableLoadMore(false);
         mPresenter.requestData(Constant.REFRESH_DOWN);

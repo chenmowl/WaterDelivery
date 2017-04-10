@@ -46,7 +46,6 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
 
-    private SendingAdapter sendingAdapter;
     private List<WaitingOrderBo> sendData;
 
     @Override
@@ -65,7 +64,7 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
         swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
         rvContent.setLayoutManager(new LinearLayoutManager(App.getAppInstance()));
         sendData = new ArrayList<>();
-        sendingAdapter = new SendingAdapter(App.getAppInstance(),sendData);
+        SendingAdapter sendingAdapter = new SendingAdapter(App.getAppInstance(),sendData);
         sendingAdapter.setOnLoadMoreListener(this,rvContent);
         sendingAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         rvContent.setAdapter(sendingAdapter);
@@ -121,8 +120,17 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
     }
 
     @Override
+    public void onDestroy() {
+        if(rvContent!=null){
+            rvContent.removeAllViews();
+            rvContent=null;
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onRefresh() {
-        sendingAdapter.setEnableLoadMore(false);
+        ((SendingAdapter)rvContent.getAdapter()).setEnableLoadMore(false);
         mPresenter.requestData(Constant.REFRESH_DOWN);
     }
 
@@ -145,10 +153,10 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
                 break;
             case Constant.REFRESH_DOWN:
                 swipeRefresh.setRefreshing(false);
-                sendingAdapter.setEnableLoadMore(true);
+                ((SendingAdapter)rvContent.getAdapter()).setEnableLoadMore(true);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
-                sendingAdapter.loadMoreFail();
+                ((SendingAdapter)rvContent.getAdapter()).loadMoreFail();
                 swipeRefresh.setEnabled(true);
                 break;
             default:
@@ -171,7 +179,7 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
             case Constant.REFRESH_DOWN:
                 sendData.clear();
                 swipeRefresh.setRefreshing(false);
-                sendingAdapter.setEnableLoadMore(true);
+                ((SendingAdapter)rvContent.getAdapter()).setEnableLoadMore(true);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
                 swipeRefresh.setEnabled(true);
@@ -180,9 +188,9 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
                 break;
         }
         sendData.addAll(data);
-        sendingAdapter.notifyDataSetChanged();
+        rvContent.getAdapter().notifyDataSetChanged();
         if(Constant.REFRESH_UP_LOADMORE==flag){
-            sendingAdapter.loadMoreComplete();
+            ((SendingAdapter)rvContent.getAdapter()).loadMoreComplete();
         }
     }
 
@@ -190,7 +198,7 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
     public void notifyNoData() {
         ToastUtil.shortToast(mActivity, getText(R.string.no_data).toString());
         swipeRefresh.setEnabled(true);
-        sendingAdapter.loadMoreEnd();
+        ((SendingAdapter)rvContent.getAdapter()).loadMoreEnd();
     }
 
     @Override
@@ -199,11 +207,11 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
             case Constant.REFRESH_NORMAL:
                 break;
             case Constant.REFRESH_DOWN:
-                sendingAdapter.setEnableLoadMore(true);
+                ((SendingAdapter)rvContent.getAdapter()).setEnableLoadMore(true);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
                 swipeRefresh.setEnabled(true);
-                sendingAdapter.loadMoreFail();
+                ((SendingAdapter)rvContent.getAdapter()).loadMoreFail();
                 break;
             default:
                 break;
@@ -230,6 +238,11 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
         super.onActivityResult(requestCode, resultCode, data);
         if(Constant.REQUEST_CODE==requestCode && RESULT_OK==resultCode){
             refreshPage();
+            notifyNava();
         }
+    }
+
+    public void notifyNava(){
+        ((HomeActivity)mActivity).requestCompleteNumber();
     }
 }

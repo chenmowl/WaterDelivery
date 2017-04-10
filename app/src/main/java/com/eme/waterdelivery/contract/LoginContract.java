@@ -22,6 +22,8 @@ public interface LoginContract {
 
         void showProgress(boolean b);
 
+        void hideSoftboard();
+
     }
 
     interface Presenter extends BasePresenter {

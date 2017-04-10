@@ -83,8 +83,7 @@ public class MyApplyActivity extends BaseActivity<MyApplyPresenter> implements M
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        mPresenter.unSubscribe();
-                        MyApplyActivity.this.finish();
+                        finish();
                     }
                 });
         vpMain.setOnPageChangeListener(this);

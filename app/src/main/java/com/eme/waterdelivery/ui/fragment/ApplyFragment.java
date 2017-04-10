@@ -286,6 +286,11 @@ public class ApplyFragment extends BaseFragment<ApplyPresenter> implements Apply
         adapterGood=null;
         etAmount=null;
         dialogView=null;
+        adapter=null;
+        if(rvApply!=null){
+            rvApply.removeAllViews();
+            rvApply=null;
+        }
         super.onDestroy();
     }
 

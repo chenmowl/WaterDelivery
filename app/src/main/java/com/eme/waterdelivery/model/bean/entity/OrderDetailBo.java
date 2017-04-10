@@ -42,6 +42,24 @@ public class OrderDetailBo {
     private String shippingTime;
     private String storeId;
     private List<GoodsBean> goods;
+    private float memberLng;
+    private float memberLat;
+
+    public float getMemberLng() {
+        return memberLng;
+    }
+
+    public void setMemberLng(float memberLng) {
+        this.memberLng = memberLng;
+    }
+
+    public float getMemberLat() {
+        return memberLat;
+    }
+
+    public void setMemberLat(float memberLat) {
+        this.memberLat = memberLat;
+    }
 
     public String getCreateTime() {
         return createTime;

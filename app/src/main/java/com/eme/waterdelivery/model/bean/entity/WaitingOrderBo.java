@@ -1,5 +1,6 @@
 package com.eme.waterdelivery.model.bean.entity;
 
+
 import java.util.List;
 
 /**
@@ -33,6 +34,15 @@ public class WaitingOrderBo {
     private String shippingTime;
     private String storeId;
     private List<GoodsBean> goods;
+    private String orderAmount;
+
+    public String getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(String orderAmount) {
+        this.orderAmount = orderAmount;
+    }
 
     public String getCreateTime() {
         return createTime;

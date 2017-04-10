@@ -12,12 +12,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.eme.waterdelivery.App;
 import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.LoginContract;
 import com.eme.waterdelivery.model.bean.entity.LoginBo;
 import com.eme.waterdelivery.presenter.LoginPresenter;
+import com.eme.waterdelivery.tools.KeyboardUtils;
+import com.eme.waterdelivery.tools.NetworkUtils;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.tbruyelle.rxpermissions2.Permission;
@@ -86,7 +89,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        mPresenter.login(etLoginUsername.getText().toString(),etLoginPassword.getText().toString());
+                        if(!NetworkUtils.isConnected(App.getAppInstance())){
+                            showNetError();
+                        }else{
+                            mPresenter.login(etLoginUsername.getText().toString(),etLoginPassword.getText().toString());
+                        }
                     }
                 });
 
@@ -158,6 +165,11 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     @Override
     public void showProgress(boolean b) {
         isShowLayer(llAvLoadingTransparent44,b);
+    }
+
+    @Override
+    public void hideSoftboard() {
+        KeyboardUtils.hideSoftInput(this);
     }
 
     @OnTextChanged({R.id.et_login_username,R.id.et_login_password})

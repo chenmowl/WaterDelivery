@@ -47,7 +47,6 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
 
-    private DelayAdapter delayAdapter;
     private List<WaitingOrderBo> delayData;
 
     @Override
@@ -66,7 +65,7 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
         swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
         rvContent.setLayoutManager(new LinearLayoutManager(App.getAppInstance()));
         delayData = new ArrayList<>();
-        delayAdapter = new DelayAdapter(App.getAppInstance(), delayData);
+        DelayAdapter delayAdapter = new DelayAdapter(App.getAppInstance(), delayData);
         delayAdapter.setAutoLoadMoreSize(5);
 //        delayAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
         rvContent.setAdapter(delayAdapter);
@@ -110,8 +109,17 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
     }
 
     @Override
+    public void onDestroy() {
+        if(rvContent!=null){
+            rvContent.removeAllViews();
+            rvContent=null;
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onRefresh() {
-        delayAdapter.setEnableLoadMore(false);
+        ((DelayAdapter)rvContent.getAdapter()).setEnableLoadMore(false);
         mPresenter.requestData(Constant.REFRESH_DOWN);
     }
 
@@ -134,10 +142,10 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
                 break;
             case Constant.REFRESH_DOWN:
                 swipeRefresh.setRefreshing(false);
-                delayAdapter.setEnableLoadMore(true);
+                ((DelayAdapter)rvContent.getAdapter()).setEnableLoadMore(true);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
-                delayAdapter.loadMoreFail();
+                ((DelayAdapter)rvContent.getAdapter()).loadMoreFail();
                 swipeRefresh.setEnabled(true);
                 break;
             default:
@@ -160,7 +168,7 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
             case Constant.REFRESH_DOWN:
                 delayData.clear();
                 swipeRefresh.setRefreshing(false);
-                delayAdapter.setEnableLoadMore(true);
+                ((DelayAdapter)rvContent.getAdapter()).setEnableLoadMore(true);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
                 swipeRefresh.setEnabled(true);
@@ -169,9 +177,9 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
                 break;
         }
         delayData.addAll(data);
-        delayAdapter.notifyDataSetChanged();
+        rvContent.getAdapter().notifyDataSetChanged();
         if(Constant.REFRESH_UP_LOADMORE==flag){
-            delayAdapter.loadMoreComplete();
+            ((DelayAdapter)rvContent.getAdapter()).loadMoreComplete();
         }
     }
 
@@ -179,7 +187,7 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
     public void notifyNoData() {
         ToastUtil.shortToast(mActivity, getText(R.string.no_data).toString());
         swipeRefresh.setEnabled(true);
-        delayAdapter.loadMoreEnd();
+        ((DelayAdapter)rvContent.getAdapter()).loadMoreEnd();
     }
 
     @Override
@@ -188,11 +196,11 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
             case Constant.REFRESH_NORMAL:
                 break;
             case Constant.REFRESH_DOWN:
-                delayAdapter.setEnableLoadMore(true);
+                ((DelayAdapter)rvContent.getAdapter()).setEnableLoadMore(true);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
                 swipeRefresh.setEnabled(true);
-                delayAdapter.loadMoreFail();
+                ((DelayAdapter)rvContent.getAdapter()).loadMoreFail();
                 break;
             default:
                 break;

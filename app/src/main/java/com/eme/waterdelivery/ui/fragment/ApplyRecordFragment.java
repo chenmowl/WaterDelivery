@@ -120,6 +120,20 @@ public class ApplyRecordFragment extends BaseFragment<ApplyRecordPresenter> impl
     }
 
     @Override
+    public void onDestroy() {
+        tvToday=null;
+        tvMonth=null;
+        tvAll=null;
+        applyRecordAdapter=null;
+        if(rvContent!=null){
+            rvContent.removeAllViews();
+            rvContent=null;
+        }
+        super.onDestroy();
+
+    }
+
+    @Override
     public void onRefresh() {
         applyRecordAdapter.setEnableLoadMore(false);
         mPresenter.requestData(Constant.REFRESH_DOWN);

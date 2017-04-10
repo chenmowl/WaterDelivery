@@ -104,7 +104,6 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
     private AMap aMap;
 
     private List<OrderDetailBo.GoodsBean> mData;
-    private SendingDetailGoodAdapter goodAdapter;
     private boolean isShowAll;
 
     private String orderId;
@@ -127,12 +126,12 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
             aMap = map.getMap();
         }
         // TODO: 17/3/8  改变可视区域,添加坐标点 
-        changeCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
-                        new LatLng(39.983456, 116.3154950), 18, 30, 30)));
+//        changeCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
+//                        new LatLng(39.983456, 116.3154950), 18, 30, 30)));
         aMap.clear();
-        aMap.addMarker(new MarkerOptions().position(new LatLng(39.983456, 116.3154950))
-                .icon(BitmapDescriptorFactory
-                        .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+//        aMap.addMarker(new MarkerOptions().position(new LatLng(39.983456, 116.3154950))
+//                .icon(BitmapDescriptorFactory
+//                        .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
         mapContainer.setScrollView(sv);//MapContainer关联ScrollView 解决地图和ScrollView的事件冲突
 
@@ -145,7 +144,7 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
         rvContent.setLayoutManager(manager);
         mData = new ArrayList<>();
         isShowAll = false;//商品是否展开
-        goodAdapter = new SendingDetailGoodAdapter(this, mData);
+        SendingDetailGoodAdapter goodAdapter = new SendingDetailGoodAdapter(this, mData);
         rvContent.setAdapter(goodAdapter);
 
         if (mData.size() <= 2) {
@@ -185,7 +184,6 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        mPresenter.unSubscribe();
                         finish();
                     }
                 });
@@ -196,7 +194,7 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
      */
     private void checkShowAll() {
         isShowAll = !isShowAll;
-        goodAdapter.setIsOpenPlus(isShowAll);
+        ((SendingDetailGoodAdapter)rvContent.getAdapter()).setIsOpenPlus(isShowAll);
         if (isShowAll) {
             tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_close_surplus);
             ivOrderDetailOpenSurplus.setImageResource(R.mipmap.shangla);
@@ -260,7 +258,7 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
 
     @Override
     public void updateUi(OrderDetailBo orderDetailBo) {
-        tvOrderDetailPlaceTime.setText(orderDetailBo.getCreateTime());
+        tvOrderDetailPlaceTime.setText(TextUtils.isEmpty(orderDetailBo.getCreateTime())?Constant.STR_EMPTY:orderDetailBo.getCreateTime());
         switch (orderDetailBo.getPayType()){
             case Constant.PAY_TYPE_MONEY:
                 tvOrderDetailPayMode.setText(getText(R.string.order_pay_mode_money));
@@ -269,21 +267,21 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
                 tvOrderDetailPayMode.setText(getText(R.string.order_pay_mode_weixin));
                 break;
             default:
-                tvOrderDetailPayMode.setText(Constant.STR_EMPTY);
+                tvOrderDetailPayMode.setText(getText(R.string.order_pay_mode_other));
                 break;
         }
         if(!TextUtils.isEmpty(orderDetailBo.getShippingTime())){
             tvOrderDetailUsedTime.setText(TimeUtils.getIntervalTime(TimeUtils.getCurTimeString(), orderDetailBo.getShippingTime(), ConstUtils.TimeUnit.MIN) + "分钟");
         }
-        tvReceiver.setText(getText(R.string.order_receiver_title) + orderDetailBo.getMemberName());
-        tvAddress.setText(getText(R.string.order_address_title) + orderDetailBo.getMemberAddress());
-        tvRemark.setText(orderDetailBo.getOrderMessage());
-        tvOrderDetailClientPhone.setText(orderDetailBo.getServicePhone());
-        tvOrderDetailCustomerPhone.setText(orderDetailBo.getMemberPhone());
+        tvReceiver.setText(getText(R.string.order_receiver_title) + (TextUtils.isEmpty(orderDetailBo.getMemberName())?Constant.STR_EMPTY:orderDetailBo.getMemberName()));
+        tvAddress.setText(getText(R.string.order_address_title) + (TextUtils.isEmpty(orderDetailBo.getMemberAddress())?Constant.STR_EMPTY:orderDetailBo.getMemberAddress()));
+        tvRemark.setText(TextUtils.isEmpty(orderDetailBo.getOrderMessage())?Constant.STR_EMPTY:orderDetailBo.getOrderMessage());
+        tvOrderDetailClientPhone.setText(TextUtils.isEmpty(orderDetailBo.getServicePhone())?Constant.STR_EMPTY:orderDetailBo.getServicePhone());
+        tvOrderDetailCustomerPhone.setText(TextUtils.isEmpty(orderDetailBo.getMemberPhone())?Constant.STR_EMPTY:orderDetailBo.getMemberPhone());
         List<OrderDetailBo.GoodsBean> data=orderDetailBo.getGoods();
         mData.clear();
         mData.addAll(data);
-        goodAdapter.notifyDataSetChanged();
+        rvContent.getAdapter().notifyDataSetChanged();
         if (mData.size() <= 2) {
             llOrderOpenSurplus.setVisibility(View.GONE);
         } else {
@@ -295,8 +293,21 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
                 ivOrderDetailOpenSurplus.setImageResource(R.mipmap.xiala);
             }
         }
-        tvBalance.setText(getText(R.string.order_balance_title) +orderDetailBo.getOrderAmount());
+        String amount=orderDetailBo.getOrderAmount();
+        tvBalance.setText(getText(R.string.order_balance_title) +(TextUtils.isEmpty(amount)?Constant.STR_EMPTY:amount));
         initSignListener(orderDetailBo.getOrderAmount());
+        // TODO: 17/4/10 更新地图坐标
+        float memberLat=orderDetailBo.getMemberLat();
+        float memberLng=orderDetailBo.getMemberLng();
+        if(memberLat==0 || memberLng==0){
+            memberLat=39.983456f;
+            memberLng=116.3154950f;
+        }
+        changeCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(memberLat, memberLng), 18, 30, 30)));
+        aMap.clear();
+        aMap.addMarker(new MarkerOptions().position(new LatLng(memberLat, memberLng))
+                .icon(BitmapDescriptorFactory
+                        .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
     }
 
     @Override
@@ -308,7 +319,6 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
                 ToastUtil.shortToast(this,message);
             }
             // 成功即关闭当前页面，并刷新配送订单列表
-            mPresenter.unSubscribe();
             setResult(RESULT_OK);
             finish();
         }else{
@@ -332,7 +342,11 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
                 .subscribe(new Consumer<Object>() {
                     @Override
                     public void accept(Object o) throws Exception {
-                        alertConfirm(orderAmount);
+                        if(TextUtils.isEmpty(orderAmount)){
+                            ToastUtil.shortToast(SendingDetailActivity.this,getText(R.string.order_info_error).toString());
+                        }else{
+                            alertConfirm(orderAmount);
+                        }
                     }
                 });
     }
