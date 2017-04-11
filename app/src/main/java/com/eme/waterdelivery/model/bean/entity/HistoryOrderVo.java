@@ -46,7 +46,16 @@ public class HistoryOrderVo {
 
         private String categoryId;
         private String categoryName;
+        private String categoryUnitName;
         private int goodsSum;
+
+        public String getCategoryUnitName() {
+            return categoryUnitName;
+        }
+
+        public void setCategoryUnitName(String categoryUnitName) {
+            this.categoryUnitName = categoryUnitName;
+        }
 
         public String getCategoryId() {
             return categoryId;

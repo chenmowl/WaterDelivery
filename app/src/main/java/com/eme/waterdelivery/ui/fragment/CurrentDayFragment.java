@@ -191,7 +191,7 @@ public class CurrentDayFragment extends BaseFragment<CurrentDayPresenter> implem
         llHeader.removeAllViews();
         for (HistoryOrderVo.SellRecord record: historySellSum){
             TextView tv= (TextView) inflater.inflate(R.layout.item_history_record,null,false);
-            tv.setText(TextUtils.concat(record.getCategoryName(),getText(R.string.tip),String.valueOf(record.getGoodsSum())));
+            tv.setText(TextUtils.concat(record.getCategoryName(),getText(R.string.tip),String.valueOf(record.getGoodsSum()),record.getCategoryUnitName()));
             llHeader.addView(tv);
         }
         if(Constant.REFRESH_UP_LOADMORE==flag){
