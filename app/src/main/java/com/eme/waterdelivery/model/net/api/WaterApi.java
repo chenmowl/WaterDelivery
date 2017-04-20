@@ -2,6 +2,7 @@ package com.eme.waterdelivery.model.net.api;
 
 import com.eme.waterdelivery.model.bean.Result;
 import com.eme.waterdelivery.model.bean.StatusResult;
+import com.eme.waterdelivery.model.bean.VersionResult;
 import com.eme.waterdelivery.model.bean.entity.ApplyDetailVo;
 import com.eme.waterdelivery.model.bean.entity.ApplyOneLevelBo;
 import com.eme.waterdelivery.model.bean.entity.ApplyTwoLevelGoodBo;
@@ -16,7 +17,9 @@ import com.eme.waterdelivery.model.bean.entity.WaitingOrderVo;
 import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * 雪百真api
@@ -24,6 +27,9 @@ import retrofit2.http.POST;
  * Created by dijiaoliang on 17/3/20.
  */
 public interface WaterApi {
+
+    @GET("/xbz-manage/device/getAndroidVersionUpdate")
+    Observable<VersionResult> checkAppVersion(@Query("username")String username, @Query("password")String password);
 
     @POST("/xbz-api/employ/cookieLogin")
     Observable<Result<LoginBo>> cookieLogin();

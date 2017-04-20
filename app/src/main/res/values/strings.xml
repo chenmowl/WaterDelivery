@@ -43,7 +43,8 @@
     <string name="yuan">元</string>
     <string name="number_job">工号:</string>
     <string name="waiting">待接单 (</string>
-    <string name="waiting_home">待接单</string>
+    <string name="waiting_home">即时订单</string>
+    <string name="fixed_order">固定订单</string>
     <string name="sending">配送中 (</string>
     <string name="sending_home">配送中</string>
     <string name="today_receive">今日完成 (</string>

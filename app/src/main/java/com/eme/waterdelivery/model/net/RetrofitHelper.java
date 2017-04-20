@@ -3,6 +3,7 @@ package com.eme.waterdelivery.model.net;
 
 import com.eme.waterdelivery.model.bean.Result;
 import com.eme.waterdelivery.model.bean.StatusResult;
+import com.eme.waterdelivery.model.bean.VersionResult;
 import com.eme.waterdelivery.model.bean.entity.ApplyDetailVo;
 import com.eme.waterdelivery.model.bean.entity.ApplyOneLevelBo;
 import com.eme.waterdelivery.model.bean.entity.ApplyTwoLevelGoodBo;
@@ -26,6 +27,14 @@ public class RetrofitHelper {
 
     public RetrofitHelper(WaterApi waterApi) {
         this.waterApi = waterApi;
+    }
+
+    /**
+     * 校验版本
+     * @return
+     */
+    public Observable<VersionResult> checkAppVersion(String username, String password) {
+        return waterApi.checkAppVersion(username,password);
     }
 
     /**

@@ -70,8 +70,10 @@ public class HomePresenter implements HomeContract.Presenter {
 
             }
         });
-    }
 
+//        checkVersion();
+
+    }
 
     @Override
     public void unSubscribe() {
@@ -80,13 +82,12 @@ public class HomePresenter implements HomeContract.Presenter {
         disposables.clear();
     }
 
-
     @Override
     public void requestCompleteNumber() {
         disposables.add(
                 retrofitHelper.getHistoryOrderSum(storeId)
                         .subscribeOn(Schedulers.io())
-                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Consumer<Result<HistoryOrderSumBo>>() {
                             @Override
                             public void accept(Result<HistoryOrderSumBo> historyOrderSumBoResult) throws Exception {
@@ -103,4 +104,5 @@ public class HomePresenter implements HomeContract.Presenter {
 
         );
     }
+
 }

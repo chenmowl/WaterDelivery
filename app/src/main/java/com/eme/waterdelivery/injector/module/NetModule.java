@@ -9,7 +9,6 @@ import com.eme.waterdelivery.model.net.converter.FastJsonConverterFactory;
 import com.eme.waterdelivery.model.sp.SPBase;
 import com.eme.waterdelivery.model.sp.SpConstant;
 import com.eme.waterdelivery.tools.NetworkUtils;
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.io.File;
@@ -68,7 +67,8 @@ public class NetModule {
         if (ApiConfig.DEBUG) {
             HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addInterceptor(httpLoggingInterceptor).addNetworkInterceptor(new StethoInterceptor());
+            builder.addInterceptor(httpLoggingInterceptor);
+//            builder.addInterceptor(httpLoggingInterceptor).addNetworkInterceptor(new StethoInterceptor());
         }
         File cacheFile = new File(ApiConfig.PATH_CACHE);
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 50);

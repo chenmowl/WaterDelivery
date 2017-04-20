@@ -56,14 +56,14 @@ project.ext {
             "dagger-compiler"            : "com.google.dagger:dagger-compiler:${daggerVersion}",
 
             //facebook
-            "stetho"                     : "com.facebook.stetho:stetho:${stethoVersion}",
-            "stetho-okhttp3"             : "com.facebook.stetho:stetho-okhttp3:${stethoVersion}",
+//            "stetho"                     : "com.facebook.stetho:stetho:${stethoVersion}",
+//            "stetho-okhttp3"             : "com.facebook.stetho:stetho-okhttp3:${stethoVersion}",
 
             //others
             "okhttp3"                    : "com.squareup.okhttp3:okhttp:3.4.1",
             "okhttp3-logging-interceptor": "com.squareup.okhttp3:logging-interceptor:3.4.1",
             "ormlite-android"            : "com.j256.ormlite:ormlite-android:4.48",
-            "fastjson"                   : "com.alibaba:fastjson:1.2.10",
+            "fastjson"                   : "com.alibaba:fastjson:1.2.31",
             "butterknife"                : "com.jakewharton:butterknife:${butterKnifeVersion}",
             "butterknife-compiler"       : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
 //            "retrofit2-fastjson-converter": "me.baron.retrofit2.converter:Retrofit2-FastJson-Converter:1.0.0"
@@ -85,11 +85,13 @@ project.ext {
             "glide"                      : "com.github.bumptech.glide:glide:${glideVersion}",
 
             //adapter helper
-            "adapter"              : "com.github.CymChad:BaseRecyclerViewAdapterHelper:${adapterVersion}",
+            "adapter"                    : "com.github.CymChad:BaseRecyclerViewAdapterHelper:${adapterVersion}",
 
-            "spinner"              : "com.weiwangcn.betterspinner:library:${spinnerVersion}",
+            "spinner"                    : "com.weiwangcn.betterspinner:library:${spinnerVersion}",
 
-            "rxpermissions2"              : "com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar",
+            "rxpermissions2"             : "com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar",
+
+            "update"                     : 'com.github.czy1121:update:1.1.0',
 
     ]
 }

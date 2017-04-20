@@ -41,7 +41,8 @@ public class Constant {
 
     //待接单和配送中的标记
     public static final int ORDER_DELAY=1001;
-    public static final int ORDER_SEND=1002;
+    public static final int ORDER_FIXED=1002;
+    public static final int ORDER_SEND=1003;
 
 
     //采购单状态 0待处理 1派送中 2完结
@@ -64,5 +65,9 @@ public class Constant {
     public static final int REFRESH_UP_LOADMORE=2;//上拉加载更多
     public static final int REFRESH_DOWN=3;//下拉刷新
 
+    /***************************  版本校验参数  *****************************/
+
+    public static final String username="admin";
+    public static final String password="123456";
 
 }

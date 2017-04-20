@@ -4,8 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.facebook.stetho.common.LogUtil;
-
 /**
  * Created by luokaiwen on 15/4/28.
  * <p/>
@@ -22,7 +20,7 @@ public class ToastUtil {
         }
 
         if (TextUtils.isEmpty(content)) {
-            LogUtil.e(TAG, "content is null");
+//            LogUtil.e(TAG, "content is null");
             return;
         }
 
@@ -36,7 +34,7 @@ public class ToastUtil {
         }
 
         if (TextUtils.isEmpty(content)) {
-            LogUtil.e(TAG, "content is null");
+//            LogUtil.e(TAG, "content is null");
             return;
         }
 

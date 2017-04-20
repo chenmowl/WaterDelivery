@@ -16,6 +16,7 @@ import com.eme.waterdelivery.ui.fragment.ApplyFragment;
 import com.eme.waterdelivery.ui.fragment.ApplyRecordFragment;
 import com.eme.waterdelivery.ui.fragment.CurrentDayFragment;
 import com.eme.waterdelivery.ui.fragment.DelayFragment;
+import com.eme.waterdelivery.ui.fragment.FixedFragment;
 import com.eme.waterdelivery.ui.fragment.MonthOrderFragment;
 import com.eme.waterdelivery.ui.fragment.SendingFragment;
 
@@ -45,6 +46,8 @@ public interface ViewComponent {
     void inject(ApplyDetailActivity applyDetailActivity);
 
     void inject(DelayFragment delayFragment);
+
+    void inject(FixedFragment fixedFragment);
 
     void inject(SendingFragment sendingFragment);
 

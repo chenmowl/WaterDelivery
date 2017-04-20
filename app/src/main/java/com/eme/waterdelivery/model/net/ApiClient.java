@@ -1,7 +1,6 @@
 package com.eme.waterdelivery.model.net;
 
 import com.eme.waterdelivery.model.net.converter.FastJsonConverterFactory;
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import okhttp3.OkHttpClient;
@@ -24,7 +23,8 @@ public class ApiClient {
                     if (ApiConfig.DEBUG) {
                         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
                         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-                        builder.addInterceptor(httpLoggingInterceptor).addNetworkInterceptor(new StethoInterceptor());
+                        builder.addInterceptor(httpLoggingInterceptor);
+//                        builder.addInterceptor(httpLoggingInterceptor).addNetworkInterceptor(new StethoInterceptor());
                     }
                     OkHttpClient client = builder.build();
 

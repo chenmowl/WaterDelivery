@@ -19,31 +19,42 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.HomeContract;
 import com.eme.waterdelivery.event.CompleteNumEvent;
+import com.eme.waterdelivery.model.bean.VersionResult;
 import com.eme.waterdelivery.model.bean.entity.HistoryOrderSumBo;
 import com.eme.waterdelivery.model.bean.entity.LoginBo;
+import com.eme.waterdelivery.model.bean.entity.VersionBo;
+import com.eme.waterdelivery.model.net.ApiConfig;
 import com.eme.waterdelivery.model.sp.SPBase;
 import com.eme.waterdelivery.model.sp.SpConstant;
 import com.eme.waterdelivery.presenter.HomePresenter;
 import com.eme.waterdelivery.tools.ImageLoader;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.tools.Util;
+import com.eme.waterdelivery.tools.XmlUtil;
 import com.eme.waterdelivery.ui.adapter.HomeFragmentAdapter;
 import com.eme.waterdelivery.ui.fragment.DelayFragment;
+import com.eme.waterdelivery.ui.fragment.FixedFragment;
 import com.eme.waterdelivery.ui.fragment.SendingFragment;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import ezy.boost.update.IUpdateParser;
+import ezy.boost.update.UpdateInfo;
+import ezy.boost.update.UpdateManager;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
@@ -113,41 +124,48 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         initNavClickListener(headerLayout);
 
         /**处理侧边栏数据**/
-        LoginBo loginBo=getIntent().getExtras().getParcelable(Constant.LOGIN_INFO);
-        if(loginBo!=null){
-            //更新侧边栏信息
-            CircleImageView ivHeader = (CircleImageView) headerLayout.findViewById(R.id.profile_image);
-            TextView tvName = (TextView) headerLayout.findViewById(R.id.tv_name);
-            TextView tvJobNumber = (TextView) headerLayout.findViewById(R.id.tv_job_number);
-            TextView tvCount = (TextView) headerLayout.findViewById(R.id.tv_count);
-            TextView tvTodayRecord = (TextView) headerLayout.findViewById(R.id.tv_today_record);
-            TextView tvMonthRecord = (TextView) headerLayout.findViewById(R.id.tv_month_record);
-            TextView tvTotalRecord = (TextView) headerLayout.findViewById(R.id.tv_total_record);
-            TextView tvStationPhone = (TextView) headerLayout.findViewById(R.id.tv_station_phone);
-            tvName.setText(loginBo.getCname());
-            tvCount.setText(TextUtils.concat(loginBo.getPaidAmount(),getText(R.string.yuan)));
-            tvJobNumber.setText(TextUtils.concat(getText(R.string.number_job),loginBo.getUserId()));
-            tvTodayRecord.setText(String.valueOf(loginBo.getOrdersSumToday()));
-            tvMonthRecord.setText(String.valueOf(loginBo.getOrdersSumMonth()));
-            tvTotalRecord.setText(String.valueOf(loginBo.getOrdersSumTotal()));
-            tvStationPhone.setText(loginBo.getStorePhone());
-            if(!TextUtils.isEmpty(loginBo.getImg())){
-                ImageLoader.load(this,loginBo.getImg(),ivHeader);
+        if(getIntent().getExtras()!=null){
+            LoginBo loginBo=getIntent().getExtras().getParcelable(Constant.LOGIN_INFO);
+            if(loginBo!=null){
+                //更新侧边栏信息
+                CircleImageView ivHeader = (CircleImageView) headerLayout.findViewById(R.id.profile_image);
+                TextView tvName = (TextView) headerLayout.findViewById(R.id.tv_name);
+                TextView tvJobNumber = (TextView) headerLayout.findViewById(R.id.tv_job_number);
+                TextView tvCount = (TextView) headerLayout.findViewById(R.id.tv_count);
+                TextView tvTodayRecord = (TextView) headerLayout.findViewById(R.id.tv_today_record);
+                TextView tvMonthRecord = (TextView) headerLayout.findViewById(R.id.tv_month_record);
+                TextView tvTotalRecord = (TextView) headerLayout.findViewById(R.id.tv_total_record);
+                TextView tvStationPhone = (TextView) headerLayout.findViewById(R.id.tv_station_phone);
+                tvName.setText(loginBo.getCname());
+                tvCount.setText(TextUtils.concat(loginBo.getPaidAmount(),getText(R.string.yuan)));
+                tvJobNumber.setText(TextUtils.concat(getText(R.string.number_job),loginBo.getUserId()));
+                tvTodayRecord.setText(String.valueOf(loginBo.getOrdersSumToday()));
+                tvMonthRecord.setText(String.valueOf(loginBo.getOrdersSumMonth()));
+                tvTotalRecord.setText(String.valueOf(loginBo.getOrdersSumTotal()));
+                tvStationPhone.setText(loginBo.getStorePhone());
+                if(!TextUtils.isEmpty(loginBo.getImg())){
+                    ImageLoader.load(this,loginBo.getImg(),ivHeader);
+                }
             }
         }
         DelayFragment delayFragment=new DelayFragment();
+        FixedFragment fixedFragment=new FixedFragment();
         SendingFragment sendingFragment=new SendingFragment();
         fragments.add(delayFragment);
+        fragments.add(fixedFragment);
         fragments.add(sendingFragment);
         homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
         vpMain.setAdapter(homeFragmentAdapter);
         //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
         tabMain.setupWithViewPager(vpMain, true);
         tabMain.getTabAt(0).setText(getText(R.string.waiting_home).toString());
-        tabMain.getTabAt(1).setText(getText(R.string.sending_home).toString());
+        tabMain.getTabAt(1).setText(getText(R.string.fixed_order).toString());
+        tabMain.getTabAt(2).setText(getText(R.string.sending_home).toString());
 
         vpMain.setOnPageChangeListener(this);
 
+        //校验应用版本
+//        checkAppVersion();
     }
 
     /**
@@ -160,8 +178,11 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
             case Constant.ORDER_DELAY:
                 tabMain.getTabAt(0).setText(TextUtils.concat(getText(R.string.waiting).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
                 break;
+            case Constant.ORDER_FIXED:
+                tabMain.getTabAt(1).setText(TextUtils.concat(getText(R.string.fixed_order).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
+                break;
             case Constant.ORDER_SEND:
-                tabMain.getTabAt(1).setText(TextUtils.concat(getText(R.string.sending).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
+                tabMain.getTabAt(2).setText(TextUtils.concat(getText(R.string.sending).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
                 break;
             default:
                 break;
@@ -309,7 +330,12 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
                 break;
             case Constant.ONE:
                 if(fragments.get(1)!=null){
-                    ((SendingFragment)fragments.get(1)).refreshPage();
+                    ((FixedFragment)fragments.get(1)).refreshPage();
+                }
+                break;
+            case Constant.TWO:
+                if(fragments.get(2)!=null){
+                    ((SendingFragment)fragments.get(2)).refreshPage();
                 }
                 break;
             default:
@@ -359,6 +385,77 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
             default:
                 break;
         }
+    }
+
+    /**
+     * 版本更新
+     */
+    private void checkAppVersion() {
+        UpdateManager.create(this).setUrl(ApiConfig.VERSION_CHECK_URL).setManual(true).setNotifyId(998).setParser(new IUpdateParser() {
+            @Override
+            public UpdateInfo parse(String source) throws Exception {
+                UpdateInfo info = new UpdateInfo();
+                info.isIgnorable = false;
+                boolean isForce=false;
+                if(!TextUtils.isEmpty(source)){
+                    VersionResult versionResult = JSON.parseObject(source, VersionResult.class);
+                    if(versionResult!=null && versionResult.isSuccess()){
+                        String xml=versionResult.getData();
+                        Map<String,Set<String>> map= XmlUtil.handleXml(xml);
+                        VersionBo bo = new VersionBo();
+                        bo.setRefreshVersionList(new ArrayList<String>());
+                        Set<String> idSet=map.get("id");
+                        for(String id:idSet){
+                            bo.setId(id);
+                        }
+                        Set<String> idTitle=map.get("title");
+                        for(String title:idTitle){
+                            bo.setTitle(title);
+                        }
+                        Set<String> idVersion=map.get("version");
+                        for(String version:idVersion){
+                            bo.setVersion(version);
+                        }
+                        Set<String> idDescription=map.get("description");
+                        for(String description:idDescription){
+                            bo.setDescription(description);
+                        }
+                        Set<String> idUrl=map.get("url");
+                        for(String url:idUrl){
+                            bo.setUrl(url);
+                        }
+                        Set<String> idMd5=map.get("md5");
+                        for(String md5:idMd5){
+                            bo.setMd5(md5);
+                        }
+                        Set<String> idRefreshVersion=map.get("refreshVersion");
+                        List<String> list= bo.getRefreshVersionList();
+                        for(String refreshVersion:idRefreshVersion){
+                            list.add(refreshVersion);
+                        }
+                        String versionName=Util.getVersionName(HomeActivity.this);
+                        if(!versionName.equals(bo.getVersion())){
+                            info.hasUpdate=true;
+                            info.updateContent = bo.getDescription().replace("|","\n");
+                            info.versionName = bo.getVersion();
+                            info.url = bo.getUrl();
+                            info.md5 = bo.getMd5();
+                            info.size = 10149314;
+                            List<String> versions=bo.getRefreshVersionList();
+                            for(String version: versions){
+                                if(versionName.equals(version)){
+                                    isForce=true;
+                                }
+                            }
+                            info.isForce = isForce;
+                        }else{
+                            info.hasUpdate=false;
+                        }
+                    }
+                }
+                return info;
+            }
+        }).check();
     }
 
     @Override
