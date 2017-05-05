@@ -16,6 +16,8 @@ import com.eme.waterdelivery.tools.ImageLoader;
 import java.util.List;
 
 /**
+ * 配送中非水类产品的
+ *
  * Created by dijiaoliang on 17/3/9.
  */
 public class SendingDetailGoodAdapter extends RecyclerView.Adapter<SendingDetailGoodAdapter.ViewHolder> {

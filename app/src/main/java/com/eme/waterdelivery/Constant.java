@@ -10,6 +10,7 @@ public class Constant {
     public static final String STR_EMPTY="";
 
     //数字0,1
+    public static final int MINUS=-1;
     public static final int ZERO=0;
     public static final int ONE=1;
     public static final int TWO=2;
@@ -26,12 +27,34 @@ public class Constant {
 
     public static final String TRAFFIC_NO="TRAFFIC_NO";
 
+    public static final String ORDER_SIGN_BEAN="ORDER_SIGN_BEAN";
+
+    public static final String ORDER_BUCKETS="ORDER_BUCKETS";
+
     public static final int REQUEST_CODE=1001;//跳转配送中商品详情的请求码
 
 
-    //现金、微信
+    //现金、微信 、欠款
     public static final String PAY_TYPE_MONEY="1";
     public static final String PAY_TYPE_WEIXIN="2";
+    public static final String PAY_TYPE_DEBT="3";
+
+    //售票的支付类型  1、微信 2、现金 3白条
+    public static final String PAY_MODE_WEIXIN="1";
+    public static final String PAY_MODE_MONEY="2";
+    public static final String PAY_MODE_DEBT="3";
+
+    //支付状态 1、已支付 2、待支付
+    public static final String PAY_STATUS_YES="1";
+    public static final String PAY_STATUS_NO="2";
+
+    //水票类型 1 电子水票，2纸质水票
+    public static final String TICKET_TYPE_ELECTRON="1";
+    public static final String TICKET_TYPE_PAPER="2";
+
+    //payMethod     1、货到付款 2、 在线支付
+    public static final String PAY_METHOD_RECEIVE="1";
+    public static final String PAY_METHOD_ONLINE="2";
 
     //历史订单的传入参数
     public static final String ORDER_FLAG="ORDER_FLAG";

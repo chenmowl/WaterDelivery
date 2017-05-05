@@ -8,10 +8,10 @@
         android:id="@+id/rl_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_gray"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/bg_gray">
 
         <LinearLayout
             android:id="@+id/ll_quit"
@@ -78,99 +78,60 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/ll_money"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/ll_head"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:weightSum="2">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:text="@string/main_money"
-                    android:textColor="@color/text_color_bar"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tv_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="500.2元"
-                    android:textColor="@color/main_color_red"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="@string/water_coupon"
-                    android:visibility="gone"
-                    android:textColor="@color/text_color_bar"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="50张"
-                    android:visibility="gone"
-                    android:textColor="@color/main_color_red"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/iv_line"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_below="@+id/ll_money"
-            android:background="@color/cline_deep" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_below="@+id/iv_line"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+            android:layout_height="@dimen/info_line_height02"
+            android:layout_below="@+id/ll_head">
 
             <TextView
+                android:id="@+id/tv_work_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="@string/work_status"
+                android:textColor="@color/text_color_bar"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/tv_work_status"
+                android:text="出勤中"
+                android:textColor="@color/text_color_bar"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/ll_refresh_status"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/begin_make_order"
-                android:textColor="@color/text_color_bar"
-                android:textSize="14sp" />
+                android:layout_toRightOf="@+id/tv_status"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
 
-            <com.eme.waterdelivery.widget.ToggleButton
-                android:id="@+id/tb_work"
-                android:layout_width="50dp"
-                android:layout_height="28dp"
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_refresh_black_24dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btn_apply_vacation"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
+                android:gravity="center"
+                android:paddingLeft="@dimen/tab_text_size"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:text="@string/apply_vacation"
+                android:textColor="@color/text_color_blue"
+                android:textSize="13sp" />
 
         </RelativeLayout>
 
@@ -188,18 +149,18 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/rl_apply"
+                android:id="@+id/rl_collect_water"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
-                    android:text="@string/my_apply"
+                    android:text="@string/collect_water"
                     android:textColor="@color/text_color_bar"
                     android:textSize="14sp" />
 
@@ -212,48 +173,34 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="15dp"
-                    android:src="@mipmap/mine_item_right"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    />
+                    android:src="@mipmap/mine_item_right" />
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_day_order"
+                android:id="@+id/rl_collect_bucket"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
-                    android:text="@string/num_order_today"
+                    android:text="@string/collect_bucket"
                     android:textColor="@color/text_color_bar"
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:id="@+id/iv_today"
                     android:layout_width="10dp"
                     android:layout_height="15dp"
-                    android:src="@mipmap/mine_item_right"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    />
-
-                <TextView
-                    android:layout_toLeftOf="@+id/iv_today"
-                    android:id="@+id/tv_today_record"
-                    android:layout_marginRight="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="0"
-                    android:textColor="@color/main_color_red"
-                    android:textSize="13sp" />
+                    android:src="@mipmap/mine_item_right" />
 
                 <View
                     android:layout_width="match_parent"
@@ -264,40 +211,27 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_month_order"
+                android:id="@+id/rl_sale_ticket"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
-                    android:text="@string/num_month_today"
+                    android:text="@string/sale_ticket"
                     android:textColor="@color/text_color_bar"
                     android:textSize="14sp" />
 
                 <ImageView
-                    android:id="@+id/iv_month"
                     android:layout_width="10dp"
                     android:layout_height="15dp"
-                    android:src="@mipmap/mine_item_right"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    />
-
-                <TextView
-                    android:layout_toLeftOf="@+id/iv_month"
-                    android:layout_marginRight="16dp"
-                    android:id="@+id/tv_month_record"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="0"
-                    android:textColor="@color/main_color_red"
-                    android:textSize="13sp" />
+                    android:src="@mipmap/mine_item_right" />
 
                 <View
                     android:layout_width="match_parent"
@@ -308,18 +242,111 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_total_order"
+                android:id="@+id/rl_apply_ticket"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:gravity="center_vertical"
-                    android:text="@string/num_total_record"
+                    android:text="@string/apply_ticket"
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/mine_item_right" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/cline_deep" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_assessment"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/assessment"
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/mine_item_right" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/cline_deep" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_chase_order"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/chase_order"
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="15dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/mine_item_right" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/cline_deep" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_history_order"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
+                    android:text="@string/order_history"
                     android:textColor="@color/text_color_bar"
                     android:textSize="14sp" />
 
@@ -327,21 +354,9 @@
                     android:id="@+id/iv_total"
                     android:layout_width="10dp"
                     android:layout_height="15dp"
-                    android:src="@mipmap/mine_item_right"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_total_record"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_toLeftOf="@+id/iv_total"
-                    android:layout_marginRight="16dp"
-                    android:gravity="center_vertical"
-                    android:text="0"
-                    android:textColor="@color/main_color_red"
-                    android:textSize="13sp" />
+                    android:src="@mipmap/mine_item_right" />
 
                 <View
                     android:layout_width="match_parent"
@@ -355,8 +370,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp">
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
 
                 <TextView
                     android:id="@+id/tv_phone"
@@ -387,7 +402,6 @@
             </RelativeLayout>
 
         </LinearLayout>
-
 
     </ScrollView>
 

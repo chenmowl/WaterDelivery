@@ -5,6 +5,22 @@
 
     <dimen name="title_bar_height">44dp</dimen>
     <dimen name="tab_text_size">12dp</dimen>
+    <dimen name="info_line_height">30dp</dimen>
+    <dimen name="info_line_height02">36dp</dimen>
+    <dimen name="text_align_left_margin">30dp</dimen>
+    <dimen name="text_align_left_margin02">20dp</dimen>
+    <dimen name="line">0.5dp</dimen>
+
+    <dimen name="height_min">40dp</dimen>
+
+
+
+
+
+    <!--字体-->
+    <dimen name="font_info_line_small">12sp</dimen>
+    <dimen name="font_info_line_normal">14sp</dimen>
+    <dimen name="font_info_line_big">16sp</dimen>
 
 
 

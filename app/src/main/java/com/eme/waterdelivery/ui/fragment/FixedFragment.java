@@ -1,10 +1,9 @@
 package com.eme.waterdelivery.ui.fragment;
 
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -19,13 +18,16 @@ import com.eme.waterdelivery.App;
 import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseFragment;
-import com.eme.waterdelivery.contract.DelayFragContract;
+import com.eme.waterdelivery.contract.FixedFragContract;
 import com.eme.waterdelivery.model.bean.entity.OrderSumBo;
 import com.eme.waterdelivery.model.bean.entity.WaitingOrderBo;
-import com.eme.waterdelivery.presenter.DelayFragPresenter;
+import com.eme.waterdelivery.presenter.FixedFragPresenter;
+import com.eme.waterdelivery.tools.NetworkUtils;
 import com.eme.waterdelivery.tools.ToastUtil;
+import com.eme.waterdelivery.ui.FixedDetailActivity;
 import com.eme.waterdelivery.ui.HomeActivity;
-import com.eme.waterdelivery.ui.adapter.DelayAdapter;
+import com.eme.waterdelivery.ui.adapter.FixedAdapter;
+import com.eme.waterdelivery.ui.dialog.SelectDayDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +40,11 @@ import butterknife.ButterKnife;
  *
  * Created by dijiaoliang on 17/3/7.
  */
-public class FixedFragment extends BaseFragment<DelayFragPresenter> implements DelayFragContract.View, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
+public class FixedFragment extends BaseFragment<FixedFragPresenter> implements FixedFragContract.View, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
     private static final String TAG = FixedFragment.class.getSimpleName();
+
+    public static final int FIXED_FRAG_REQUEST_CODE=1001;
 
     @BindView(R.id.rv_content)
     RecyclerView rvContent;
@@ -67,11 +71,11 @@ public class FixedFragment extends BaseFragment<DelayFragPresenter> implements D
         swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
         rvContent.setLayoutManager(new LinearLayoutManager(App.getAppInstance()));
         delayData = new ArrayList<>();
-        DelayAdapter delayAdapter = new DelayAdapter(App.getAppInstance(), delayData);
-        delayAdapter.setAutoLoadMoreSize(5);
-//        delayAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
-        rvContent.setAdapter(delayAdapter);
-        delayAdapter.setOnLoadMoreListener(this,rvContent);
+        FixedAdapter fixedAdapter = new FixedAdapter(App.getAppInstance(), delayData);
+        fixedAdapter.setAutoLoadMoreSize(5);
+//        fixedAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+        rvContent.setAdapter(fixedAdapter);
+        fixedAdapter.setOnLoadMoreListener(this,rvContent);
         rvContent.addOnItemTouchListener(new OnItemClickListener() {
 
             @Override
@@ -82,24 +86,44 @@ public class FixedFragment extends BaseFragment<DelayFragPresenter> implements D
             public void onItemChildClick(BaseQuickAdapter adapter, View view, final int position) {
                 super.onItemChildClick(adapter, view, position);
                 switch (view.getId()) {
-                    case R.id.btn_receiving:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
-                        builder.setMessage("是否接单？\n一旦接单将无法取消");
-                        builder.setNegativeButton("取消", null);
-                        builder.setPositiveButton("接单", new DialogInterface.OnClickListener() {
+                    case R.id.btn_reject:
+                        final SelectDayDialog sbDialog=new SelectDayDialog(mActivity);
+                        sbDialog.setOnBirthChangeListener(new SelectDayDialog.OnBirthChangeListener() {
                             @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                String orderId = delayData.get(position).getOrderId();
-                                mPresenter.receiveOrder(orderId);
+                            public void changeBirthday(String birthday) {
+                                sbDialog.cancel();
                             }
                         });
-                        builder.show();
+                        sbDialog.showDialog(mActivity, null);
+                        break;
+                    case R.id.btn_order_detail:
+                        if(!NetworkUtils.isConnected(mActivity)){
+                            ToastUtil.shortToast(mActivity,getText(R.string.net_error).toString());
+                            return;
+                        }
+                        WaitingOrderBo bo=delayData.get(position);
+                        if(bo!=null && bo.getOrderId()!=null){
+//                    Intent intent=new Intent(mActivity, SendingDetailActivity.class);
+                            Intent intent=new Intent(mActivity, FixedDetailActivity.class);
+                            intent.putExtra(Constant.ORDER_ID,bo.getOrderId());
+                            startActivityForResult(intent,Constant.REQUEST_CODE);
+                        }else {
+                            ToastUtil.shortToast(mActivity,getText(R.string.order_info_error).toString());
+                        }
                         break;
                     default:
                         break;
                 }
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==Constant.REQUEST_CODE &&resultCode==RESULT_OK){
+            refreshPage();
+        }
     }
 
     @Override
@@ -121,7 +145,7 @@ public class FixedFragment extends BaseFragment<DelayFragPresenter> implements D
 
     @Override
     public void onRefresh() {
-        ((DelayAdapter)rvContent.getAdapter()).setEnableLoadMore(false);
+        ((FixedAdapter)rvContent.getAdapter()).setEnableLoadMore(false);
         mPresenter.requestData(Constant.REFRESH_DOWN);
     }
 
@@ -144,10 +168,10 @@ public class FixedFragment extends BaseFragment<DelayFragPresenter> implements D
                 break;
             case Constant.REFRESH_DOWN:
                 swipeRefresh.setRefreshing(false);
-                ((DelayAdapter)rvContent.getAdapter()).setEnableLoadMore(true);
+                ((FixedAdapter)rvContent.getAdapter()).setEnableLoadMore(true);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
-                ((DelayAdapter)rvContent.getAdapter()).loadMoreFail();
+                ((FixedAdapter)rvContent.getAdapter()).loadMoreFail();
                 swipeRefresh.setEnabled(true);
                 break;
             default:
@@ -170,7 +194,7 @@ public class FixedFragment extends BaseFragment<DelayFragPresenter> implements D
             case Constant.REFRESH_DOWN:
                 delayData.clear();
                 swipeRefresh.setRefreshing(false);
-                ((DelayAdapter)rvContent.getAdapter()).setEnableLoadMore(true);
+                ((FixedAdapter)rvContent.getAdapter()).setEnableLoadMore(true);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
                 swipeRefresh.setEnabled(true);
@@ -181,7 +205,7 @@ public class FixedFragment extends BaseFragment<DelayFragPresenter> implements D
         delayData.addAll(data);
         rvContent.getAdapter().notifyDataSetChanged();
         if(Constant.REFRESH_UP_LOADMORE==flag){
-            ((DelayAdapter)rvContent.getAdapter()).loadMoreComplete();
+            ((FixedAdapter)rvContent.getAdapter()).loadMoreComplete();
         }
     }
 
@@ -189,7 +213,7 @@ public class FixedFragment extends BaseFragment<DelayFragPresenter> implements D
     public void notifyNoData() {
         ToastUtil.shortToast(mActivity, getText(R.string.no_data).toString());
         swipeRefresh.setEnabled(true);
-        ((DelayAdapter)rvContent.getAdapter()).loadMoreEnd();
+        ((FixedAdapter)rvContent.getAdapter()).loadMoreEnd();
     }
 
     @Override
@@ -198,11 +222,11 @@ public class FixedFragment extends BaseFragment<DelayFragPresenter> implements D
             case Constant.REFRESH_NORMAL:
                 break;
             case Constant.REFRESH_DOWN:
-                ((DelayAdapter)rvContent.getAdapter()).setEnableLoadMore(true);
+                ((FixedAdapter)rvContent.getAdapter()).setEnableLoadMore(true);
                 break;
             case Constant.REFRESH_UP_LOADMORE:
                 swipeRefresh.setEnabled(true);
-                ((DelayAdapter)rvContent.getAdapter()).loadMoreFail();
+                ((FixedAdapter)rvContent.getAdapter()).loadMoreFail();
                 break;
             default:
                 break;
@@ -212,7 +236,7 @@ public class FixedFragment extends BaseFragment<DelayFragPresenter> implements D
 
     @Override
     public void updateOrderSum(OrderSumBo orderSumBo) {
-        ((HomeActivity) mActivity).updateOrderSum(Constant.ORDER_DELAY, orderSumBo.getWaitingOrderSum());
+        ((HomeActivity) mActivity).updateOrderSum(Constant.ORDER_FIXED, orderSumBo.getFixedOrderSum());
     }
 
     @Override

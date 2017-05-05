@@ -50,4 +50,25 @@
         <item name="android:textSize">@dimen/tab_text_size</item>
     </style>
 
+    <!-- 重写系统弹出Dialog -->
+    <style name="KDialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- 除去title -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 模糊 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 除去背景色 -->
+    </style>
+
+    <!--修改头像弹出样式-->
+    <style name="AnimDialogBottomEntry" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/dialog_photo_picker_enter</item>
+        <item name="@android:windowExitAnimation">@anim/dialog_photo_picker_exit</item>
+    </style>
+
 </resources>

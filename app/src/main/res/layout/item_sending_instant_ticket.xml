@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/activity_bg">
+
+    <TextView
+        android:id="@+id/tv_ticket_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:text="冰川水票"
+        android:textColor="@color/text_color_bar"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_number"
+        android:layout_width="80dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/btn_cat_increase"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/btn_reduce"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="-"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="0.3dp"
+            android:layout_height="match_parent"
+            android:background="@color/cart_spec_tv" />
+
+        <TextView
+            android:id="@+id/tv_item_number"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="100"
+            android:textColor="@color/text_color_bar"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="0.3dp"
+            android:layout_height="match_parent"
+            android:background="@color/cart_spec_tv" />
+
+        <TextView
+            android:id="@+id/btn_add"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="+"
+            android:textColor="@color/main_color_red"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/ll_number"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/cline_deep" />
+
+</RelativeLayout>

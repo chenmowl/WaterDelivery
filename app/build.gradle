@@ -13,9 +13,25 @@ android {
     }
     buildTypes {
         release {
+            //优化资源文件，去除不必要资源
             shrinkResources true
+
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    signingConfigs {
+        release {
+            try {
+                storeFile file("/Users/liuzhenzhen/wd.jks")
+                storePassword KEYSTORE_PASSWORD
+                keyAlias "wd"
+                keyPassword KEY_PASSWORD
+            }
+            catch (ex) {
+                throw new InvalidUserDataException("You should define KEYSTORE_PASSWORD and KEY_PASSWORD in gradle.properties.")
+            }
         }
     }
 
@@ -70,6 +86,7 @@ dependencies {
     compile rootProject.ext.dependencies.getAt("adapter")
     compile rootProject.ext.dependencies.getAt("spinner")
     compile rootProject.ext.dependencies.getAt("rxpermissions2")
+    compile rootProject.ext.dependencies.getAt("numberbutton")
 //    compile rootProject.ext.dependencies.getAt("stetho")
 //    compile rootProject.ext.dependencies.getAt("stetho-okhttp3")
 //    compile rootProject.ext.dependencies.getAt("update")

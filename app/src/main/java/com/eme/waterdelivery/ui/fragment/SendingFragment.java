@@ -25,7 +25,7 @@ import com.eme.waterdelivery.presenter.SendingFragPresenter;
 import com.eme.waterdelivery.tools.NetworkUtils;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.ui.HomeActivity;
-import com.eme.waterdelivery.ui.SendingDetailActivity;
+import com.eme.waterdelivery.ui.SendingInstantActivity;
 import com.eme.waterdelivery.ui.adapter.SendingAdapter;
 
 import java.util.ArrayList;
@@ -78,7 +78,8 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
                 }
                 WaitingOrderBo bo=sendData.get(position);
                 if(bo!=null && bo.getOrderId()!=null){
-                    Intent intent=new Intent(mActivity, SendingDetailActivity.class);
+//                    Intent intent=new Intent(mActivity, SendingDetailActivity.class);
+                    Intent intent=new Intent(mActivity, SendingInstantActivity.class);
                     intent.putExtra(Constant.ORDER_ID,bo.getOrderId());
                     startActivityForResult(intent,Constant.REQUEST_CODE);
                 }else {
@@ -107,7 +108,7 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
         });
 
         //// TODO: 2017/3/7 RecyclerView添加头布局
-//        View v = LayoutInflater.from(mActivity).inflate(R.layout.header_recycler, null);
+//        View v = LayoutInflater.from(mActivity).inflate(R.layout_number_button.header_recycler, null);
 //        sendingAdapter.addHeaderView(v);
     }
 
@@ -238,11 +239,7 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
         super.onActivityResult(requestCode, resultCode, data);
         if(Constant.REQUEST_CODE==requestCode && RESULT_OK==resultCode){
             refreshPage();
-            notifyNava();
         }
     }
 
-    public void notifyNava(){
-        ((HomeActivity)mActivity).requestCompleteNumber();
-    }
 }

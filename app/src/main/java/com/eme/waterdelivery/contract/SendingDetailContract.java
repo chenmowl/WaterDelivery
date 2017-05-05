@@ -24,7 +24,6 @@ public interface SendingDetailContract {
 
         void requestData(String orderId);
 
-        void orderSign(String orderId);
     }
 
 }

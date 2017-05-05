@@ -102,7 +102,7 @@ public class CurrentDayFragment extends BaseFragment<CurrentDayPresenter> implem
             }
         });
 
-        //// TODO: 2017/3/7 RecyclerView添加头布局
+        // TODO: 2017/3/7 RecyclerView添加头布局
         llHeader = (LinearLayout) LayoutInflater.from(mActivity).inflate(R.layout.header_recycler, null);
         currentDayAdapter.addHeaderView(llHeader);
     }

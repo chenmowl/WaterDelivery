@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/window_bg"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/include_tb"
+        layout="@layout/tb_normal" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_sign"
+        android:layout_below="@+id/include_tb">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="@string/apply_time"
+                android:textColor="@color/text_color_bar"
+                android:textSize="@dimen/font_info_line_big" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btn_start_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/info_line_height02"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="6dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_select_time"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="@color/border_gray"
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/text_color_bar" />
+
+                <TextView
+                    android:id="@+id/btn_end_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/info_line_height02"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_select_time"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="@color/border_gray"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:background="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="@string/apply_category"
+                android:textColor="@color/text_color_bar"
+                android:textSize="@dimen/font_info_line_big" />
+
+            <RadioGroup
+                android:id="@+id/rg_apply_vacation"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_align_left_margin"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/tv_pay_type_title"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_sick_leave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_align_left_margin02"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:button="@null"
+                    android:checked="true"
+                    android:drawableLeft="@drawable/rb_invoice"
+                    android:drawablePadding="6dp"
+                    android:text="@string/sick_leave"
+                    android:textColor="@drawable/selector_tv_invoice_info"
+                    android:textSize="@dimen/font_info_line_normal" />
+
+                <RadioButton
+                    android:id="@+id/rb_casual_leave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/rb_invoice"
+                    android:drawablePadding="6dp"
+                    android:text="@string/casual_leave"
+                    android:textColor="@drawable/selector_tv_invoice_info"
+                    android:textSize="@dimen/font_info_line_normal" />
+
+                <RadioButton
+                    android:id="@+id/rb_other_leave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/rb_invoice"
+                    android:drawablePadding="6dp"
+                    android:text="@string/other_leave"
+                    android:textColor="@drawable/selector_tv_invoice_info"
+                    android:textSize="@dimen/font_info_line_normal" />
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="@dimen/text_align_left_margin02"
+                android:layout_marginTop="10dp"
+                android:text="@string/apply_category"
+                android:textColor="@color/text_color_bar"
+                android:textSize="@dimen/font_info_line_normal" />
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/et_remark"
+                style="@style/Base.V7.Widget.AppCompat.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginLeft="@dimen/text_align_left_margin02"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/bg_edit_apply"
+                android:elevation="-2dp"
+                android:gravity="left|top"
+                android:lineSpacingExtra="2dp"
+                android:padding="10dp"
+                android:textColor="@color/text_color_bar"
+                android:textColorHint="@color/hint_text_gray"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_sign"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/main_color_red"
+        android:text="@string/apply"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <include layout="@layout/net_loading" />
+
+
+</RelativeLayout>

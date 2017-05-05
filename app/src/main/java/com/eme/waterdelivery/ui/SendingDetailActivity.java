@@ -6,8 +6,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -78,12 +76,6 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
     TextView tvOrderDetailClientPhone;
     @BindView(R.id.tv_order_detail_customer_phone)
     TextView tvOrderDetailCustomerPhone;
-    @BindView(R.id.tv_order_detail_open_surplus)
-    TextView tvOrderDetailOpenSurplus;
-    @BindView(R.id.iv_order_detail_open_surplus)
-    ImageView ivOrderDetailOpenSurplus;
-    @BindView(R.id.ll_order_open_surplus)
-    LinearLayout llOrderOpenSurplus;
     @BindView(R.id.tv_balance)
     TextView tvBalance;
     @BindView(R.id.btn_sign)
@@ -147,17 +139,6 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
         SendingDetailGoodAdapter goodAdapter = new SendingDetailGoodAdapter(this, mData);
         rvContent.setAdapter(goodAdapter);
 
-        if (mData.size() <= 2) {
-            llOrderOpenSurplus.setVisibility(View.GONE);
-        } else {
-            if (isShowAll) {
-                tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_close_surplus);
-                ivOrderDetailOpenSurplus.setImageResource(R.mipmap.shangla);
-            } else {
-                tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_open_surplus);
-                ivOrderDetailOpenSurplus.setImageResource(R.mipmap.xiala);
-            }
-        }
         initListener();
         orderId=getIntent().getStringExtra(Constant.ORDER_ID);
         tvTitle.setText(orderId);
@@ -169,15 +150,6 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
      */
     private void initListener() {
         //        设置btn监听,防止连续的二次点击
-        RxView.clicks(llOrderOpenSurplus)
-                .throttleFirst(1, TimeUnit.SECONDS)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        checkShowAll();
-                    }
-                });
         RxView.clicks(back)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -192,17 +164,17 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
     /**
      * 检查商品列表是否展开
      */
-    private void checkShowAll() {
-        isShowAll = !isShowAll;
-        ((SendingDetailGoodAdapter)rvContent.getAdapter()).setIsOpenPlus(isShowAll);
-        if (isShowAll) {
-            tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_close_surplus);
-            ivOrderDetailOpenSurplus.setImageResource(R.mipmap.shangla);
-        } else {
-            tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_open_surplus);
-            ivOrderDetailOpenSurplus.setImageResource(R.mipmap.xiala);
-        }
-    }
+//    private void checkShowAll() {
+//        isShowAll = !isShowAll;
+//        ((SendingDetailGoodAdapter)rvContent.getAdapter()).setIsOpenPlus(isShowAll);
+//        if (isShowAll) {
+//            tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_close_surplus);
+//            ivOrderDetailOpenSurplus.setImageResource(R.mipmap.shangla);
+//        } else {
+//            tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_open_surplus);
+//            ivOrderDetailOpenSurplus.setImageResource(R.mipmap.xiala);
+//        }
+//    }
 
     /**
      * 根据动画按钮状态，调用函数animateCamera或moveCamera来改变可视区域
@@ -282,17 +254,6 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
         mData.clear();
         mData.addAll(data);
         rvContent.getAdapter().notifyDataSetChanged();
-        if (mData.size() <= 2) {
-            llOrderOpenSurplus.setVisibility(View.GONE);
-        } else {
-            if (isShowAll) {
-                tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_close_surplus);
-                ivOrderDetailOpenSurplus.setImageResource(R.mipmap.shangla);
-            } else {
-                tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_open_surplus);
-                ivOrderDetailOpenSurplus.setImageResource(R.mipmap.xiala);
-            }
-        }
         String amount=orderDetailBo.getOrderAmount();
         tvBalance.setText(getText(R.string.order_balance_title) +(TextUtils.isEmpty(amount)?Constant.STR_EMPTY:amount));
         initSignListener(orderDetailBo.getOrderAmount());
@@ -362,7 +323,7 @@ public class SendingDetailActivity extends BaseActivity<SendingDetailPresenter> 
         builder.setPositiveButton(getText(R.string.confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mPresenter.orderSign(orderId);
+//                mPresenter.orderSign(orderId);
             }
         });
         builder.show();

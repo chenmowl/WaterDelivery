@@ -6,12 +6,15 @@ package com.eme.waterdelivery.model.bean.entity;
  */
 public class OrderSumBo {
 
+
     /**
-     * distributingOrderSum : 2
-     * waitingOrderSum : 1
+     * distributingOrderSum : 1
+     * fixedOrderSum : 1
+     * waitingOrderSum : 5
      */
 
     private int distributingOrderSum;
+    private int fixedOrderSum;
     private int waitingOrderSum;
 
     public int getDistributingOrderSum() {
@@ -20,6 +23,14 @@ public class OrderSumBo {
 
     public void setDistributingOrderSum(int distributingOrderSum) {
         this.distributingOrderSum = distributingOrderSum;
+    }
+
+    public int getFixedOrderSum() {
+        return fixedOrderSum;
+    }
+
+    public void setFixedOrderSum(int fixedOrderSum) {
+        this.fixedOrderSum = fixedOrderSum;
     }
 
     public int getWaitingOrderSum() {

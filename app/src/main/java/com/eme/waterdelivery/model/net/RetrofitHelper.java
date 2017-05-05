@@ -3,20 +3,26 @@ package com.eme.waterdelivery.model.net;
 
 import com.eme.waterdelivery.model.bean.Result;
 import com.eme.waterdelivery.model.bean.StatusResult;
-import com.eme.waterdelivery.model.bean.VersionResult;
 import com.eme.waterdelivery.model.bean.entity.ApplyDetailVo;
 import com.eme.waterdelivery.model.bean.entity.ApplyOneLevelBo;
 import com.eme.waterdelivery.model.bean.entity.ApplyTwoLevelGoodBo;
+import com.eme.waterdelivery.model.bean.entity.CalculationPayAmountBo;
+import com.eme.waterdelivery.model.bean.entity.GetActiveInfoByTicketBo;
+import com.eme.waterdelivery.model.bean.entity.GetAddressByPhoneBo;
+import com.eme.waterdelivery.model.bean.entity.GetQRCodeBo;
+import com.eme.waterdelivery.model.bean.entity.GetTicketInfoBo;
 import com.eme.waterdelivery.model.bean.entity.HistoryOrderSumBo;
 import com.eme.waterdelivery.model.bean.entity.HistoryOrderVo;
 import com.eme.waterdelivery.model.bean.entity.HistoryPurchaseVo;
 import com.eme.waterdelivery.model.bean.entity.LoginBo;
 import com.eme.waterdelivery.model.bean.entity.OrderDetailBo;
 import com.eme.waterdelivery.model.bean.entity.OrderSumBo;
+import com.eme.waterdelivery.model.bean.entity.SaleTicketRecordBo;
 import com.eme.waterdelivery.model.bean.entity.WaitingOrderVo;
 import com.eme.waterdelivery.model.net.api.WaterApi;
 
 import io.reactivex.Observable;
+import retrofit2.http.Field;
 
 /**
  * Created by dijiaoliang on 17/3/6.
@@ -29,16 +35,10 @@ public class RetrofitHelper {
         this.waterApi = waterApi;
     }
 
-    /**
-     * 校验版本
-     * @return
-     */
-    public Observable<VersionResult> checkAppVersion(String username, String password) {
-        return waterApi.checkAppVersion(username,password);
-    }
 
     /**
      * cookie登录
+     *
      * @return
      */
     public Observable<Result<LoginBo>> cookieLogin() {
@@ -47,16 +47,18 @@ public class RetrofitHelper {
 
     /**
      * 密码登录
+     *
      * @param uid
      * @param password
      * @return
      */
     public Observable<Result<LoginBo>> pwdLogin(String uid, String password) {
-        return waterApi.pwdLogin(uid,password);
+        return waterApi.pwdLogin(uid, password);
     }
 
     /**
      * 分页拉取待接订单接口
+     *
      * @param storeId
      * @param pageNo
      * @param pageSize
@@ -67,7 +69,19 @@ public class RetrofitHelper {
     }
 
     /**
+     * 分页拉取固定订单接口(getFixedOrdersByPage)
+     * @param storeId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public Observable<Result<WaitingOrderVo>> getFixedOrders(@Field("storeId")String storeId, @Field("pageNo")int pageNo, @Field("pageSize")String pageSize){
+         return waterApi.getFixedOrders(storeId, pageNo, pageSize);
+    }
+
+    /**
      * 分页拉取派送中的订单列表
+     *
      * @param storeId
      * @param pageNo
      * @param pageSize
@@ -79,6 +93,7 @@ public class RetrofitHelper {
 
     /**
      * 获取订单（待接单，派送中订单）数量接口
+     *
      * @param storeId
      * @return
      */
@@ -88,6 +103,7 @@ public class RetrofitHelper {
 
     /**
      * 接单
+     *
      * @param orderId
      * @return
      */
@@ -97,6 +113,7 @@ public class RetrofitHelper {
 
     /**
      * 分页拉取历史订单接口
+     *
      * @param storeId
      * @param pageNo
      * @param pageSize
@@ -109,6 +126,7 @@ public class RetrofitHelper {
 
     /**
      * 获取历史订单（日，月，总）数量接口
+     *
      * @param storeId
      * @return
      */
@@ -118,6 +136,7 @@ public class RetrofitHelper {
 
     /**
      * 订单详情接口
+     *
      * @param orderId
      * @return
      */
@@ -127,15 +146,17 @@ public class RetrofitHelper {
 
     /**
      * 订单签收
+     *
      * @param orderId
      * @return
      */
-    public Observable<StatusResult> orderSign(String orderId) {
-        return waterApi.orderSign(orderId);
+    public Observable<StatusResult> orderSign(String orderId,String payType,String payAmountGoods) {
+        return waterApi.orderSign(orderId,payType,payAmountGoods);
     }
 
     /**
      * 获取申请的一级数据
+     *
      * @return
      */
     public Observable<Result<ApplyOneLevelBo>> getApplyOneLevel() {
@@ -144,6 +165,7 @@ public class RetrofitHelper {
 
     /**
      * 获取申请的二级数据
+     *
      * @param parentId
      * @return
      */
@@ -153,6 +175,7 @@ public class RetrofitHelper {
 
     /**
      * 拉取二级分类下商品接口
+     *
      * @param categoryId
      * @return
      */
@@ -162,17 +185,19 @@ public class RetrofitHelper {
 
     /**
      * 分页拉取历史订购单
+     *
      * @param storeId
      * @param pageNo
      * @param pageSize
      * @return
      */
-    public Observable<Result<HistoryPurchaseVo>> getHistoryPurchaseOrders(String storeId,int pageNo,String pageSize) {
-        return waterApi.getHistoryPurchaseOrders(storeId,pageNo,pageSize);
+    public Observable<Result<HistoryPurchaseVo>> getHistoryPurchaseOrders(String storeId, int pageNo, String pageSize) {
+        return waterApi.getHistoryPurchaseOrders(storeId, pageNo, pageSize);
     }
 
     /**
      * 拉取订购单详情
+     *
      * @param trafficNo
      * @return
      */
@@ -182,22 +207,137 @@ public class RetrofitHelper {
 
     /**
      * 提交订购单
+     *
      * @param storeId
      * @param createMemo
      * @param purchaseGoods
      * @return
      */
-    public Observable<StatusResult> submitApplications(String storeId,String createMemo,String purchaseGoods) {
-        return waterApi.submitApplications(storeId,createMemo,purchaseGoods);
+    public Observable<StatusResult> submitApplications(String storeId, String createMemo, String purchaseGoods) {
+        return waterApi.submitApplications(storeId, createMemo, purchaseGoods);
     }
 
     /**
      * 订购单确认收货接口
+     *
      * @param trafficNo
      * @return
      */
     public Observable<StatusResult> confirmPurchaseOrder(String trafficNo) {
         return waterApi.confirmPurchaseOrder(trafficNo);
+    }
+
+
+    /**
+     * 计算价格（calculationPayAmount）
+     *
+     * @param orderId
+     * @param payAmountGoods
+     * @return
+     */
+    public Observable<Result<CalculationPayAmountBo>> calculationPayAmount(String orderId, String payAmountGoods) {
+        return waterApi.calculationPayAmount(orderId, payAmountGoods);
+    }
+
+    /**
+     * 拉取微信支付二维码（getQRCode）
+     *
+     * @param storeId
+     * @return
+     */
+    public Observable<Result<GetQRCodeBo>> getQRCode(String storeId) {
+        return waterApi.getQRCode(storeId);
+    }
+
+    /**
+     * 下拉选择水票接口（getTicketInfo）
+     *
+     * @return
+     */
+    public Observable<Result<GetTicketInfoBo>> getTicketInfo() {
+        return waterApi.getTicketInfo();
+    }
+
+    /**
+     * 根据电话检索地址信息（getAddressByPhone）
+     *
+     * @param phoneNumber
+     * @return
+     */
+    public Observable<Result<GetAddressByPhoneBo>> getAddressByPhone(String phoneNumber) {
+        return waterApi.getAddressByPhone(phoneNumber);
+    }
+
+    /**
+     * 获取购票活动信息（getActiveInfoByTicket）
+     *
+     * @param ticketsModel
+     * @return
+     */
+    public Observable<Result<GetActiveInfoByTicketBo>> getActiveInfoByTicket(String ticketsModel, String tickets) {
+        return waterApi.getActiveInfoByTicket(ticketsModel, tickets);
+    }
+
+    /**
+     * 售票提交（sellTicketSubmit）
+     *
+     * @param storeId
+     * @param memberName
+     * @param memberPhone
+     * @param memberAddress
+     * @param invoiceTitle
+     * @param ticketsModel
+     * @param payType
+     * @param memberAdressId
+     * @param tickets
+     * @return
+     */
+    public Observable<StatusResult> sellTicketSubmit(String storeId, String memberName, String memberPhone,
+                                                     String memberAddress, String invoiceTitle, String ticketsModel,
+                                                     String payType, String memberAdressId, String tickets) {
+        return waterApi.sellTicketSubmit(storeId, memberName, memberPhone, memberAddress, invoiceTitle, ticketsModel, payType, memberAdressId, tickets);
+    }
+
+    /**
+     * 申请购票提交（applyTicketSubmit）
+     *
+     * @param storeId
+     * @param memberName
+     * @param memberPhone
+     * @param memberAddress
+     * @param invoiceTitle
+     * @param ticketsModel
+     * @param payType
+     * @param payStatus
+     * @param memberAdressId
+     * @param tickets
+     * @return
+     */
+    public Observable<StatusResult> applyTicketSubmit(String storeId, String memberName, String memberPhone, String memberAddress, String invoiceTitle,
+                                                      String ticketsModel, String payType, String payStatus, String memberAdressId, String tickets) {
+        return waterApi.applyTicketSubmit(storeId, memberName, memberPhone, memberAddress, invoiceTitle, ticketsModel, payType, payStatus, memberAdressId, tickets);
+    }
+
+    /**
+     * 分页拉取售票记录（getSellTicketByPage）
+     * @param storeId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public Observable<Result<SaleTicketRecordBo>> getSellTicketByPage(String storeId, int pageNo, String pageSize){
+        return waterApi.getSellTicketByPage(storeId,pageNo,pageSize);
+    }
+
+    /**
+     * 分页拉取购票记录（getApplyTicketByPage）
+     * @param storeId
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public Observable<Result<SaleTicketRecordBo>> getApplyTicketByPage(String storeId, int pageNo, String pageSize){
+        return waterApi.getApplyTicketByPage(storeId,pageNo,pageSize);
     }
 
 }

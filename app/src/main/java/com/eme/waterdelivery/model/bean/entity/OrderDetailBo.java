@@ -42,8 +42,44 @@ public class OrderDetailBo {
     private String shippingTime;
     private String storeId;
     private List<GoodsBean> goods;
-    private float memberLng;
-    private float memberLat;
+    private float memberLng;    //用户位置经度
+    private float memberLat;    //用户位置纬度
+    private String orderType;   //是否固定订单：1是  0否（即时）
+    private String payMethod;   //1货到付款  2在线支付
+    private boolean canOwe;     //是否可欠款
+    private boolean waterOrder; //是否水订单
+
+    public String getPayMethod() {
+        return payMethod;
+    }
+
+    public void setPayMethod(String payMethod) {
+        this.payMethod = payMethod;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public boolean isCanOwe() {
+        return canOwe;
+    }
+
+    public void setCanOwe(boolean canOwe) {
+        this.canOwe = canOwe;
+    }
+
+    public boolean isWaterOrder() {
+        return waterOrder;
+    }
+
+    public void setWaterOrder(boolean waterOrder) {
+        this.waterOrder = waterOrder;
+    }
 
     public float getMemberLng() {
         return memberLng;
@@ -200,6 +236,90 @@ public class OrderDetailBo {
         private int goodsNum;
         private String specName;
         private String unitName;
+        private String goodsId;//商品id
+        private String goodsPrice;//商品单价
+        private String bucketName;//桶名称
+        private String bucketSpecName;//桶规格
+        private String ticketName;//使用水票的名称
+        private int ticketUsedCount;//使用水票数量
+        private String ticketsModel;//水票形态 1、电子水票  2、纸质水票 0表示没有使用水票
+
+
+        //非网络获取数据
+        private int mortgageBucketCount;//押桶数
+        private int sellBucketCount;//售桶数
+
+        public int getMortgageBucketCount() {
+            return mortgageBucketCount;
+        }
+
+        public void setMortgageBucketCount(int mortgageBucketCount) {
+            this.mortgageBucketCount = mortgageBucketCount;
+        }
+
+        public int getSellBucketCount() {
+            return sellBucketCount;
+        }
+
+        public void setSellBucketCount(int sellBucketCount) {
+            this.sellBucketCount = sellBucketCount;
+        }
+
+        public String getGoodsId() {
+            return goodsId;
+        }
+
+        public void setGoodsId(String goodsId) {
+            this.goodsId = goodsId;
+        }
+
+        public String getGoodsPrice() {
+            return goodsPrice;
+        }
+
+        public void setGoodsPrice(String goodsPrice) {
+            this.goodsPrice = goodsPrice;
+        }
+
+        public String getBucketName() {
+            return bucketName;
+        }
+
+        public void setBucketName(String bucketName) {
+            this.bucketName = bucketName;
+        }
+
+        public String getBucketSpecName() {
+            return bucketSpecName;
+        }
+
+        public void setBucketSpecName(String bucketSpecName) {
+            this.bucketSpecName = bucketSpecName;
+        }
+
+        public int getTicketUsedCount() {
+            return ticketUsedCount;
+        }
+
+        public void setTicketUsedCount(int ticketUsedCount) {
+            this.ticketUsedCount = ticketUsedCount;
+        }
+
+        public String getTicketName() {
+            return ticketName;
+        }
+
+        public void setTicketName(String ticketName) {
+            this.ticketName = ticketName;
+        }
+
+        public String getTicketsModel() {
+            return ticketsModel;
+        }
+
+        public void setTicketsModel(String ticketsModel) {
+            this.ticketsModel = ticketsModel;
+        }
 
         public String getGoodsAmount() {
             return goodsAmount;

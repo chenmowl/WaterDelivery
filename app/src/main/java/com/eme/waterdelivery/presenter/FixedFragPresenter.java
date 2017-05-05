@@ -90,7 +90,7 @@ public class FixedFragPresenter implements FixedFragContract.Presenter {
                 }
                 break;
         }
-        disposables.add(Observable.zip(retrofitHelper.getWaitingOrders(storeId, pNum, Constant.PAGE_SIZE), retrofitHelper.getOrderSum(storeId), new BiFunction<Result<WaitingOrderVo>, Result<OrderSumBo>, WaitingBeanZip>() {
+        disposables.add(Observable.zip(retrofitHelper.getFixedOrders(storeId, pNum, Constant.PAGE_SIZE), retrofitHelper.getOrderSum(storeId), new BiFunction<Result<WaitingOrderVo>, Result<OrderSumBo>, WaitingBeanZip>() {
             @Override
             public WaitingBeanZip apply(Result<WaitingOrderVo> waitingOrderVoResult, Result<OrderSumBo> orderSumBoResult) throws Exception {
                 return new WaitingBeanZip(waitingOrderVoResult, orderSumBoResult);

@@ -24,9 +24,7 @@ import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.HomeContract;
-import com.eme.waterdelivery.event.CompleteNumEvent;
 import com.eme.waterdelivery.model.bean.VersionResult;
-import com.eme.waterdelivery.model.bean.entity.HistoryOrderSumBo;
 import com.eme.waterdelivery.model.bean.entity.LoginBo;
 import com.eme.waterdelivery.model.bean.entity.VersionBo;
 import com.eme.waterdelivery.model.net.ApiConfig;
@@ -59,9 +57,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
 /**
+ * 主页面
+ *
  * Created by dijiaoliang on 17/3/7.
  */
-
 public class HomeActivity extends BaseActivity<HomePresenter> implements HomeContract.View, ViewPager.OnPageChangeListener {
 
 
@@ -132,16 +131,9 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
                 TextView tvName = (TextView) headerLayout.findViewById(R.id.tv_name);
                 TextView tvJobNumber = (TextView) headerLayout.findViewById(R.id.tv_job_number);
                 TextView tvCount = (TextView) headerLayout.findViewById(R.id.tv_count);
-                TextView tvTodayRecord = (TextView) headerLayout.findViewById(R.id.tv_today_record);
-                TextView tvMonthRecord = (TextView) headerLayout.findViewById(R.id.tv_month_record);
-                TextView tvTotalRecord = (TextView) headerLayout.findViewById(R.id.tv_total_record);
                 TextView tvStationPhone = (TextView) headerLayout.findViewById(R.id.tv_station_phone);
                 tvName.setText(loginBo.getCname());
-                tvCount.setText(TextUtils.concat(loginBo.getPaidAmount(),getText(R.string.yuan)));
                 tvJobNumber.setText(TextUtils.concat(getText(R.string.number_job),loginBo.getUserId()));
-                tvTodayRecord.setText(String.valueOf(loginBo.getOrdersSumToday()));
-                tvMonthRecord.setText(String.valueOf(loginBo.getOrdersSumMonth()));
-                tvTotalRecord.setText(String.valueOf(loginBo.getOrdersSumTotal()));
                 tvStationPhone.setText(loginBo.getStorePhone());
                 if(!TextUtils.isEmpty(loginBo.getImg())){
                     ImageLoader.load(this,loginBo.getImg(),ivHeader);
@@ -179,7 +171,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
                 tabMain.getTabAt(0).setText(TextUtils.concat(getText(R.string.waiting).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
                 break;
             case Constant.ORDER_FIXED:
-                tabMain.getTabAt(1).setText(TextUtils.concat(getText(R.string.fixed_order).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
+                tabMain.getTabAt(1).setText(TextUtils.concat(getText(R.string.fixed_home).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
                 break;
             case Constant.ORDER_SEND:
                 tabMain.getTabAt(2).setText(TextUtils.concat(getText(R.string.sending).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
@@ -207,7 +199,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
                         alertQuitDialog();
                     }
                 });
-        RxView.clicks(headerLayout.findViewById(R.id.rl_day_order))
+        RxView.clicks(headerLayout.findViewById(R.id.rl_history_order))
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Object>() {
@@ -219,39 +211,74 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
                         startActivity(intent);
                     }
                 });
-        RxView.clicks(headerLayout.findViewById(R.id.rl_month_order))
+        RxView.clicks(headerLayout.findViewById(R.id.btn_apply_vacation))
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Object>() {
 
                     @Override
                     public void accept(Object o) throws Exception {
-                        Intent intent = new Intent(HomeActivity.this, CompleteActivity.class);
-                        intent.putExtra(CompleteActivity.TAB, CompleteActivity.TAB_1);
-                        startActivity(intent);
+                        startActivity(new Intent(HomeActivity.this, ApplyVacationActivity.class));
                     }
                 });
-        RxView.clicks(headerLayout.findViewById(R.id.rl_total_order))
+        RxView.clicks(headerLayout.findViewById(R.id.rl_collect_water))
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Object>() {
 
                     @Override
                     public void accept(Object o) throws Exception {
-                        Intent intent = new Intent(HomeActivity.this, CompleteActivity.class);
-                        intent.putExtra(CompleteActivity.TAB, CompleteActivity.TAB_2);
-                        startActivity(intent);
+                        startActivity(new Intent(HomeActivity.this, CollectWaterActivity.class));
                     }
                 });
-        RxView.clicks(headerLayout.findViewById(R.id.rl_apply))
+        RxView.clicks(headerLayout.findViewById(R.id.rl_collect_bucket))
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Object>() {
+
                     @Override
                     public void accept(Object o) throws Exception {
-                        Intent intent = new Intent(HomeActivity.this, MyApplyActivity.class);
-                        intent.putExtra(CompleteActivity.TAB, CompleteActivity.TAB_0);
-                        startActivity(intent);
+                        startActivity(new Intent(HomeActivity.this, CollectWaterActivity.class));
+                    }
+                });
+        RxView.clicks(headerLayout.findViewById(R.id.rl_assessment))
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        startActivity(new Intent(HomeActivity.this, AssessmentActivity.class));
+                    }
+                });
+        RxView.clicks(headerLayout.findViewById(R.id.rl_sale_ticket))
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        startActivity(new Intent(HomeActivity.this, SaleTicketActivity.class));
+                    }
+                });
+        RxView.clicks(headerLayout.findViewById(R.id.rl_apply_ticket))
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        startActivity(new Intent(HomeActivity.this, ApplyTicketActivity.class));
+                    }
+                });
+        RxView.clicks(headerLayout.findViewById(R.id.rl_chase_order))
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        startActivity(new Intent(HomeActivity.this, ChaseOrderActivity.class));
                     }
                 });
     }
@@ -346,45 +373,6 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     @Override
     public void onPageScrollStateChanged(int state) {
 
-    }
-
-
-    public void requestCompleteNumber(){
-        mPresenter.requestCompleteNumber();
-    }
-
-    @Override
-    public void updateOrderSum(HistoryOrderSumBo historyOrderSumBo) {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerLayout = navigationView.getHeaderView(0);
-        TextView tvTodayRecord = (TextView) headerLayout.findViewById(R.id.tv_today_record);
-        TextView tvMonthRecord = (TextView) headerLayout.findViewById(R.id.tv_month_record);
-        TextView tvTotalRecord = (TextView) headerLayout.findViewById(R.id.tv_total_record);
-        tvTodayRecord.setText(String.valueOf(historyOrderSumBo.getHistoryOrderDaySum()));
-        tvMonthRecord.setText(String.valueOf(historyOrderSumBo.getHistoryOrderMonthSum()));
-        tvTotalRecord.setText(String.valueOf(historyOrderSumBo.getHistoryOrderAllSum()));
-    }
-
-    @Override
-    public void updateNavSum(CompleteNumEvent completeNumEvent) {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View headerLayout = navigationView.getHeaderView(0);
-        switch (completeNumEvent.getFlag()){
-            case Constant.ORDER_TODAY:
-                TextView tvTodayRecord = (TextView) headerLayout.findViewById(R.id.tv_today_record);
-                tvTodayRecord.setText(String.valueOf(completeNumEvent.getSum()));
-                break;
-            case Constant.ORDER_MONTH:
-                TextView tvMonthRecord = (TextView) headerLayout.findViewById(R.id.tv_month_record);
-                tvMonthRecord.setText(String.valueOf(completeNumEvent.getSum()));
-                break;
-            case Constant.ORDER_ALL:
-                TextView tvTotalRecord = (TextView) headerLayout.findViewById(R.id.tv_total_record);
-                tvTotalRecord.setText(String.valueOf(completeNumEvent.getSum()));
-                break;
-            default:
-                break;
-        }
     }
 
     /**

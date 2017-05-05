@@ -1,14 +1,14 @@
 package com.eme.waterdelivery.widget;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
 
 /**
  * Created by zulei on 16/8/16.
  */
-public class FixedListButton extends Button {
+public class FixedListButton extends AppCompatButton {
     public FixedListButton(Context context) {
         super(context);
     }

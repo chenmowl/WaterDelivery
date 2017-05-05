@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
+ * 即时订单
  * Created by dijiaoliang on 17/3/7.
  */
 public class DelayAdapter extends BaseQuickAdapter<WaitingOrderBo, BaseViewHolder> {

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/activity_bg"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
+
+
+    <ImageView
+        android:id="@+id/sdv_good"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:layout_marginTop="10dp"
+        android:clickable="false"
+        android:src="@mipmap/coliflor" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/sdv_good"
+        android:layout_alignTop="@id/sdv_good"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@id/sdv_good"
+        android:orientation="vertical"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp">
+
+        <TextView
+            android:id="@+id/tv_good_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="53度茅台飞天 名贵白酒正品"
+            android:textColor="@color/text_color_bar"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_good_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:text="@string/specs_colon"
+            android:textColor="@color/hint_text_gray"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_good_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5dp"
+            android:text="x12"
+            android:textColor="@color/text_color_gray"
+            android:textSize="12sp" />
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/sdv_good"
+        android:layout_marginTop="10dp"
+        android:background="@color/cline_low" />
+
+</RelativeLayout>

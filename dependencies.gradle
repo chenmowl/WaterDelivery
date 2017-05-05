@@ -93,5 +93,8 @@ project.ext {
 
             "update"                     : 'com.github.czy1121:update:1.1.0',
 
+            "numberbutton"                     : 'ren.qinc.numberbutton:numberbutton:0.0.1',
+
+
     ]
 }

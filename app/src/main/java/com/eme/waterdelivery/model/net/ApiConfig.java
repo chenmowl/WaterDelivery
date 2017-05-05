@@ -14,7 +14,7 @@ public final class ApiConfig {
 
     //主机名
     public static final String API_HOST="http://news-at.zhihu.com";//知乎
-//    public static final String WATER_HOST="http://192.168.50.247:8080";
+//    public static final String WATER_HOST="http://192.168.50.247:8080";//俎磊
     public static final String WATER_HOST="http://xbzwater.com:8082";
 //    public static final String WATER_HOST="http://192.168.50.218";//彬哥ip
 

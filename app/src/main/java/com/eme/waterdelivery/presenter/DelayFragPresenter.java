@@ -137,7 +137,11 @@ public class DelayFragPresenter implements DelayFragContract.Presenter {
                                     break;
                             }
                         } else {
-                            view.requestFailure(refreshFlag, waitingOrderBoListResult.getData().getMessage());
+                            String message=null;
+                            if(waitingOrderBoListResult != null && waitingOrderBoListResult.isSuccess() && waitingOrderBoListResult.getData() != null){
+                                message=waitingOrderBoListResult.getData().getMessage();
+                            }
+                            view.requestFailure(refreshFlag, message);
                         }
                     }
                 }, new Consumer<Throwable>() {

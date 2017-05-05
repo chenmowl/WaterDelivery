@@ -13,6 +13,29 @@
     <string name="order_sign_error">订单签收失败</string>
     <string name="order_sign_success">订单签收成功</string>
     <string name="submit_application_failure">采购单提交失败</string>
+    <string name="get_wx_image_failure">微信二维码获取失败</string>
+    <string name="reach_zero">数量已经为0</string>
+    <string name="tip_ya_sale">押售桶总和不能大于商品数</string>
+    <string name="tip_ticket">水票数不能大于商品数</string>
+    <string name="update_order_amount_failure">订单价格更新失败</string>
+    <string name="sign_success">订单签收成功</string>
+    <string name="sign_failure">订单签收失败</string>
+    <string name="input_phone_please">请输入电话号码</string>
+    <string name="no_address_relate_this_number">此号码无关联地址</string>
+    <string name="no_ticket_info">无水票信息</string>
+    <string name="search_address_failure">寻址失败</string>
+    <string name="search_ticket_failure">获取水票失败</string>
+    <string name="no_select_ticket_type">未选择水票类型</string>
+    <string name="no_input_ticket_count">未输入数票数量</string>
+    <string name="add_ticket_success">添加水票成功</string>
+    <string name="tip_reduce">已经为1</string>
+    <string name="tip_has_not_add_ticket">未添加水票</string>
+    <string name="tip_has_not_username">未添加用户名</string>
+    <string name="tip_has_not_phone">未添加电话号码</string>
+    <string name="tip_has_not_address">未添加地址</string>
+    <string name="tip_has_not_invoice">未添加发票抬头</string>
+    <string name="commit_success">提交成功</string>
+    <string name="commit_failure">提交失败</string>
 
     <!--登陆页面-->
     <string name="input_username">输入账户名</string>
@@ -27,13 +50,24 @@
     <!--main-->
     <string name="quit">退出</string>
     <string name="main_money">上缴金额:</string>
+    <string name="work_status">出勤状况:</string>
+    <string name="apply_vacation">申请休假</string>
     <string name="water_coupon">水票:</string>
     <string name="begin_make_order">开始接单</string>
+    <string name="collect_bucket">回桶数量</string>
+    <string name="sale_ticket">售票</string>
+    <string name="sale_ticket_record">售票记录</string>
+    <string name="apply_ticket_record">购票记录</string>
+    <string name="apply_ticket">申请购票</string>
+    <string name="assessment">应缴金额</string>
+    <string name="chase_order">追欠订单</string>
+    <string name="order_history">历史订单</string>
     <string name="num_order_today">今日完成</string>
     <string name="num_month_today">月完成</string>
     <string name="num_total_record">历史完成</string>
     <string name="num_month_invalid_record">月无效接单</string>
     <string name="my_apply">我的申请</string>
+    <string name="collect_water">收水确认</string>
     <string name="water_station">水站:</string>
     <string name="navigation_drawer_open">侧开</string>
     <string name="navigation_drawer_close">侧关</string>
@@ -45,6 +79,7 @@
     <string name="waiting">待接单 (</string>
     <string name="waiting_home">即时订单</string>
     <string name="fixed_order">固定订单</string>
+    <string name="fixed_home">固定订单 (</string>
     <string name="sending">配送中 (</string>
     <string name="sending_home">配送中</string>
     <string name="today_receive">今日完成 (</string>
@@ -58,10 +93,61 @@
     <string name="quit_app">退出当前应用</string>
     <string name="quit_app_message">确定退出WaterDelivery吗</string>
     <string name="quit_app_again">再按一次退出程序</string>
+    <string name="sick_leave">病假</string>
+    <string name="casual_leave">事假</string>
+    <string name="other_leave">其他</string>
+    <string name="assessment_history">缴账历史</string>
+    <string name="today_reject">今日不接</string>
+    <string name="order_detail">订单详情</string>
+    <string name="next_period">下个周期</string>
+
+
+
+    <!--apply_vacation-->
+    <string name="apply">申请</string>
+    <string name="apply_time">申请时间</string>
+    <string name="apply_category">申请类别</string>
+
+    <!--collect_water-->
+    <string name="logistics_info">物流信息</string>
+    <string name="license_plate_number">车牌号: </string>
+    <string name="driver">司机: </string>
+    <string name="affirm">确认</string>
+
+    <!--sale_ticket-->
+    <string name="user_info">用户信息</string>
+    <string name="name_user">用户姓名:</string>
+    <string name="phone">手机号码:</string>
+    <string name="detailed_address">详细地址:</string>
+    <string name="bill_info">发票信息</string>
+    <string name="invoice_no">不开发票</string>
+    <string name="invoice_has">开发票</string>
+    <string name="invoice_header">发票抬头</string>
+    <string name="paper_ticket">纸质水票</string>
+    <string name="electron_ticket">电子水票</string>
+    <string name="add_ticket">添加水票</string>
+    <string name="pay_info">支付信息</string>
+    <string name="have_pay">已支付</string>
+    <string name="pay_no">未支付</string>
+    <string name="pay_status">支付状态</string>
+    <string name="count">数量:</string>
+    <string name="apply_bug_ticket">申请购票</string>
+    <string name="search_address">搜寻地址</string>
+    <string name="common_address">常用地址</string>
+    <string name="ticket_value">水票面值</string>
+    <string name="choice_ticket_type">请选择水票种类</string>
+    <string name="money_unit">￥</string>
+    <string name="commit">提交</string>
+    <string name="close">关闭</string>
+    <string name="get_ticket_activity_info_failure">获取水票活动信息失败</string>
+    <string name="tip_no_activity_info">暂无活动信息，是否签收?</string>
 
     <!--delay-->
     <string name="receive_order_failure">接单失败</string>
     <string name="receive_order_success">接单成功</string>
+
+    <!--fixed-->
+    <string name="fixed_input_empty">输入数量为空</string>
 
     <!--sending-->
     <string name="call">电话</string>
@@ -72,6 +158,8 @@
     <string name="service">客服:</string>
     <string name="customer">客户:</string>
     <string name="good_info">商品信息</string>
+    <string name="ticket_info">水票信息</string>
+    <string name="bucket_info">水桶信息</string>
     <string name="order_detail_open_surplus">展开剩余商品</string>
     <string name="order_detail_sign">收款签收</string>
     <string name="specs_colon">规格</string>
@@ -79,12 +167,33 @@
     <string name="order_detail_title_open_surplus">展开剩余商品</string>
     <string name="order_pay_mode_money">现金</string>
     <string name="order_pay_mode_weixin">微信</string>
+    <string name="order_pay_mode_bt">白条</string>
+    <string name="order_pay_mode_debt">欠款</string>
     <string name="order_receiver_title">收件人: </string>
     <string name="order_address_title">地址: </string>
     <string name="order_balance_title">金额: ￥</string>
     <string name="order_balance_title2">金额: </string>
+    <string name="order_balance_title3">金额 </string>
     <string name="order_confirm_sign">确定收款／水票</string>
     <string name="order_pay_mode_other">其它</string>
+    <string name="order_sign">确认签收</string>
+    <string name="order_wx_code">微信支付二维码</string>
+    <string name="order_pay_info">付款信息</string>
+    <string name="order_pay_mode">支付方式</string>
+    <string name="order_pay_mode_1">支付方式:</string>
+    <string name="order_payable_bucket">应交桶数</string>
+    <string name="order_actual_bucket">实交桶数</string>
+    <string name="order_owe_bucket">欠桶数</string>
+    <string name="order_good_name">商品名称:</string>
+    <string name="order_good_size">规格:</string>
+    <string name="order_good_price">价格: ￥</string>
+    <string name="order_nr">\n\r</string>
+    <string name="order_charge_bucket">押桶</string>
+    <string name="order_minute">分钟</string>
+    <string name="bucket">桶</string>
+    <string name="tip_bucket">实缴桶数不能超过应缴桶数</string>
+    <string name="pay_method_receive">货到付款</string>
+    <string name="pay_method_online">在线支付</string>
 
 
     <!--已完成-->
@@ -104,6 +213,7 @@
     <string name="choice_name">请选择名称</string>
     <string name="choice_size">请选择规格</string>
     <string name="apply_count">采购数量</string>
+    <string name="buy_count">购买数量</string>
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>
     <string name="apply_list">申请清单</string>

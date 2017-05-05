@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/cline_deep" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/info_line_height"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:gravity="center_vertical"
+        android:text="五加仑水桶"
+        android:textColor="@color/text_color_bar"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/cline_deep" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_line_height"
+                android:gravity="center_vertical"
+                android:text="@string/order_payable_bucket"
+                android:textColor="@color/text_color_bar"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_should_count"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_line_height"
+                android:gravity="center_vertical"
+                android:text="10桶"
+                android:textColor="@color/text_color_bar"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/line"
+            android:layout_height="match_parent"
+            android:background="@color/text_color_bar" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_line_height"
+                android:gravity="center_vertical"
+                android:text="@string/order_actual_bucket"
+                android:textColor="@color/text_color_bar"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/et_real_count"
+                android:gravity="center"
+                android:layout_width="60dp"
+                android:layout_height="26dp"
+                android:background="@drawable/btn_gray_border"
+                android:ems="19"
+                android:hint="输入桶数"
+                android:inputType="number"
+                android:padding="2dp"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="@dimen/line"
+            android:layout_height="match_parent"
+            android:background="@color/text_color_bar" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_line_height"
+                android:gravity="center_vertical"
+                android:text="@string/order_owe_bucket"
+                android:textColor="@color/text_color_bar"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_debt_count"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/info_line_height"
+                android:gravity="center_vertical"
+                android:text="1桶"
+                android:textColor="@color/text_color_bar"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
