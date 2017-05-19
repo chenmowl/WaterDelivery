@@ -144,14 +144,7 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
         if (aMap == null) {
             aMap = map.getMap();
         }
-        // TODO: 17/3/8  改变可视区域,添加坐标点 
-//        changeCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
-//                        new LatLng(39.983456, 116.3154950), 18, 30, 30)));
         aMap.clear();
-//        aMap.addMarker(new MarkerOptions().position(new LatLng(39.983456, 116.3154950))
-//                .icon(BitmapDescriptorFactory
-//                        .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
         mapContainer.setScrollView(sv);//MapContainer关联ScrollView 解决地图和ScrollView的事件冲突
 
 //        如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
@@ -440,10 +433,10 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
         List<OrderDetailBo.GoodsBean> data = orderDetailBo.getGoods();
         mData.clear();
         mData.addAll(data);
-        rvTicket.getAdapter().notifyDataSetChanged();
         waterOrder=orderDetailBo.isWaterOrder();
         if (orderDetailBo.isWaterOrder()) {
-            llWaterTicket.setVisibility(View.GONE);
+            llWaterTicket.setVisibility(View.VISIBLE);
+            rvTicket.getAdapter().notifyDataSetChanged();
             SendingDetailWaterAdapter waterAdapter = new SendingDetailWaterAdapter(mData);
             rvContent.setAdapter(waterAdapter);
             rvContent.addOnItemTouchListener(new OnItemClickListener() {

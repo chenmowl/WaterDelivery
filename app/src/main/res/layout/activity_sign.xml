@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/btn_sign"
+        android:background="@color/activity_bg"
         android:layout_below="@+id/include_tb">
 
         <LinearLayout
@@ -22,24 +23,25 @@
 
             <LinearLayout
                 android:id="@+id/ll_wx_image"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/iv_wx"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
+                android:background="@color/window_bg"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:text="@string/order_wx_code" />
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_wx"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/order_wx_code" />
 
             </LinearLayout>
 
@@ -127,10 +129,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/window_bg"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/info_line_height"
-                    android:layout_marginTop="10dp"
                     android:background="@color/activity_bg"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -151,10 +157,14 @@
 
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="@color/window_bg"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/info_line_height"
-                    android:layout_marginTop="10dp"
                     android:background="@color/activity_bg"
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -175,35 +185,35 @@
 
                 </RelativeLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/info_line_height"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/activity_bg"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:text="@string/remark"
-                    android:textColor="@color/text_color_bar"
-                    android:textSize="@dimen/font_info_line_small"
-                    android:visibility="gone" />
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/info_line_height"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:background="@color/activity_bg"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+                <!--android:text="@string/remark"-->
+                <!--android:textColor="@color/text_color_bar"-->
+                <!--android:textSize="@dimen/font_info_line_small"-->
+                <!--android:visibility="gone" />-->
 
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/et_remark"
-                    style="@style/Base.V7.Widget.AppCompat.EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/bg_edit_apply"
-                    android:elevation="-2dp"
-                    android:gravity="left|top"
-                    android:lineSpacingExtra="2dp"
-                    android:padding="10dp"
-                    android:textColor="@color/text_color_bar"
-                    android:textColorHint="@color/hint_text_gray"
-                    android:textSize="13sp"
-                    android:visibility="gone" />
+                <!--<android.support.v7.widget.AppCompatEditText-->
+                <!--android:id="@+id/et_remark"-->
+                <!--style="@style/Base.V7.Widget.AppCompat.EditText"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="100dp"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginLeft="10dp"-->
+                <!--android:layout_marginRight="10dp"-->
+                <!--android:background="@drawable/bg_edit_apply"-->
+                <!--android:elevation="-2dp"-->
+                <!--android:gravity="left|top"-->
+                <!--android:lineSpacingExtra="2dp"-->
+                <!--android:padding="10dp"-->
+                <!--android:textColor="@color/text_color_bar"-->
+                <!--android:textColorHint="@color/hint_text_gray"-->
+                <!--android:textSize="13sp"-->
+                <!--android:visibility="gone" />-->
 
             </LinearLayout>
 

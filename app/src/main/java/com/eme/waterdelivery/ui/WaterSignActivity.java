@@ -135,6 +135,7 @@ public class WaterSignActivity extends BaseActivity<WaterSignPresenter> implemen
         bucketManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvBucket.setLayoutManager(bucketManager);
         WBaseRecycleAdapter<BucketBean> mBucketAdapter = new WBaseRecycleAdapter<BucketBean>(this, mBucketData, R.layout.item_sign_bucket) {
+
             @Override
             public void onBindViewHolder(final WBaseRecycleViewHolder holder, int position, BucketBean s) {
                 final int shouldCount = s.getGoodsNumber() - s.getMortgageBucketCount() - s.getSellBucketCount();
@@ -166,7 +167,7 @@ public class WaterSignActivity extends BaseActivity<WaterSignPresenter> implemen
                         }
                         if (realCount > shouldCount) {
                             realCount = shouldCount;
-                            editText.setText(String.valueOf(shouldCount));
+                            editText.setText(Constant.STR_EMPTY);
                             ToastUtil.shortToast(WaterSignActivity.this, R.string.tip_bucket);
                         }
                         holder.setText(R.id.tv_debt_count, TextUtils.concat(String.valueOf(shouldCount - realCount), getText(R.string.bucket)).toString());

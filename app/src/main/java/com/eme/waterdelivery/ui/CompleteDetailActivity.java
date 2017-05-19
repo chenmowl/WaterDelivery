@@ -31,6 +31,8 @@ import com.eme.waterdelivery.tools.ConstUtils;
 import com.eme.waterdelivery.tools.TimeUtils;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.ui.adapter.SendingDetailGoodAdapter;
+import com.eme.waterdelivery.ui.adapter.WBaseRecycleAdapter;
+import com.eme.waterdelivery.ui.adapter.WBaseRecycleViewHolder;
 import com.eme.waterdelivery.widget.FullyLinearLayoutManager;
 import com.eme.waterdelivery.widget.MapContainer;
 import com.jakewharton.rxbinding2.view.RxView;
@@ -73,12 +75,6 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
     TextView tvOrderDetailClientPhone;
     @BindView(R.id.tv_order_detail_customer_phone)
     TextView tvOrderDetailCustomerPhone;
-    @BindView(R.id.tv_order_detail_open_surplus)
-    TextView tvOrderDetailOpenSurplus;
-    @BindView(R.id.iv_order_detail_open_surplus)
-    ImageView ivOrderDetailOpenSurplus;
-    @BindView(R.id.ll_order_open_surplus)
-    LinearLayout llOrderOpenSurplus;
     @BindView(R.id.tv_balance)
     TextView tvBalance;
     @BindView(R.id.btn_sign)
@@ -95,12 +91,18 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
     ScrollView sv;
     @BindView(R.id.map_container)
     MapContainer mapContainer;
+    @BindView(R.id.rv_ticket)
+    RecyclerView rvTicket;
+    @BindView(R.id.ll_water_ticket)
+    LinearLayout llWaterTicket;
+    @BindView(R.id.tv_pay_type)
+    TextView tvPayType;
+    @BindView(R.id.iv_arrow)
+    ImageView ivArrow;
 
     private AMap aMap;
 
     private List<OrderDetailBo.GoodsBean> mData;
-    private SendingDetailGoodAdapter goodAdapter;
-    private boolean isShowAll;
 
     @Override
     protected void initInject() {
@@ -109,27 +111,19 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
 
     @Override
     protected int getLayout() {
-        return R.layout.activity_sending_detail;
+        return R.layout.activity_sending_instant;
     }
 
     @Override
     protected void initEventAndData(Bundle savedInstanceState) {
         btnSign.setVisibility(View.GONE);
-
+        ivArrow.setVisibility(View.GONE);
         map.onCreate(savedInstanceState);
         //初始化地图控制器对象
         if (aMap == null) {
             aMap = map.getMap();
         }
-//        // TODO: 17/3/8  改变可视区域,添加坐标点
-//        changeCamera(
-//                CameraUpdateFactory.newCameraPosition(new CameraPosition(
-//                        new LatLng(39.983456, 116.3154950), 18, 30, 30)));
-//        aMap.clear();
-//        aMap.addMarker(new MarkerOptions().position(new LatLng(39.983456, 116.3154950))
-//                .icon(BitmapDescriptorFactory
-//                        .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
+        aMap.clear();
         mapContainer.setScrollView(sv);//MapContainer关联ScrollView 解决地图和ScrollView的事件冲突
 
 //        如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
@@ -140,28 +134,30 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         rvContent.setLayoutManager(manager);
         mData = new ArrayList<>();
-        mData.add(new OrderDetailBo.GoodsBean());
-        mData.add(new OrderDetailBo.GoodsBean());
-        mData.add(new OrderDetailBo.GoodsBean());
-        mData.add(new OrderDetailBo.GoodsBean());
-        isShowAll = false;//商品是否展开
-        goodAdapter = new SendingDetailGoodAdapter(this, mData);
+        SendingDetailGoodAdapter goodAdapter = new SendingDetailGoodAdapter(this, mData);
         rvContent.setAdapter(goodAdapter);
-
-        if (mData.size() <= 2) {
-            llOrderOpenSurplus.setVisibility(View.GONE);
-        } else {
-            if (isShowAll) {
-                tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_close_surplus);
-                ivOrderDetailOpenSurplus.setImageResource(R.mipmap.shangla);
-            } else {
-                tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_open_surplus);
-                ivOrderDetailOpenSurplus.setImageResource(R.mipmap.xiala);
+        rvTicket.setHasFixedSize(true);
+        rvTicket.setNestedScrollingEnabled(false);
+        FullyLinearLayoutManager manager02 = new FullyLinearLayoutManager(App.getAppInstance());
+        manager02.setAutoMeasureEnabled(true);
+        manager02.setOrientation(LinearLayoutManager.VERTICAL);
+        rvTicket.setLayoutManager(manager02);
+        WBaseRecycleAdapter<OrderDetailBo.GoodsBean> ticketAdapter=new WBaseRecycleAdapter<OrderDetailBo.GoodsBean>(this,mData,R.layout.item_sending_instant_ticket) {
+            @Override
+            public void onBindViewHolder(WBaseRecycleViewHolder holder, int position, OrderDetailBo.GoodsBean goodsBean) {
+                holder.getView(R.id.ll_number).setVisibility(View.GONE);
+                TextView ticketNum=holder.getView(R.id.tv_ticket_num);
+                ticketNum.setVisibility(View.VISIBLE);
+                ticketNum.setText(String.valueOf(goodsBean.getTicketUsedCount()));
+                holder.setText(R.id.tv_ticket_type,goodsBean.getTicketName());
             }
-        }
+        };
+        rvTicket.setAdapter(ticketAdapter);
+
+
         initListener();
 
-        String orderId=getIntent().getStringExtra(Constant.ORDER_ID);
+        String orderId = getIntent().getStringExtra(Constant.ORDER_ID);
         tvTitle.setText(orderId);
         mPresenter.requestData(orderId);//请求订单详情数据
     }
@@ -171,15 +167,6 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
      */
     private void initListener() {
         //        设置btn监听,防止连续的二次点击
-        RxView.clicks(llOrderOpenSurplus)
-                .throttleFirst(1, TimeUnit.SECONDS)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        checkShowAll();
-                    }
-                });
         RxView.clicks(back)
                 .throttleFirst(1, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -190,21 +177,6 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
                         finish();
                     }
                 });
-    }
-
-    /**
-     * 检查商品列表是否展开
-     */
-    private void checkShowAll() {
-        isShowAll = !isShowAll;
-        goodAdapter.setIsOpenPlus(isShowAll);
-        if (isShowAll) {
-            tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_close_surplus);
-            ivOrderDetailOpenSurplus.setImageResource(R.mipmap.shangla);
-        } else {
-            tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_open_surplus);
-            ivOrderDetailOpenSurplus.setImageResource(R.mipmap.xiala);
-        }
     }
 
     /**
@@ -247,62 +219,78 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
 
     @Override
     public void showProgress(boolean b) {
-        isShowLayer(llAvLoadingTransparent44,b);
+        isShowLayer(llAvLoadingTransparent44, b);
     }
 
     @Override
     public void showRequestMsg(String msg) {
-        if(TextUtils.isEmpty(msg)){
-            ToastUtil.shortToast(this,getText(R.string.request_error).toString());
-        }else{
-            ToastUtil.shortToast(this,msg);
+        if (TextUtils.isEmpty(msg)) {
+            ToastUtil.shortToast(this, getText(R.string.request_error).toString());
+        } else {
+            ToastUtil.shortToast(this, msg);
         }
     }
 
     @Override
     public void updateUi(OrderDetailBo orderDetailBo) {
-        tvOrderDetailPlaceTime.setText(TextUtils.isEmpty(orderDetailBo.getCreateTime())?Constant.STR_EMPTY:orderDetailBo.getCreateTime());
-        switch (orderDetailBo.getPayType()){
+        tvOrderDetailPlaceTime.setText(TextUtils.isEmpty(orderDetailBo.getCreateTime()) ? Constant.STR_EMPTY : orderDetailBo.getCreateTime());
+        switch (orderDetailBo.getPayType()) {
             case Constant.PAY_TYPE_MONEY:
-                tvOrderDetailPayMode.setText(getText(R.string.order_pay_mode_money));
+                tvPayType.setText(getText(R.string.order_pay_mode_money));
                 break;
             case Constant.PAY_TYPE_WEIXIN:
-                tvOrderDetailPayMode.setText(getText(R.string.order_pay_mode_weixin));
+                tvPayType.setText(getText(R.string.order_pay_mode_weixin));
                 break;
             default:
-                tvOrderDetailPayMode.setText(getText(R.string.order_pay_mode_other));
+                tvPayType.setText(getText(R.string.order_pay_mode_debt));
                 break;
         }
-        if(!TextUtils.isEmpty(orderDetailBo.getShippingTime())){
+        switch (orderDetailBo.getPayMethod()) {
+            case Constant.PAY_METHOD_RECEIVE:
+                tvOrderDetailPayMode.setText(getText(R.string.pay_method_receive));
+                break;
+            case Constant.PAY_METHOD_ONLINE:
+                tvOrderDetailPayMode.setText(getText(R.string.pay_method_online));
+                break;
+            default:
+                break;
+        }
+        if (!TextUtils.isEmpty(orderDetailBo.getShippingTime())) {
             tvOrderDetailUsedTime.setText(TimeUtils.getIntervalTime(TimeUtils.getCurTimeString(), orderDetailBo.getShippingTime(), ConstUtils.TimeUnit.MIN) + "分钟");
         }
-        tvReceiver.setText(getText(R.string.order_receiver_title) + (TextUtils.isEmpty(orderDetailBo.getMemberName())?Constant.STR_EMPTY:orderDetailBo.getMemberName()));
-        tvAddress.setText(getText(R.string.order_address_title) + (TextUtils.isEmpty(orderDetailBo.getMemberAddress())?Constant.STR_EMPTY:orderDetailBo.getMemberAddress()));
-        tvRemark.setText(TextUtils.isEmpty(orderDetailBo.getOrderMessage())?Constant.STR_EMPTY:orderDetailBo.getOrderMessage());
-        tvOrderDetailClientPhone.setText(TextUtils.isEmpty(orderDetailBo.getServicePhone())?Constant.STR_EMPTY:orderDetailBo.getServicePhone());
-        tvOrderDetailCustomerPhone.setText(TextUtils.isEmpty(orderDetailBo.getMemberPhone())?Constant.STR_EMPTY:orderDetailBo.getMemberPhone());
-        List<OrderDetailBo.GoodsBean> data=orderDetailBo.getGoods();
+        tvReceiver.setText(getText(R.string.order_receiver_title) + (TextUtils.isEmpty(orderDetailBo.getMemberName()) ? Constant.STR_EMPTY : orderDetailBo.getMemberName()));
+        tvAddress.setText(getText(R.string.order_address_title) + (TextUtils.isEmpty(orderDetailBo.getMemberAddress()) ? Constant.STR_EMPTY : orderDetailBo.getMemberAddress()));
+        tvRemark.setText(TextUtils.isEmpty(orderDetailBo.getOrderMessage()) ? Constant.STR_EMPTY : orderDetailBo.getOrderMessage());
+        tvOrderDetailClientPhone.setText(TextUtils.isEmpty(orderDetailBo.getServicePhone()) ? Constant.STR_EMPTY : orderDetailBo.getServicePhone());
+        tvOrderDetailCustomerPhone.setText(TextUtils.isEmpty(orderDetailBo.getMemberPhone()) ? Constant.STR_EMPTY : orderDetailBo.getMemberPhone());
+        List<OrderDetailBo.GoodsBean> data = orderDetailBo.getGoods();
         mData.clear();
         mData.addAll(data);
-        goodAdapter.notifyDataSetChanged();
-        if (mData.size() <= 2) {
-            llOrderOpenSurplus.setVisibility(View.GONE);
-        } else {
-            if (isShowAll) {
-                tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_close_surplus);
-                ivOrderDetailOpenSurplus.setImageResource(R.mipmap.shangla);
-            } else {
-                tvOrderDetailOpenSurplus.setText(R.string.order_detail_title_open_surplus);
-                ivOrderDetailOpenSurplus.setImageResource(R.mipmap.xiala);
+        if (orderDetailBo.isWaterOrder()) {
+            boolean hasTicket=false;
+            for(OrderDetailBo.GoodsBean bean:mData){
+                if(bean.getTicketUsedCount()!=0){
+                    if(!hasTicket)hasTicket=true;
+                }
             }
+            if(hasTicket){
+                llWaterTicket.setVisibility(View.VISIBLE);
+                rvTicket.getAdapter().notifyDataSetChanged();
+            }else{
+                llWaterTicket.setVisibility(View.GONE);
+            }
+        } else {
+            llWaterTicket.setVisibility(View.GONE);
         }
-        tvBalance.setText(getText(R.string.order_balance_title) +(TextUtils.isEmpty(orderDetailBo.getOrderAmount())?Constant.STR_EMPTY:orderDetailBo.getOrderAmount()));
+        rvContent.getAdapter().notifyDataSetChanged();
+
+        tvBalance.setText(getText(R.string.order_balance_title) + (TextUtils.isEmpty(orderDetailBo.getOrderAmount()) ? Constant.STR_EMPTY : orderDetailBo.getOrderAmount()));
         // TODO: 17/4/10 更新地图坐标
-        float memberLat=orderDetailBo.getMemberLat();
-        float memberLng=orderDetailBo.getMemberLng();
-        if(memberLat==0 || memberLng==0){
-            memberLat=39.983456f;
-            memberLng=116.3154950f;
+        float memberLat = orderDetailBo.getMemberLat();
+        float memberLng = orderDetailBo.getMemberLng();
+        if (memberLat == 0 || memberLng == 0) {
+            memberLat = 39.983456f;
+            memberLng = 116.3154950f;
         }
         changeCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(memberLat, memberLng), 18, 30, 30)));
         aMap.clear();

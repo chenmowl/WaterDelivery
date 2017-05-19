@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * 配送中非水类产品的
- *
+ * <p>
  * Created by dijiaoliang on 17/3/9.
  */
 public class SendingDetailGoodAdapter extends RecyclerView.Adapter<SendingDetailGoodAdapter.ViewHolder> {
@@ -26,12 +26,9 @@ public class SendingDetailGoodAdapter extends RecyclerView.Adapter<SendingDetail
     private List<OrderDetailBo.GoodsBean> data;
     private LayoutInflater inflater;
 
-    private boolean isOpenAll;
-
     public SendingDetailGoodAdapter(Context context, List<OrderDetailBo.GoodsBean> data) {
         this.data = data;
         this.inflater = LayoutInflater.from(context);
-        isOpenAll = false;
     }
 
 
@@ -42,12 +39,12 @@ public class SendingDetailGoodAdapter extends RecyclerView.Adapter<SendingDetail
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        OrderDetailBo.GoodsBean goodsBean=data.get(position);
+        OrderDetailBo.GoodsBean goodsBean = data.get(position);
         holder.tvGoodName.setText(goodsBean.getGoodsName());
-        holder.tvSize.setText("规格: "+goodsBean.getSpecName());
-        holder.tvPrice.setText("￥ "+goodsBean.getGoodsAmount() );
-        holder.tvSum.setText("x"+goodsBean.getGoodsNum());
-        ImageLoader.load(App.getAppInstance(),goodsBean.getGoodsImage(),holder.imageView);
+        holder.tvSize.setText("规格: " + goodsBean.getSpecName());
+        holder.tvPrice.setText("￥ " + goodsBean.getGoodsAmount());
+        holder.tvSum.setText("x" + goodsBean.getGoodsNum());
+        ImageLoader.load(App.getAppInstance(), goodsBean.getGoodsImage(), holder.imageView);
     }
 
     @Override
@@ -55,25 +52,9 @@ public class SendingDetailGoodAdapter extends RecyclerView.Adapter<SendingDetail
         if (data == null) {
             return 0;
         } else {
-            if (data.size() > 2) {
-                if (!isOpenAll) {
-                    return 2;
-                } else {
-                    return data.size();
-                }
-            } else {
-                return data.size();
-            }
+            return data.size();
         }
-//        Log.e("getItemCount",data.size()+"");
-//        return data.size();
     }
-
-    public void setIsOpenPlus(boolean b) {
-        isOpenAll = b;
-        notifyDataSetChanged();
-    }
-
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -89,11 +70,11 @@ public class SendingDetailGoodAdapter extends RecyclerView.Adapter<SendingDetail
 
         public ViewHolder(View itemView) {
             super(itemView);
-            imageView= (ImageView) itemView.findViewById(R.id.sdv_good);
-            tvGoodName= (TextView) itemView.findViewById(R.id.tv_good_name);
-            tvSize= (TextView) itemView.findViewById(R.id.tv_good_size);
-            tvPrice= (TextView) itemView.findViewById(R.id.tv_good_price);
-            tvSum= (TextView) itemView.findViewById(R.id.tv_good_count);
+            imageView = (ImageView) itemView.findViewById(R.id.sdv_good);
+            tvGoodName = (TextView) itemView.findViewById(R.id.tv_good_name);
+            tvSize = (TextView) itemView.findViewById(R.id.tv_good_size);
+            tvPrice = (TextView) itemView.findViewById(R.id.tv_good_price);
+            tvSum = (TextView) itemView.findViewById(R.id.tv_good_count);
 
         }
     }
