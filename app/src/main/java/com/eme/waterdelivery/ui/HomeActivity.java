@@ -168,7 +168,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
     public void updateOrderSum(int flag,int distributingOrderSum){
         switch (flag){
             case Constant.ORDER_DELAY:
-                tabMain.getTabAt(0).setText(TextUtils.concat(getText(R.string.waiting).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
+                tabMain.getTabAt(0).setText(TextUtils.concat(getText(R.string.waiting_home_01).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));
                 break;
             case Constant.ORDER_FIXED:
                 tabMain.getTabAt(1).setText(TextUtils.concat(getText(R.string.fixed_home).toString(),String.valueOf(distributingOrderSum),getText(R.string.sign)));

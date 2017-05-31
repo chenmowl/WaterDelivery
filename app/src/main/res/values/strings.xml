@@ -79,6 +79,7 @@
     <string name="waiting">待接单 (</string>
     <string name="waiting_home">即时订单</string>
     <string name="fixed_order">固定订单</string>
+    <string name="waiting_home_01">即时订单 (</string>
     <string name="fixed_home">固定订单 (</string>
     <string name="sending">配送中 (</string>
     <string name="sending_home">配送中</string>

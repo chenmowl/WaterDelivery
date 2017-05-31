@@ -41,7 +41,7 @@ import com.eme.waterdelivery.tools.NetworkUtils;
 import com.eme.waterdelivery.tools.TimeUtils;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.ui.adapter.FixedDetailGoodAdapter;
-import com.eme.waterdelivery.ui.adapter.SendingInstantTicketAdapter;
+import com.eme.waterdelivery.ui.adapter.SendingFixedTicketAdapter;
 import com.eme.waterdelivery.ui.dialog.PayTypeDialog;
 import com.eme.waterdelivery.widget.FullyLinearLayoutManager;
 import com.eme.waterdelivery.widget.MapContainer;
@@ -140,12 +140,7 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
             aMap = map.getMap();
         }
         // TODO: 17/3/8  改变可视区域,添加坐标点 
-//        changeCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition(
-//                        new LatLng(39.983456, 116.3154950), 18, 30, 30)));
         aMap.clear();
-//        aMap.addMarker(new MarkerOptions().position(new LatLng(39.983456, 116.3154950))
-//                .icon(BitmapDescriptorFactory
-//                        .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
         mapContainer.setScrollView(sv);//MapContainer关联ScrollView 解决地图和ScrollView的事件冲突
 
@@ -212,7 +207,7 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
         manager02.setAutoMeasureEnabled(true);
         manager02.setOrientation(LinearLayoutManager.VERTICAL);
         rvTicket.setLayoutManager(manager02);
-        SendingInstantTicketAdapter sendingDetailGoodAdapter = new SendingInstantTicketAdapter(mData);
+        SendingFixedTicketAdapter sendingDetailGoodAdapter = new SendingFixedTicketAdapter(mData);
         rvTicket.setAdapter(sendingDetailGoodAdapter);
         rvTicket.addOnItemTouchListener(new OnItemClickListener() {
             @Override

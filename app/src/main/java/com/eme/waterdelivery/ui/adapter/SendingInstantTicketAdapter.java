@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class SendingInstantTicketAdapter extends BaseQuickAdapter<OrderDetailBo.GoodsBean, BaseViewHolder> {
 
+    private boolean isPayOnline;
 
     public SendingInstantTicketAdapter(List<OrderDetailBo.GoodsBean> data) {
         super(R.layout.item_sending_instant_ticket,data);
@@ -30,10 +31,25 @@ public class SendingInstantTicketAdapter extends BaseQuickAdapter<OrderDetailBo.
                 helper.setVisible(R.id.line_bottom,true);
             }
         }
+        if(isPayOnline){
+            helper.setVisible(R.id.ll_number,false);
+            helper.setVisible(R.id.tv_ticket_num,true);
+            helper.setText(R.id.tv_ticket_num,String.valueOf(item.getTicketUsedCount()));
+        }else{
+            helper.setVisible(R.id.ll_number,true);
+            helper.setVisible(R.id.tv_ticket_num,false);
+            helper.setText(R.id.tv_item_number,String.valueOf(item.getTicketUsedCount()));
+            helper.addOnClickListener(R.id.btn_add);
+            helper.addOnClickListener(R.id.btn_reduce);
+        }
         helper.setText(R.id.tv_ticket_type,item.getTicketName());
-        helper.setText(R.id.tv_item_number,String.valueOf(item.getTicketUsedCount()));
-        helper.addOnClickListener(R.id.btn_add);
-        helper.addOnClickListener(R.id.btn_reduce);
     }
 
+    public boolean isPayOnline() {
+        return isPayOnline;
+    }
+
+    public void setPayOnline(boolean payOnline) {
+        isPayOnline = payOnline;
+    }
 }

@@ -122,6 +122,8 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
 
     private List<OrderDetailBo.GoodsBean> mData;
 
+    SendingInstantTicketAdapter sendingDetailGoodAdapter;
+
     private String orderId;
     private String payType;
     private String orderAmount;
@@ -162,7 +164,7 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
         manager02.setAutoMeasureEnabled(true);
         manager02.setOrientation(LinearLayoutManager.VERTICAL);
         rvTicket.setLayoutManager(manager02);
-        SendingInstantTicketAdapter sendingDetailGoodAdapter = new SendingInstantTicketAdapter(mData);
+        sendingDetailGoodAdapter = new SendingInstantTicketAdapter(mData);
         rvTicket.setAdapter(sendingDetailGoodAdapter);
         rvTicket.addOnItemTouchListener(new OnItemClickListener() {
             @Override
@@ -412,12 +414,15 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
                 payType = Constant.PAY_TYPE_DEBT;
                 break;
         }
+        boolean isPayOnline = false;
         switch (orderDetailBo.getPayMethod()){
             case Constant.PAY_METHOD_RECEIVE:
                 tvOrderDetailPayMode.setText(getText(R.string.pay_method_receive));
+                isPayOnline=false;
                 break;
             case Constant.PAY_METHOD_ONLINE:
                 tvOrderDetailPayMode.setText(getText(R.string.pay_method_online));
+                isPayOnline=true;
                 break;
             default:
                 break;
@@ -436,7 +441,8 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
         waterOrder=orderDetailBo.isWaterOrder();
         if (orderDetailBo.isWaterOrder()) {
             llWaterTicket.setVisibility(View.VISIBLE);
-            rvTicket.getAdapter().notifyDataSetChanged();
+            sendingDetailGoodAdapter.setPayOnline(isPayOnline);
+            sendingDetailGoodAdapter.notifyDataSetChanged();
             SendingDetailWaterAdapter waterAdapter = new SendingDetailWaterAdapter(mData);
             rvContent.setAdapter(waterAdapter);
             rvContent.addOnItemTouchListener(new OnItemClickListener() {
