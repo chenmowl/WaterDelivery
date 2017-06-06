@@ -96,10 +96,13 @@ public class ApplyTicketPresenter implements ApplyTicketContract.Presenter {
         );
     }
 
+    /**
+     * 这里默认只申请纸质水票
+     */
     @Override
     public void requestTicketList() {
         disposables.add(
-                retrofitHelper.getTicketInfo()
+                retrofitHelper.getTicketInfo(Constant.TICKET_TYPE_PAPER)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override

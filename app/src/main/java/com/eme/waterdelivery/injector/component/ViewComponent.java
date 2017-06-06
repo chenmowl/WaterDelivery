@@ -17,6 +17,7 @@ import com.eme.waterdelivery.ui.CompleteDetailActivity;
 import com.eme.waterdelivery.ui.FixedDetailActivity;
 import com.eme.waterdelivery.ui.GoodsSignActivity;
 import com.eme.waterdelivery.ui.HomeActivity;
+import com.eme.waterdelivery.ui.HomeCollectWaterActivity;
 import com.eme.waterdelivery.ui.LaunchActivity;
 import com.eme.waterdelivery.ui.LoginActivity;
 import com.eme.waterdelivery.ui.MyApplyActivity;
@@ -28,6 +29,8 @@ import com.eme.waterdelivery.ui.WaterSignActivity;
 import com.eme.waterdelivery.ui.fragment.AllOrderFragment;
 import com.eme.waterdelivery.ui.fragment.ApplyFragment;
 import com.eme.waterdelivery.ui.fragment.ApplyRecordFragment;
+import com.eme.waterdelivery.ui.fragment.AssessMoneyFragment;
+import com.eme.waterdelivery.ui.fragment.AssessTicketFragment;
 import com.eme.waterdelivery.ui.fragment.CurrentDayFragment;
 import com.eme.waterdelivery.ui.fragment.DelayFragment;
 import com.eme.waterdelivery.ui.fragment.FixedFragment;
@@ -52,6 +55,8 @@ public interface ViewComponent {
     void inject(ApplyVacationActivity applyVacationActivity);
 
     void inject(CollectWaterActivity collectWaterActivity);
+
+    void inject(HomeCollectWaterActivity homeCollectWaterActivity);
 
     void inject(CollectBucketActivity collectBucketActivity);
 
@@ -102,5 +107,9 @@ public interface ViewComponent {
     void inject(ApplyFragment applyFragment);
 
     void inject(ApplyRecordFragment applyRecordFragment);
+
+    void inject(AssessMoneyFragment assessMoneyFragment);
+
+    void inject(AssessTicketFragment assessTicketFragment);
 
 }

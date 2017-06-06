@@ -40,9 +40,8 @@ import com.eme.waterdelivery.tools.ImageLoader;
 import com.eme.waterdelivery.tools.NetworkUtils;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.tools.ZeroTextWatcher;
+import com.eme.waterdelivery.ui.adapter.CommonAddressAdapter;
 import com.eme.waterdelivery.ui.adapter.SaleTicketAdapter;
-import com.eme.waterdelivery.ui.adapter.WBaseRecycleAdapter;
-import com.eme.waterdelivery.ui.adapter.WBaseRecycleViewHolder;
 import com.eme.waterdelivery.widget.FullyLinearLayoutManager;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.weiwangcn.betterspinner.library.BetterSpinner;
@@ -56,6 +55,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
+
+import static com.eme.waterdelivery.R.id.et_invoice;
 
 /**
  * 售票页面
@@ -82,7 +83,7 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
     TextView tvAddress;
     @BindView(R.id.et_address)
     EditText etAddress;
-    @BindView(R.id.et_invoice)
+    @BindView(et_invoice)
     EditText etInvoice;
     @BindView(R.id.rg_invoice_info_content)
     RadioGroup rgInvoiceInfoContent;
@@ -230,7 +231,7 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
                     @Override
                     public void accept(Object o) throws Exception {
                         if (NetworkUtils.isConnected(SaleTicketActivity.this)) {
-                            mPresenter.requestTicketList();
+                            mPresenter.requestTicketList(ticketsModel);
                         } else {
                             showNetError();
                         }
@@ -350,7 +351,7 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
     /**
      * 搜索常用地址
      */
-    private void alertDialog(List<GetAddressByPhoneBo.ListBean> list) {
+    private void alertDialog(final List<GetAddressByPhoneBo.ListBean> list) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_list_address, null, false);
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.rv_address);
@@ -360,24 +361,13 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
         manager.setAutoMeasureEnabled(true);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recycler.setLayoutManager(manager);
-        WBaseRecycleAdapter<GetAddressByPhoneBo.ListBean> adapter = new WBaseRecycleAdapter<GetAddressByPhoneBo.ListBean>(this, list, R.layout.item_spinner_apply) {
+        CommonAddressAdapter adapter=new CommonAddressAdapter(this,list);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onBindViewHolder(WBaseRecycleViewHolder holder, int position, GetAddressByPhoneBo.ListBean s) {
-                holder.setText(R.id.tv_content, s.getAddress());
-            }
-        };
-        adapter.setOnItemClickListener(new WBaseRecycleAdapter.OnItemClickListener<GetAddressByPhoneBo.ListBean>() {
-            @Override
-            public void onItemClick(View view, int position, GetAddressByPhoneBo.ListBean model) {
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                GetAddressByPhoneBo.ListBean model=list.get(position);
                 memberAdressId = model.getId();
                 etAddress.setText(model.getAddress());
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position, GetAddressByPhoneBo.ListBean model) {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
@@ -681,5 +671,17 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
             tempBigDecimal = tempBigDecimal.add(new BigDecimal(bean.getPrice()).multiply(new BigDecimal(bean.getNumber())));
         }
         tvAmount.setText(getText(R.string.money_unit) + String.valueOf(tempBigDecimal));
+    }
+
+    @Override
+    public int[] hideSoftByEditViewIds() {
+        int[] ids = {R.id.et_username, R.id.et_phone, R.id.et_address, R.id.et_invoice};
+        return ids;
+    }
+
+    @Override
+    public View[] filterViewByIds() {
+        View[] views = {etUsername, etPhone,etInvoice,etAddress};
+        return views;
     }
 }

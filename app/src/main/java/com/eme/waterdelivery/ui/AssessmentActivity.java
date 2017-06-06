@@ -1,21 +1,22 @@
 package com.eme.waterdelivery.ui;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.os.Handler;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.eme.waterdelivery.App;
+import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.AssessmentContract;
 import com.eme.waterdelivery.presenter.AssessmentPresenter;
-import com.eme.waterdelivery.ui.adapter.AssessmentAdapter;
+import com.eme.waterdelivery.ui.adapter.HomeFragmentAdapter;
+import com.eme.waterdelivery.ui.fragment.AssessMoneyFragment;
+import com.eme.waterdelivery.ui.fragment.AssessTicketFragment;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.ArrayList;
@@ -29,26 +30,26 @@ import io.reactivex.functions.Consumer;
 
 /**
  * 应缴金额
- *
+ * <p>
  * Created by dijiaoliang on 17/4/25.
  */
-public class AssessmentActivity extends BaseActivity<AssessmentPresenter> implements AssessmentContract.View, SwipeRefreshLayout.OnRefreshListener {
+public class AssessmentActivity extends BaseActivity<AssessmentPresenter> implements AssessmentContract.View, ViewPager.OnPageChangeListener {
+
 
     @BindView(R.id.back)
     LinearLayout back;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.tab_main)
+    TabLayout tabMain;
+    @BindView(R.id.vp_main)
+    ViewPager vpMain;
     @BindView(R.id.btn_right)
     TextView btnRight;
-    @BindView(R.id.rv_content)
-    RecyclerView rvContent;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefresh;
 
-    private LinearLayout llHeader;
-    private LayoutInflater inflater;
-
-    private List<String> mData;
+    private AssessMoneyFragment assessMoneyFragment;
+    private AssessTicketFragment assessTicketFragment;
+    List<Fragment> fragments = new ArrayList<>();
 
     @Override
     protected void initInject() {
@@ -57,7 +58,7 @@ public class AssessmentActivity extends BaseActivity<AssessmentPresenter> implem
 
     @Override
     protected int getLayout() {
-        return R.layout.activity_assessment;
+        return R.layout.activity_complete;
     }
 
     @Override
@@ -66,22 +67,29 @@ public class AssessmentActivity extends BaseActivity<AssessmentPresenter> implem
         btnRight.setText(getText(R.string.assessment_history));
         btnRight.setTextColor(getResources().getColor(R.color.main_color_red));
 
-        inflater=LayoutInflater.from(App.getAppInstance());
-        swipeRefresh.setOnRefreshListener(this);
-        swipeRefresh.setColorSchemeColors(Color.rgb(47, 223, 189));
-        rvContent.setLayoutManager(new LinearLayoutManager(App.getAppInstance()));
-        mData = new ArrayList<>();
-        mData.add("1");
-        mData.add("1");
-        mData.add("1");
-        AssessmentAdapter adapter=new AssessmentAdapter(this,mData);
-//        currentDayAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
-        rvContent.setAdapter(adapter);
+        assessMoneyFragment = new AssessMoneyFragment();
+        assessTicketFragment = new AssessTicketFragment();
+        fragments.add(assessMoneyFragment);
+        fragments.add(assessTicketFragment);
+        HomeFragmentAdapter homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
+        vpMain.setOffscreenPageLimit(2);
+        vpMain.setAdapter(homeFragmentAdapter);
+        //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
+        vpMain.setOnPageChangeListener(this);
+        tabMain.setupWithViewPager(vpMain, true);
+        tabMain.getTabAt(0).setText(getText(R.string.assessment_amount).toString());
+        tabMain.getTabAt(1).setText(getText(R.string.assessment_ticket).toString());
 
-        // TODO: 2017/3/7 RecyclerView添加头布局
-        llHeader = (LinearLayout) inflater.inflate(R.layout.header_recycler, null,false);
-        adapter.addHeaderView(llHeader);
         initListener();
+
+//        // TODO: 17/3/29 延迟加载，因为fragment初始化需要时间
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                vpMain.setCurrentItem(0);
+            }
+        }, 200);
+
     }
 
     private void initListener() {
@@ -95,6 +103,15 @@ public class AssessmentActivity extends BaseActivity<AssessmentPresenter> implem
                         startActivity(new Intent(AssessmentActivity.this, AssessmentHistoryActivity.class));
                     }
                 });
+        RxView.clicks(back)
+                .throttleFirst(1, TimeUnit.SECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        finish();
+                    }
+                });
     }
 
     @Override
@@ -105,17 +122,26 @@ public class AssessmentActivity extends BaseActivity<AssessmentPresenter> implem
     }
 
     @Override
-    public void onDestroy() {
-        llHeader=null;
-        if(rvContent!=null){
-            rvContent.removeAllViews();
-            rvContent=null;
-        }
-        super.onDestroy();
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
     }
 
     @Override
-    public void onRefresh() {
+    public void onPageSelected(int position) {
+        switch (position) {
+            case Constant.ZERO:
+                assessMoneyFragment.refreshPage();
+                break;
+            case Constant.ONE:
+                assessTicketFragment.refreshPage();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
 
     }
 }

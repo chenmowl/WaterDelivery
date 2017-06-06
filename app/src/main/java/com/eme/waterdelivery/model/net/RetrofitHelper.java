@@ -1,12 +1,17 @@
 package com.eme.waterdelivery.model.net;
 
 
+import com.eme.waterdelivery.model.bean.AResult;
+import com.eme.waterdelivery.model.bean.AStatusResult;
 import com.eme.waterdelivery.model.bean.Result;
 import com.eme.waterdelivery.model.bean.StatusResult;
 import com.eme.waterdelivery.model.bean.entity.ApplyDetailVo;
 import com.eme.waterdelivery.model.bean.entity.ApplyOneLevelBo;
 import com.eme.waterdelivery.model.bean.entity.ApplyTwoLevelGoodBo;
+import com.eme.waterdelivery.model.bean.entity.AssessMoneyVo;
+import com.eme.waterdelivery.model.bean.entity.AssessTicketVo;
 import com.eme.waterdelivery.model.bean.entity.CalculationPayAmountBo;
+import com.eme.waterdelivery.model.bean.entity.ChaseOrderVo;
 import com.eme.waterdelivery.model.bean.entity.GetActiveInfoByTicketBo;
 import com.eme.waterdelivery.model.bean.entity.GetAddressByPhoneBo;
 import com.eme.waterdelivery.model.bean.entity.GetQRCodeBo;
@@ -18,6 +23,8 @@ import com.eme.waterdelivery.model.bean.entity.LoginBo;
 import com.eme.waterdelivery.model.bean.entity.OrderDetailBo;
 import com.eme.waterdelivery.model.bean.entity.OrderSumBo;
 import com.eme.waterdelivery.model.bean.entity.SaleTicketRecordBo;
+import com.eme.waterdelivery.model.bean.entity.TrafficDetailVo;
+import com.eme.waterdelivery.model.bean.entity.TrafficVo;
 import com.eme.waterdelivery.model.bean.entity.WaitingOrderVo;
 import com.eme.waterdelivery.model.net.api.WaterApi;
 
@@ -254,8 +261,8 @@ public class RetrofitHelper {
      *
      * @return
      */
-    public Observable<Result<GetTicketInfoBo>> getTicketInfo() {
-        return waterApi.getTicketInfo();
+    public Observable<Result<GetTicketInfoBo>> getTicketInfo(String ticketsModel) {
+        return waterApi.getTicketInfo(ticketsModel);
     }
 
     /**
@@ -338,6 +345,67 @@ public class RetrofitHelper {
      */
     public Observable<Result<SaleTicketRecordBo>> getApplyTicketByPage(String storeId, int pageNo, String pageSize){
         return waterApi.getApplyTicketByPage(storeId,pageNo,pageSize);
+    }
+
+    /**
+     * 分页拉取运单记录
+     * @param pageNo
+     * @return
+     */
+    public Observable<AResult<TrafficVo>> getTrafficList(String pageNo){
+        return waterApi.getTrafficList(pageNo);
+    }
+
+    /**
+     * 获取运单详情
+     * @param trafficNo
+     * @return
+     */
+    public Observable<AResult<TrafficDetailVo>> getTrafficDetail(String trafficNo){
+        return waterApi.getTrafficDetail(trafficNo);
+    }
+
+    /**
+     * 运单确认
+     * @param trafficNo
+     * @return
+     */
+    public Observable<AStatusResult> confirmTraffic(String trafficNo){
+        return waterApi.confirmTraffic(trafficNo);
+    }
+
+    /**
+     * 分页拉追欠记录
+     * @param pageNo
+     * @return
+     */
+    public Observable<AResult<ChaseOrderVo>> getCrefditRecords(String pageNo){
+        return waterApi.getCrefditRecords(pageNo);
+    }
+
+    /**
+     * 欠款完结接口
+     * @param id
+     * @return
+     */
+    public Observable<AStatusResult> confirmCrefdit(@Field("id")String id){
+        return waterApi.confirmCrefdit(id);
+    }
+
+    /**
+     * 拉取应缴金额
+     * @return
+     */
+    public Observable<AResult<AssessMoneyVo>> cashStatements(){
+        return waterApi.cashStatements();
+    }
+
+    /**
+     * 拉取应缴水票
+     * @return
+     */
+    public Observable<AResult<AssessTicketVo>> ticketsStatements(){
+        return waterApi.ticketsStatements();
     }
 
 }

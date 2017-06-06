@@ -5,7 +5,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.eme.waterdelivery.App;
@@ -25,28 +24,22 @@ import butterknife.ButterKnife;
 
 /**
  * 回桶数量
- *
+ * <p>
  * Created by dijiaoliang on 17/4/25.
  */
 public class CollectBucketActivity extends BaseActivity<CollectBucketPresenter> implements CollectBucketContract.View {
+
 
     @BindView(R.id.back)
     LinearLayout back;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.tv_car_number)
-    TextView tvCarNumber;
-    @BindView(R.id.tv_driver)
-    TextView tvDriver;
     @BindView(R.id.rv_goods)
     RecyclerView rvGoods;
-    @BindView(R.id.sv)
-    ScrollView sv;
     @BindView(R.id.btn_confirm)
     Button btnConfirm;
     @BindView(R.id.ll_av_loading_transparent_44)
     LinearLayout llAvLoadingTransparent44;
-
     private List<String> mGoodsData;
 
     @Override

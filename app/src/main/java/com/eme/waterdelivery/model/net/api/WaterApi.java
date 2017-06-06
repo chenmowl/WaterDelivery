@@ -1,11 +1,16 @@
 package com.eme.waterdelivery.model.net.api;
 
+import com.eme.waterdelivery.model.bean.AResult;
+import com.eme.waterdelivery.model.bean.AStatusResult;
 import com.eme.waterdelivery.model.bean.Result;
 import com.eme.waterdelivery.model.bean.StatusResult;
 import com.eme.waterdelivery.model.bean.entity.ApplyDetailVo;
 import com.eme.waterdelivery.model.bean.entity.ApplyOneLevelBo;
 import com.eme.waterdelivery.model.bean.entity.ApplyTwoLevelGoodBo;
+import com.eme.waterdelivery.model.bean.entity.AssessMoneyVo;
+import com.eme.waterdelivery.model.bean.entity.AssessTicketVo;
 import com.eme.waterdelivery.model.bean.entity.CalculationPayAmountBo;
+import com.eme.waterdelivery.model.bean.entity.ChaseOrderVo;
 import com.eme.waterdelivery.model.bean.entity.GetActiveInfoByTicketBo;
 import com.eme.waterdelivery.model.bean.entity.GetAddressByPhoneBo;
 import com.eme.waterdelivery.model.bean.entity.GetQRCodeBo;
@@ -17,6 +22,8 @@ import com.eme.waterdelivery.model.bean.entity.LoginBo;
 import com.eme.waterdelivery.model.bean.entity.OrderDetailBo;
 import com.eme.waterdelivery.model.bean.entity.OrderSumBo;
 import com.eme.waterdelivery.model.bean.entity.SaleTicketRecordBo;
+import com.eme.waterdelivery.model.bean.entity.TrafficDetailVo;
+import com.eme.waterdelivery.model.bean.entity.TrafficVo;
 import com.eme.waterdelivery.model.bean.entity.WaitingOrderVo;
 
 import io.reactivex.Observable;
@@ -217,8 +224,9 @@ public interface WaterApi {
      * 下拉选择水票接口（getTicketInfo）
      * @return
      */
+    @FormUrlEncoded
     @POST("/xbz-api/ticket/getTicketInfo")
-    Observable<Result<GetTicketInfoBo>> getTicketInfo();
+    Observable<Result<GetTicketInfoBo>> getTicketInfo(@Field("ticketsModel")String ticketsModel);
 
     /**
      * 根据电话检索地址信息（getAddressByPhone）
@@ -298,5 +306,64 @@ public interface WaterApi {
     @FormUrlEncoded
     @POST("/xbz-api/ticket/getApplyTicketByPage")
     Observable<Result<SaleTicketRecordBo>> getApplyTicketByPage(@Field("storeId")String storeId, @Field("pageNo")int pageNo, @Field("pageSize")String pageSize);
+
+    /**
+     * 分页拉取运单记录
+     * @param pageNo
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/xbz-api/dispatch/getTrafficList")
+    Observable<AResult<TrafficVo>> getTrafficList(@Field("pageNo")String pageNo);
+
+    /**
+     * 获取运单详情
+     * @param trafficNo
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/xbz-api/dispatch/getTrafficDetail")
+    Observable<AResult<TrafficDetailVo>> getTrafficDetail(@Field("trafficNo")String trafficNo);
+
+    /**
+     * 运单确认
+     * @param trafficNo
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/xbz-api/dispatch/confirmTraffic")
+    Observable<AStatusResult> confirmTraffic(@Field("trafficNo")String trafficNo);
+
+    /**
+     * 分页拉追欠记录
+     * @param pageNo
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/xbz-api/dispatch/getCrefditRecords")
+    Observable<AResult<ChaseOrderVo>> getCrefditRecords(@Field("pageNo")String pageNo);
+
+    /**
+     * 欠款完结接口
+     * @param id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/xbz-api/dispatch/confirmCrefdit")
+    Observable<AStatusResult> confirmCrefdit(@Field("id")String id);
+
+    /**
+     * 拉取应缴金额
+     * @return
+     */
+    @POST("/xbz-api/dispatch/cashStatements")
+    Observable<AResult<AssessMoneyVo>> cashStatements();
+
+    /**
+     * 拉取应缴水票
+     * @return
+     */
+    @POST("/xbz-api/dispatch/ticketsStatements")
+    Observable<AResult<AssessTicketVo>> ticketsStatements();
 
 }

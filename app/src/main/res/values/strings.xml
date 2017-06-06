@@ -36,6 +36,15 @@
     <string name="tip_has_not_invoice">未添加发票抬头</string>
     <string name="commit_success">提交成功</string>
     <string name="commit_failure">提交失败</string>
+    <string name="empty_traffic">运单列表为空</string>
+    <string name="get_traffic_failure">获取运单列表数据失败</string>
+    <string name="get_traffic_detail_failure">获取运单列表数据失败</string>
+    <string name="empty_traffic_detail">运单数据为空</string>
+    <string name="traffic_exception">运单数据异常</string>
+    <string name="traffic_confirm_failure">运单确认失败</string>
+    <string name="traffic_confirm_success">运单确认成功</string>
+    <string name="crefdit_finish">追欠订单完结</string>
+    <string name="crefdit_finish_failure">追欠订单完结失败</string>
 
     <!--登陆页面-->
     <string name="input_username">输入账户名</string>
@@ -120,6 +129,7 @@
     <string name="name_user">用户姓名:</string>
     <string name="phone">手机号码:</string>
     <string name="detailed_address">详细地址:</string>
+    <string name="locate_address">定位地址: </string>
     <string name="bill_info">发票信息</string>
     <string name="invoice_no">不开发票</string>
     <string name="invoice_has">开发票</string>
@@ -234,6 +244,19 @@
     <string name="apply_confirm_purchase_success">确认收货成功</string>
     <string name="apply_confirm_purchase_failure">确认收货失败</string>
 
+
+    <!--CollectWater-->
+    <string name="collect_water_point_id">目的地派送点编号:</string>
+    <string name="collect_water_point_name">目的地派送点名称:</string>
+    <string name="collect_water_station_id">发货仓库编号:</string>
+    <string name="collect_water_station_name">发货仓库名称:</string>
+    <string name="is_confirm_collect_water">是否确认收水?</string>
+
+    <!--Assessment-->
+    <string name="assessment_amount">应缴金额</string>
+    <string name="assessment_ticket">应缴水票</string>
+    <string name="assessment_total_amount">应缴总额: </string>
+    <string name="link_flag">X</string>
 
     <array name="product_types">
         <item>格里</item>

@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -50,13 +51,14 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
     TabLayout tabMain;
     @BindView(R.id.vp_main)
     ViewPager vpMain;
+    @BindView(R.id.btn_right)
+    TextView btnRight;
 
     private CurrentDayFragment currentDayFragment;
     private MonthOrderFragment monthOrderFragment;
     private AllOrderFragment allOrderFragment;
 
     List<Fragment> fragments = new ArrayList<>();
-    private HomeFragmentAdapter homeFragmentAdapter;
 
     @Override
     protected void initInject() {
@@ -70,13 +72,14 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
 
     @Override
     protected void initEventAndData(Bundle savedInstanceState) {
-        currentDayFragment=new CurrentDayFragment();
-        monthOrderFragment=new MonthOrderFragment();
-        allOrderFragment=new AllOrderFragment();
+        btnRight.setVisibility(View.GONE);
+        currentDayFragment = new CurrentDayFragment();
+        monthOrderFragment = new MonthOrderFragment();
+        allOrderFragment = new AllOrderFragment();
         fragments.add(currentDayFragment);
         fragments.add(monthOrderFragment);
         fragments.add(allOrderFragment);
-        homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
+        HomeFragmentAdapter homeFragmentAdapter = new HomeFragmentAdapter(getSupportFragmentManager(), fragments);
         vpMain.setOffscreenPageLimit(2);
         vpMain.setAdapter(homeFragmentAdapter);
         //todo TabLayout配合ViewPager有时会出现不显示Tab文字的Bug,需要按如下顺序
@@ -108,7 +111,7 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
                         break;
                 }
             }
-        },200);
+        }, 200);
     }
 
     private void initListener() {
@@ -130,19 +133,19 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
         ButterKnife.bind(this);
     }
 
-    public void updateOrderSum(String flag,int sum){
-        switch (flag){
-                case Constant.ORDER_TODAY:
-                    tabMain.getTabAt(0).setText(TextUtils.concat(getText(R.string.today_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
-                    break;
-                case Constant.ORDER_MONTH:
-                    tabMain.getTabAt(1).setText(TextUtils.concat(getText(R.string.month_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
-                    break;
-                case Constant.ORDER_ALL:
-                    tabMain.getTabAt(2).setText(TextUtils.concat(getText(R.string.all_receive).toString(),String.valueOf(sum),getText(R.string.sign)));
-                    break;
-                default:
-                    break;
+    public void updateOrderSum(String flag, int sum) {
+        switch (flag) {
+            case Constant.ORDER_TODAY:
+                tabMain.getTabAt(0).setText(TextUtils.concat(getText(R.string.today_receive).toString(), String.valueOf(sum), getText(R.string.sign)));
+                break;
+            case Constant.ORDER_MONTH:
+                tabMain.getTabAt(1).setText(TextUtils.concat(getText(R.string.month_receive).toString(), String.valueOf(sum), getText(R.string.sign)));
+                break;
+            case Constant.ORDER_ALL:
+                tabMain.getTabAt(2).setText(TextUtils.concat(getText(R.string.all_receive).toString(), String.valueOf(sum), getText(R.string.sign)));
+                break;
+            default:
+                break;
         }
     }
 
@@ -153,7 +156,7 @@ public class CompleteActivity extends BaseActivity<CompletePresenter> implements
 
     @Override
     public void onPageSelected(int position) {
-        switch (position){
+        switch (position) {
             case Constant.ZERO:
                 currentDayFragment.refreshPage();
                 break;

@@ -34,7 +34,7 @@ public interface SaleTicketContract {
     interface Presenter extends BasePresenter {
         void requestAddress(String phoneNumber);
 
-        void requestTicketList();
+        void requestTicketList(String ticketsModel);
 
         void getTicketActivityInfo(String ticketsModel,String tickets);
 

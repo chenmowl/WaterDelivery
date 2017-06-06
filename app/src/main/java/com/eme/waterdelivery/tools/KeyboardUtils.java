@@ -160,4 +160,18 @@ public class KeyboardUtils {
         InputMethodManager  mInputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
         mInputMethodManager.hideSoftInputFromWindow(dialog.getCurrentFocus().getWindowToken(), 0);
     }
+
+    /**
+     * des:隐藏软键盘,这种方式参数为activity
+     *
+     * @param activity
+     */
+    public static void hideInputForce(Activity activity) {
+        if (activity == null || activity.getCurrentFocus() == null)
+            return;
+
+        ((InputMethodManager) activity.getSystemService(INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(activity.getCurrentFocus()
+                        .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
 }

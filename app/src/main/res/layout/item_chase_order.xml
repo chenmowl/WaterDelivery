@@ -57,81 +57,42 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:background="@android:color/white"
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:weightSum="5">
+                android:weightSum="2">
 
-                <LinearLayout
+
+                <TextView
+                    android:id="@+id/tv_chase_reason"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="欠款原因:订单拖欠"
+                    android:textColor="@color/text_color_bar"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:layout_width="1dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/cline_low" />
 
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/product"
-                        android:textColor="@color/text_color_bar"
-                        android:textSize="12sp" />
-
-                    <LinearLayout
-                        android:id="@+id/ll_container"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tv_chase_count"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2">
-
-                    <ImageView
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/cline_low" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:paddingBottom="10dp"
-                        android:paddingTop="10dp">
-
-
-                        <TextView
-                            android:id="@+id/tv_chase_reason"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="欠款原因:订单拖欠"
-                            android:textColor="@color/text_color_bar"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/tv_chase_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="欠款金额:￥555"
-                            android:textColor="@color/main_color_red"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="欠款金额:￥555"
+                    android:textColor="@color/main_color_red"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

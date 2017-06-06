@@ -111,6 +111,7 @@
                         android:layout_marginRight="2dp"
                         android:layout_marginTop="1dp"
                         android:layout_weight="1"
+                        android:inputType="phone"
                         android:background="@android:color/white"
                         android:ellipsize="end"
                         android:maxLines="1"

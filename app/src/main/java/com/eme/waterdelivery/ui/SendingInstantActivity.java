@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,6 +26,11 @@ import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.CameraPosition;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.eme.waterdelivery.App;
@@ -67,9 +73,9 @@ import static com.eme.waterdelivery.R.id.tv_order_detail_used_time;
  * <p>
  * Created by dijiaoliang on 17/3/8.
  */
-public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter> implements SendingInstantContract.View {
+public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter> implements SendingInstantContract.View, GeocodeSearch.OnGeocodeSearchListener {
 
-    public static final int SENDING_INSTANT_REQUEST_CODE=1001;
+    public static final int SENDING_INSTANT_REQUEST_CODE = 1001;
 
     @BindView(R.id.back)
     LinearLayout back;
@@ -117,8 +123,11 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
     TextView tvPayType;
     @BindView(R.id.ll_water_ticket)
     LinearLayout llWaterTicket;
+    @BindView(R.id.tv_locate_address)
+    TextView tvLocateAddress;
 
     private AMap aMap;
+    private GeocodeSearch geocoderSearch;//逆地理编码组建
 
     private List<OrderDetailBo.GoodsBean> mData;
 
@@ -148,6 +157,10 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
         }
         aMap.clear();
         mapContainer.setScrollView(sv);//MapContainer关联ScrollView 解决地图和ScrollView的事件冲突
+
+        //初始化地图组建
+        geocoderSearch = new GeocodeSearch(this);
+        geocoderSearch.setOnGeocodeSearchListener(this);
 
 //        如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         rvContent.setHasFixedSize(true);
@@ -180,17 +193,17 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
                     case R.id.btn_reduce:
                         int goodsNum = goodsBean.getTicketUsedCount();
                         if (goodsNum <= 0) {
-                            ToastUtil.shortToast(SendingInstantActivity.this,R.string.reach_zero);
+                            ToastUtil.shortToast(SendingInstantActivity.this, R.string.reach_zero);
                             return;
                         }
-                        goodsBean.setTicketUsedCount(goodsNum-1);
+                        goodsBean.setTicketUsedCount(goodsNum - 1);
                         adapter.notifyItemChanged(position);
                         updateAmount();
                         break;
                     case R.id.btn_add:
                         int goodNum = goodsBean.getTicketUsedCount() + 1;
-                        if(goodNum>goodsBean.getGoodsNum()){
-                            ToastUtil.shortToast(SendingInstantActivity.this,R.string.tip_ticket);
+                        if (goodNum > goodsBean.getGoodsNum()) {
+                            ToastUtil.shortToast(SendingInstantActivity.this, R.string.tip_ticket);
                             return;
                         }
                         goodsBean.setTicketUsedCount(goodNum);
@@ -212,14 +225,14 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
     /**
      * 更新订单价格
      */
-    public void updateAmount(){
-        if(!NetworkUtils.isConnected(App.getAppInstance())){
-            ToastUtil.shortToast(this,R.string.update_order_amount_failure);
+    public void updateAmount() {
+        if (!NetworkUtils.isConnected(App.getAppInstance())) {
+            ToastUtil.shortToast(this, R.string.update_order_amount_failure);
             return;
         }
-        List<OrderAmountGoodsBean> list=new ArrayList<>();
-        for(OrderDetailBo.GoodsBean goodsBean:mData){
-            OrderAmountGoodsBean orderAmountGoodsBean=new OrderAmountGoodsBean();
+        List<OrderAmountGoodsBean> list = new ArrayList<>();
+        for (OrderDetailBo.GoodsBean goodsBean : mData) {
+            OrderAmountGoodsBean orderAmountGoodsBean = new OrderAmountGoodsBean();
             orderAmountGoodsBean.setGoodsId(goodsBean.getGoodsId());
             orderAmountGoodsBean.setGoodsNumber(goodsBean.getGoodsNum());
             orderAmountGoodsBean.setTicketUsedCount(goodsBean.getTicketUsedCount());
@@ -231,6 +244,7 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
     }
 
     AlertDialog dialog;
+
     /**
      * 弹出押售桶的dialog
      *
@@ -266,18 +280,18 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
                         dialog.dismiss();
                     }
                 } else {
-                    if(isSellBucket){
-                        if((goodsBean.getMortgageBucketCount()+Integer.parseInt(count))>goodsBean.getGoodsNum()){
-                            ToastUtil.shortToast(SendingInstantActivity.this,R.string.tip_ya_sale);
-                        }else{
+                    if (isSellBucket) {
+                        if ((goodsBean.getMortgageBucketCount() + Integer.parseInt(count)) > goodsBean.getGoodsNum()) {
+                            ToastUtil.shortToast(SendingInstantActivity.this, R.string.tip_ya_sale);
+                        } else {
                             goodsBean.setSellBucketCount(Integer.parseInt(count));
                             adapter.notifyItemChanged(position);
                             updateAmount();
                         }
-                    }else{
-                        if((goodsBean.getSellBucketCount()+Integer.parseInt(count))>goodsBean.getGoodsNum()){
-                            ToastUtil.shortToast(SendingInstantActivity.this,R.string.tip_ya_sale);
-                        }else{
+                    } else {
+                        if ((goodsBean.getSellBucketCount() + Integer.parseInt(count)) > goodsBean.getGoodsNum()) {
+                            ToastUtil.shortToast(SendingInstantActivity.this, R.string.tip_ya_sale);
+                        } else {
                             goodsBean.setMortgageBucketCount(Integer.parseInt(count));
                             adapter.notifyItemChanged(position);
                             updateAmount();
@@ -323,18 +337,18 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
         mDialog.setOnChoosePayTypeListener(new PayTypeDialog.OnChoosePayTypeListener() {
             @Override
             public void chooseType(String flag) {
-                switch (flag){
+                switch (flag) {
                     case Constant.PAY_TYPE_MONEY:
                         tvPayType.setText(getText(R.string.order_pay_mode_money));
-                        payType=Constant.PAY_TYPE_MONEY;
+                        payType = Constant.PAY_TYPE_MONEY;
                         break;
                     case Constant.PAY_TYPE_WEIXIN:
                         tvPayType.setText(getText(R.string.order_pay_mode_weixin));
-                        payType=Constant.PAY_TYPE_WEIXIN;
+                        payType = Constant.PAY_TYPE_WEIXIN;
                         break;
                     case Constant.PAY_TYPE_DEBT:
                         tvPayType.setText(getText(R.string.order_pay_mode_debt));
-                        payType=Constant.PAY_TYPE_DEBT;
+                        payType = Constant.PAY_TYPE_DEBT;
                         break;
                     default:
                         break;
@@ -415,14 +429,14 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
                 break;
         }
         boolean isPayOnline = false;
-        switch (orderDetailBo.getPayMethod()){
+        switch (orderDetailBo.getPayMethod()) {
             case Constant.PAY_METHOD_RECEIVE:
                 tvOrderDetailPayMode.setText(getText(R.string.pay_method_receive));
-                isPayOnline=false;
+                isPayOnline = false;
                 break;
             case Constant.PAY_METHOD_ONLINE:
                 tvOrderDetailPayMode.setText(getText(R.string.pay_method_online));
-                isPayOnline=true;
+                isPayOnline = true;
                 break;
             default:
                 break;
@@ -438,7 +452,7 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
         List<OrderDetailBo.GoodsBean> data = orderDetailBo.getGoods();
         mData.clear();
         mData.addAll(data);
-        waterOrder=orderDetailBo.isWaterOrder();
+        waterOrder = orderDetailBo.isWaterOrder();
         if (orderDetailBo.isWaterOrder()) {
             llWaterTicket.setVisibility(View.VISIBLE);
             sendingDetailGoodAdapter.setPayOnline(isPayOnline);
@@ -473,7 +487,7 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
             rvContent.setAdapter(goodsAdapter);
         }
         String amount = orderDetailBo.getOrderAmount();
-        orderAmount=amount;
+        orderAmount = amount;
         tvBalance.setText(getText(R.string.order_balance_title) + (TextUtils.isEmpty(amount) ? Constant.STR_EMPTY : amount));
         initSignListener();
         // TODO: 17/4/10 更新地图坐标
@@ -488,6 +502,9 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
         aMap.addMarker(new MarkerOptions().position(new LatLng(memberLat, memberLng))
                 .icon(BitmapDescriptorFactory
                         .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        // 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+        RegeocodeQuery query = new RegeocodeQuery(new LatLonPoint(memberLat, memberLng), 200, GeocodeSearch.AMAP);
+        geocoderSearch.getFromLocationAsyn(query);
     }
 
     @Override
@@ -513,17 +530,16 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
 
     @Override
     public void showUpdateAmount(boolean isRequestSuccess, String amount) {
-        if(isRequestSuccess){
-            tvBalance.setText(TextUtils.concat(getText(R.string.order_balance_title),amount));
-            orderAmount=amount;
-        }else{
-            ToastUtil.shortToast(this,R.string.update_order_amount_failure);
+        if (isRequestSuccess) {
+            tvBalance.setText(TextUtils.concat(getText(R.string.order_balance_title), amount));
+            orderAmount = amount;
+        } else {
+            ToastUtil.shortToast(this, R.string.update_order_amount_failure);
         }
     }
 
     /**
      * 初始化签收按钮监听
-     *
      */
     private void initSignListener() {
         RxView.clicks(btnSign)
@@ -535,15 +551,15 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
                         if (TextUtils.isEmpty(orderId)) {
                             ToastUtil.shortToast(SendingInstantActivity.this, getText(R.string.order_info_error).toString());
                         } else {
-                            if(waterOrder){
+                            if (waterOrder) {
                                 Intent intent = new Intent(SendingInstantActivity.this, WaterSignActivity.class);
-                                OrderSignBean orderSignBean=new OrderSignBean();
+                                OrderSignBean orderSignBean = new OrderSignBean();
                                 orderSignBean.setOrderAmount(orderAmount);
                                 orderSignBean.setOrderId(orderId);
                                 orderSignBean.setPayType(payType);
-                                ArrayList<BucketBean> payAmountGoods=new ArrayList();
-                                for (OrderDetailBo.GoodsBean goodsBean:mData){
-                                    BucketBean bucketBean=new BucketBean();
+                                ArrayList<BucketBean> payAmountGoods = new ArrayList();
+                                for (OrderDetailBo.GoodsBean goodsBean : mData) {
+                                    BucketBean bucketBean = new BucketBean();
                                     bucketBean.setGoodsId(goodsBean.getGoodsId());
                                     bucketBean.setGoodsNumber(goodsBean.getGoodsNum());
                                     bucketBean.setTicketName(goodsBean.getTicketName());
@@ -553,29 +569,29 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
                                     bucketBean.setSellBucketCount(goodsBean.getSellBucketCount());
                                     payAmountGoods.add(bucketBean);
                                 }
-                                Bundle bundle=new Bundle();
-                                bundle.putParcelableArrayList(Constant.ORDER_BUCKETS,payAmountGoods);
-                                intent.putExtra(Constant.ORDER_SIGN_BEAN,orderSignBean);
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelableArrayList(Constant.ORDER_BUCKETS, payAmountGoods);
+                                intent.putExtra(Constant.ORDER_SIGN_BEAN, orderSignBean);
                                 intent.putExtras(bundle);
-                                startActivityForResult(intent,SENDING_INSTANT_REQUEST_CODE);
-                            }else{
-                                Intent intent1=new Intent(SendingInstantActivity.this, GoodsSignActivity.class);
-                                OrderSignBean orderSignBean=new OrderSignBean();
+                                startActivityForResult(intent, SENDING_INSTANT_REQUEST_CODE);
+                            } else {
+                                Intent intent1 = new Intent(SendingInstantActivity.this, GoodsSignActivity.class);
+                                OrderSignBean orderSignBean = new OrderSignBean();
                                 orderSignBean.setOrderAmount(orderAmount);
                                 orderSignBean.setOrderId(orderId);
                                 orderSignBean.setPayType(payType);
-                                ArrayList<BucketBean> payAmountGoods1=new ArrayList();
-                                for (OrderDetailBo.GoodsBean goodsBean:mData){
-                                    BucketBean bucketBean=new BucketBean();
+                                ArrayList<BucketBean> payAmountGoods1 = new ArrayList();
+                                for (OrderDetailBo.GoodsBean goodsBean : mData) {
+                                    BucketBean bucketBean = new BucketBean();
                                     bucketBean.setGoodsId(goodsBean.getGoodsId());
                                     bucketBean.setGoodsNumber(goodsBean.getGoodsNum());
                                     payAmountGoods1.add(bucketBean);
                                 }
-                                Bundle bundle=new Bundle();
-                                bundle.putParcelableArrayList(Constant.ORDER_BUCKETS,payAmountGoods1);
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelableArrayList(Constant.ORDER_BUCKETS, payAmountGoods1);
                                 intent1.putExtras(bundle);
-                                intent1.putExtra(Constant.ORDER_SIGN_BEAN,orderSignBean);
-                                startActivityForResult(intent1,SENDING_INSTANT_REQUEST_CODE);
+                                intent1.putExtra(Constant.ORDER_SIGN_BEAN, orderSignBean);
+                                startActivityForResult(intent1, SENDING_INSTANT_REQUEST_CODE);
                             }
                         }
                     }
@@ -585,7 +601,7 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==SENDING_INSTANT_REQUEST_CODE && resultCode==RESULT_OK){
+        if (requestCode == SENDING_INSTANT_REQUEST_CODE && resultCode == RESULT_OK) {
             setResult(RESULT_OK);
             finish();
         }
@@ -607,4 +623,29 @@ public class SendingInstantActivity extends BaseActivity<SendingInstantPresenter
         });
         builder.show();
     }
+
+
+    /**
+     * 逆地理编码
+     *
+     * @param regeocodeResult
+     * @param i
+     */
+    @Override
+    public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+        //解析result获取地址描述信息
+        String address = regeocodeResult.getRegeocodeAddress().getFormatAddress();
+        tvLocateAddress.setText(getText(R.string.locate_address)+address);
+    }
+
+    @Override
+    public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
+    }
+
 }

@@ -24,6 +24,11 @@ import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.CameraPosition;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.eme.waterdelivery.App;
@@ -65,9 +70,9 @@ import static com.eme.waterdelivery.R.id.tv_order_detail_used_time;
  * <p>
  * Created by dijiaoliang on 17/3/8.
  */
-public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> implements FixedDetailContract.View {
+public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> implements FixedDetailContract.View, GeocodeSearch.OnGeocodeSearchListener {
 
-    public static final int FIXED_REQUEST_CODE=1101;
+    public static final int FIXED_REQUEST_CODE = 1101;
 
     @BindView(R.id.back)
     LinearLayout back;
@@ -113,8 +118,11 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
     RecyclerView rvTicket;
     @BindView(R.id.tv_pay_type)
     TextView tvPayType;
+    @BindView(R.id.tv_locate_address)
+    TextView tvLocateAddress;
 
     private AMap aMap;
+    private GeocodeSearch geocoderSearch;//逆地理编码组建
 
     private List<OrderDetailBo.GoodsBean> mData;
 
@@ -141,8 +149,10 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
         }
         // TODO: 17/3/8  改变可视区域,添加坐标点 
         aMap.clear();
-
         mapContainer.setScrollView(sv);//MapContainer关联ScrollView 解决地图和ScrollView的事件冲突
+        //初始化地图组建
+        geocoderSearch = new GeocodeSearch(this);
+        geocoderSearch.setOnGeocodeSearchListener(this);
 
 //        如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         rvContent.setHasFixedSize(true);
@@ -166,19 +176,19 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
                 OrderDetailBo.GoodsBean goodsBean = mData.get(position);
                 switch (view.getId()) {
                     case R.id.tv_ya:
-                        alertBucketDialog(adapter,goodsBean,false,position);
+                        alertBucketDialog(adapter, goodsBean, false, position);
                         break;
                     case R.id.tv_sale:
-                        alertBucketDialog(adapter,goodsBean,true,position);
+                        alertBucketDialog(adapter, goodsBean, true, position);
                         break;
                     case R.id.btn_reduce:
                         int goodsNum = goodsBean.getGoodsNum();
                         if (goodsNum <= 0) {
-                            ToastUtil.shortToast(FixedDetailActivity.this,R.string.reach_zero);
+                            ToastUtil.shortToast(FixedDetailActivity.this, R.string.reach_zero);
                             return;
                         }
-                        goodsBean.setGoodsNum(goodsNum-1);
-                        goodsBean.setTicketUsedCount(goodsNum-1);
+                        goodsBean.setGoodsNum(goodsNum - 1);
+                        goodsBean.setTicketUsedCount(goodsNum - 1);
                         goodsBean.setMortgageBucketCount(0);
                         goodsBean.setSellBucketCount(0);
                         adapter.notifyItemChanged(position);
@@ -223,17 +233,17 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
                     case R.id.btn_reduce:
                         int goodsNum = goodsBean.getTicketUsedCount();
                         if (goodsNum <= 0) {
-                            ToastUtil.shortToast(FixedDetailActivity.this,R.string.reach_zero);
+                            ToastUtil.shortToast(FixedDetailActivity.this, R.string.reach_zero);
                             return;
                         }
-                        goodsBean.setTicketUsedCount(goodsNum-1);
+                        goodsBean.setTicketUsedCount(goodsNum - 1);
                         adapter.notifyItemChanged(position);
                         updateAmount();
                         break;
                     case R.id.btn_add:
                         int goodNum = goodsBean.getTicketUsedCount() + 1;
-                        if(goodNum>goodsBean.getGoodsNum()){
-                            ToastUtil.shortToast(FixedDetailActivity.this,R.string.tip_ticket);
+                        if (goodNum > goodsBean.getGoodsNum()) {
+                            ToastUtil.shortToast(FixedDetailActivity.this, R.string.tip_ticket);
                             return;
                         }
                         goodsBean.setTicketUsedCount(goodNum);
@@ -254,14 +264,14 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
     /**
      * 更新订单价格
      */
-    public void updateAmount(){
-        if(!NetworkUtils.isConnected(App.getAppInstance())){
-            ToastUtil.shortToast(this,R.string.update_order_amount_failure);
+    public void updateAmount() {
+        if (!NetworkUtils.isConnected(App.getAppInstance())) {
+            ToastUtil.shortToast(this, R.string.update_order_amount_failure);
             return;
         }
-        List<OrderAmountGoodsBean> list=new ArrayList<>();
-        for(OrderDetailBo.GoodsBean goodsBean:mData){
-            OrderAmountGoodsBean orderAmountGoodsBean=new OrderAmountGoodsBean();
+        List<OrderAmountGoodsBean> list = new ArrayList<>();
+        for (OrderDetailBo.GoodsBean goodsBean : mData) {
+            OrderAmountGoodsBean orderAmountGoodsBean = new OrderAmountGoodsBean();
             orderAmountGoodsBean.setGoodsId(goodsBean.getGoodsId());
             orderAmountGoodsBean.setGoodsNumber(goodsBean.getGoodsNum());
             orderAmountGoodsBean.setTicketUsedCount(goodsBean.getTicketUsedCount());
@@ -269,69 +279,71 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
             orderAmountGoodsBean.setSellBucketCount(goodsBean.getSellBucketCount());
             list.add(orderAmountGoodsBean);
         }
-        mPresenter.updateAmount(orderId,JSON.toJSONString(list));
+        mPresenter.updateAmount(orderId, JSON.toJSONString(list));
     }
 
     AlertDialog dialog;
+
     /**
      * 弹出押售桶的dialog
+     *
      * @param goodsBean
      * @param isSellBucket
      */
-    public void alertBucketDialog(final BaseQuickAdapter adapter, final OrderDetailBo.GoodsBean goodsBean, final boolean isSellBucket, final int position){
+    public void alertBucketDialog(final BaseQuickAdapter adapter, final OrderDetailBo.GoodsBean goodsBean, final boolean isSellBucket, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(FixedDetailActivity.this);
         View dialogView = LayoutInflater.from(FixedDetailActivity.this).inflate(R.layout.dialog_add_bucket, null, false);
         TextView tvContent = (TextView) dialogView.findViewById(R.id.tv_content);
         String rn = getText(R.string.order_nr).toString();
         String content = (String) TextUtils.concat(getText(R.string.order_good_name).toString(), goodsBean.getGoodsName(), rn, getText(R.string.order_good_size).toString(), goodsBean.getSpecName(), rn, getText(R.string.order_good_price).toString(), goodsBean.getGoodsPrice());
         tvContent.setText(content);
-        final AppCompatEditText amount= (AppCompatEditText) dialogView.findViewById(R.id.et_amount);
+        final AppCompatEditText amount = (AppCompatEditText) dialogView.findViewById(R.id.et_amount);
 //        amount.addTextChangedListener(new ZeroTextWatcher());
-        AppCompatButton cancel= (AppCompatButton) dialogView.findViewById(R.id.btn_cancel);
+        AppCompatButton cancel = (AppCompatButton) dialogView.findViewById(R.id.btn_cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(dialog!=null){
+                if (dialog != null) {
                     dialog.dismiss();
                 }
             }
         });
-        AppCompatButton confirm= (AppCompatButton) dialogView.findViewById(R.id.btn_confirm);
+        AppCompatButton confirm = (AppCompatButton) dialogView.findViewById(R.id.btn_confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String count=amount.getText().toString().trim();
-                if(TextUtils.isEmpty(count)){
-                    ToastUtil.shortToast(FixedDetailActivity.this,R.string.fixed_input_empty);
-                    if(dialog!=null){
+                String count = amount.getText().toString().trim();
+                if (TextUtils.isEmpty(count)) {
+                    ToastUtil.shortToast(FixedDetailActivity.this, R.string.fixed_input_empty);
+                    if (dialog != null) {
                         dialog.dismiss();
                     }
-                }else{
-                    if(isSellBucket){
-                        if((goodsBean.getMortgageBucketCount()+Integer.parseInt(count))>goodsBean.getGoodsNum()){
-                            ToastUtil.shortToast(FixedDetailActivity.this,R.string.tip_ya_sale);
-                        }else{
+                } else {
+                    if (isSellBucket) {
+                        if ((goodsBean.getMortgageBucketCount() + Integer.parseInt(count)) > goodsBean.getGoodsNum()) {
+                            ToastUtil.shortToast(FixedDetailActivity.this, R.string.tip_ya_sale);
+                        } else {
                             goodsBean.setSellBucketCount(Integer.parseInt(count));
                             adapter.notifyItemChanged(position);
                             updateAmount();
                         }
-                    }else{
-                        if((goodsBean.getSellBucketCount()+Integer.parseInt(count))>goodsBean.getGoodsNum()){
-                            ToastUtil.shortToast(FixedDetailActivity.this,R.string.tip_ya_sale);
-                        }else{
+                    } else {
+                        if ((goodsBean.getSellBucketCount() + Integer.parseInt(count)) > goodsBean.getGoodsNum()) {
+                            ToastUtil.shortToast(FixedDetailActivity.this, R.string.tip_ya_sale);
+                        } else {
                             goodsBean.setMortgageBucketCount(Integer.parseInt(count));
                             adapter.notifyItemChanged(position);
                             updateAmount();
                         }
                     }
-                    if(dialog!=null){
+                    if (dialog != null) {
                         dialog.dismiss();
                     }
                 }
             }
         });
         builder.setView(dialogView);
-        dialog=builder.show();
+        dialog = builder.show();
     }
 
     /**
@@ -364,18 +376,18 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
         mDialog.setOnChoosePayTypeListener(new PayTypeDialog.OnChoosePayTypeListener() {
             @Override
             public void chooseType(String flag) {
-                switch (flag){
+                switch (flag) {
                     case Constant.PAY_TYPE_MONEY:
                         tvPayType.setText(getText(R.string.order_pay_mode_money));
-                        payType=Constant.PAY_TYPE_MONEY;
+                        payType = Constant.PAY_TYPE_MONEY;
                         break;
                     case Constant.PAY_TYPE_WEIXIN:
                         tvPayType.setText(getText(R.string.order_pay_mode_weixin));
-                        payType=Constant.PAY_TYPE_WEIXIN;
+                        payType = Constant.PAY_TYPE_WEIXIN;
                         break;
                     case Constant.PAY_TYPE_DEBT:
                         tvPayType.setText(getText(R.string.order_pay_mode_debt));
-                        payType=Constant.PAY_TYPE_DEBT;
+                        payType = Constant.PAY_TYPE_DEBT;
                         break;
                     default:
                         break;
@@ -444,20 +456,20 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
         switch (orderDetailBo.getPayType()) {
             case Constant.PAY_TYPE_MONEY:
                 tvPayType.setText(getText(R.string.order_pay_mode_money));
-                payType=Constant.PAY_TYPE_MONEY;
+                payType = Constant.PAY_TYPE_MONEY;
                 break;
             case Constant.PAY_TYPE_WEIXIN:
                 tvPayType.setText(getText(R.string.order_pay_mode_weixin));
-                payType=Constant.PAY_TYPE_WEIXIN;
+                payType = Constant.PAY_TYPE_WEIXIN;
                 break;
             case Constant.PAY_TYPE_DEBT:
                 tvPayType.setText(getText(R.string.order_pay_mode_debt));
-                payType=Constant.PAY_TYPE_DEBT;
+                payType = Constant.PAY_TYPE_DEBT;
                 break;
             default:
                 break;
         }
-        switch (orderDetailBo.getPayMethod()){
+        switch (orderDetailBo.getPayMethod()) {
             case Constant.PAY_METHOD_RECEIVE:
                 tvOrderDetailPayMode.setText(getText(R.string.pay_method_receive));
                 break;
@@ -481,7 +493,7 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
         rvContent.getAdapter().notifyDataSetChanged();
         rvTicket.getAdapter().notifyDataSetChanged();
         String amount = orderDetailBo.getOrderAmount();
-        orderAmount=amount;
+        orderAmount = amount;
         tvBalance.setText(getText(R.string.order_balance_title) + (TextUtils.isEmpty(amount) ? Constant.STR_EMPTY : amount));
         initSignListener();
         // TODO: 17/4/10 更新地图坐标
@@ -496,6 +508,9 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
         aMap.addMarker(new MarkerOptions().position(new LatLng(memberLat, memberLng))
                 .icon(BitmapDescriptorFactory
                         .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        // 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+        RegeocodeQuery query = new RegeocodeQuery(new LatLonPoint(memberLat, memberLng), 200, GeocodeSearch.AMAP);
+        geocoderSearch.getFromLocationAsyn(query);
     }
 
     @Override
@@ -520,18 +535,17 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
     }
 
     @Override
-    public void showUpdateAmount(boolean isRequestSuccess,String amount) {
-        if(isRequestSuccess){
-            tvBalance.setText(TextUtils.concat(getText(R.string.order_balance_title),amount));
-            orderAmount=amount;
-        }else{
-            ToastUtil.shortToast(this,R.string.update_order_amount_failure);
+    public void showUpdateAmount(boolean isRequestSuccess, String amount) {
+        if (isRequestSuccess) {
+            tvBalance.setText(TextUtils.concat(getText(R.string.order_balance_title), amount));
+            orderAmount = amount;
+        } else {
+            ToastUtil.shortToast(this, R.string.update_order_amount_failure);
         }
     }
 
     /**
      * 初始化签收按钮监听
-     *
      */
     private void initSignListener() {
         RxView.clicks(btnSign)
@@ -545,13 +559,13 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
                         } else {
 //                            alertConfirm(orderAmount);
                             Intent intent = new Intent(FixedDetailActivity.this, WaterSignActivity.class);
-                            OrderSignBean orderSignBean=new OrderSignBean();
+                            OrderSignBean orderSignBean = new OrderSignBean();
                             orderSignBean.setOrderAmount(orderAmount);
                             orderSignBean.setOrderId(orderId);
                             orderSignBean.setPayType(payType);
-                            ArrayList<BucketBean> payAmountGoods=new ArrayList();
-                            for (OrderDetailBo.GoodsBean goodsBean:mData){
-                                BucketBean bucketBean=new BucketBean();
+                            ArrayList<BucketBean> payAmountGoods = new ArrayList();
+                            for (OrderDetailBo.GoodsBean goodsBean : mData) {
+                                BucketBean bucketBean = new BucketBean();
                                 bucketBean.setGoodsId(goodsBean.getGoodsId());
                                 bucketBean.setGoodsNumber(goodsBean.getGoodsNum());
                                 bucketBean.setTicketName(goodsBean.getTicketName());
@@ -561,11 +575,11 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
                                 bucketBean.setSellBucketCount(goodsBean.getSellBucketCount());
                                 payAmountGoods.add(bucketBean);
                             }
-                            Bundle bundle=new Bundle();
-                            bundle.putParcelableArrayList(Constant.ORDER_BUCKETS,payAmountGoods);
-                            intent.putExtra(Constant.ORDER_SIGN_BEAN,orderSignBean);
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelableArrayList(Constant.ORDER_BUCKETS, payAmountGoods);
+                            intent.putExtra(Constant.ORDER_SIGN_BEAN, orderSignBean);
                             intent.putExtras(bundle);
-                            startActivityForResult(intent,FIXED_REQUEST_CODE);
+                            startActivityForResult(intent, FIXED_REQUEST_CODE);
                         }
                     }
                 });
@@ -574,9 +588,27 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==FIXED_REQUEST_CODE && resultCode==RESULT_OK){
+        if (requestCode == FIXED_REQUEST_CODE && resultCode == RESULT_OK) {
             setResult(RESULT_OK);
             finish();
         }
+    }
+
+    /**
+     * 逆地理编码
+     *
+     * @param regeocodeResult
+     * @param i
+     */
+    @Override
+    public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
+        //解析result获取地址描述信息
+        String address = regeocodeResult.getRegeocodeAddress().getFormatAddress();
+        tvLocateAddress.setText(getText(R.string.locate_address)+address);
+    }
+
+    @Override
+    public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
+
     }
 }

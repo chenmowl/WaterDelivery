@@ -228,7 +228,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
 
                     @Override
                     public void accept(Object o) throws Exception {
-                        startActivity(new Intent(HomeActivity.this, CollectWaterActivity.class));
+                        startActivity(new Intent(HomeActivity.this, HomeCollectWaterActivity.class));
                     }
                 });
         RxView.clicks(headerLayout.findViewById(R.id.rl_collect_bucket))

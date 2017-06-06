@@ -26,6 +26,7 @@ import io.reactivex.schedulers.Schedulers;
 
 
 /**
+ * 固定订单
  * Created by dijiaoliang on 17/3/7.
  */
 public class FixedFragPresenter implements FixedFragContract.Presenter {

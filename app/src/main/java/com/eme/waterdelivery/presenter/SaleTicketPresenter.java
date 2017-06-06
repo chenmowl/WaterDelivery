@@ -97,9 +97,9 @@ public class SaleTicketPresenter implements SaleTicketContract.Presenter {
     }
 
     @Override
-    public void requestTicketList() {
+    public void requestTicketList(String ticketsModel) {
         disposables.add(
-                retrofitHelper.getTicketInfo()
+                retrofitHelper.getTicketInfo(ticketsModel)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override
