@@ -51,7 +51,7 @@ public class HomeCollectWaterPresenter implements HomeCollectWaterContract.Prese
      * @param pageNo
      */
     @Override
-    public void requestTrafficList(String pageNo) {
+    public void requestTrafficList(int pageNo) {
         disposables.add(
             retrofitHelper.getTrafficList(pageNo)
                     .subscribeOn(Schedulers.io())
@@ -84,7 +84,7 @@ public class HomeCollectWaterPresenter implements HomeCollectWaterContract.Prese
     }
 
     @Override
-    public void requestTrafficListRefresh(String pageNo) {
+    public void requestTrafficListRefresh(int pageNo) {
         disposables.add(
                 retrofitHelper.getTrafficList(pageNo)
                         .subscribeOn(Schedulers.io())

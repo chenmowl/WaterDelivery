@@ -39,9 +39,8 @@ import com.eme.waterdelivery.tools.ImageLoader;
 import com.eme.waterdelivery.tools.NetworkUtils;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.tools.ZeroTextWatcher;
+import com.eme.waterdelivery.ui.adapter.CommonAddressAdapter;
 import com.eme.waterdelivery.ui.adapter.SaleTicketAdapter;
-import com.eme.waterdelivery.ui.adapter.WBaseRecycleAdapter;
-import com.eme.waterdelivery.ui.adapter.WBaseRecycleViewHolder;
 import com.eme.waterdelivery.widget.FullyLinearLayoutManager;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.weiwangcn.betterspinner.library.BetterSpinner;
@@ -337,34 +336,33 @@ public class ApplyTicketActivity extends BaseActivity<ApplyTicketPresenter> impl
     /**
      * 搜索常用地址
      */
-    private void alertDialog(List<GetAddressByPhoneBo.ListBean> list) {
+    private void alertDialog(final List<GetAddressByPhoneBo.ListBean> list) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_list_address, null, false);
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.rv_address);
+        view.findViewById(R.id.btn_address_close).setOnClickListener(this);
         recycler.setHasFixedSize(true);
         recycler.setNestedScrollingEnabled(false);
         FullyLinearLayoutManager manager = new FullyLinearLayoutManager(App.getAppInstance());
         manager.setAutoMeasureEnabled(true);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recycler.setLayoutManager(manager);
-        WBaseRecycleAdapter<GetAddressByPhoneBo.ListBean> adapter = new WBaseRecycleAdapter<GetAddressByPhoneBo.ListBean>(this, list, R.layout.item_spinner_apply) {
+        CommonAddressAdapter adapter=new CommonAddressAdapter(this,list);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onBindViewHolder(WBaseRecycleViewHolder holder, int position, GetAddressByPhoneBo.ListBean s) {
-                holder.setText(R.id.tv_content, s.getAddress());
-            }
-        };
-        adapter.setOnItemClickListener(new WBaseRecycleAdapter.OnItemClickListener<GetAddressByPhoneBo.ListBean>() {
-            @Override
-            public void onItemClick(View view, int position, GetAddressByPhoneBo.ListBean model) {
-                memberAdressId = model.getId();
-                etAddress.setText(model.getAddress());
-                if (dialog != null) {
-                    dialog.dismiss();
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                GetAddressByPhoneBo.ListBean model=list.get(position);
+                String areaInfo=model.getAreaInfo();
+                String address=model.getAddress();
+                String info;
+                if(TextUtils.isEmpty(areaInfo)){
+                    info=TextUtils.isEmpty(address)?Constant.STR_EMPTY:address;
+                }else{
+                    info=TextUtils.isEmpty(address)?areaInfo:TextUtils.concat(areaInfo,",",address).toString();
                 }
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position, GetAddressByPhoneBo.ListBean model) {
+                etAddress.setText(info);
+                etUsername.setText(TextUtils.isEmpty(model.getTrueName())?Constant.STR_EMPTY:model.getTrueName());
+                memberAdressId = model.getId();
                 if (dialog != null) {
                     dialog.dismiss();
                 }
@@ -551,7 +549,7 @@ public class ApplyTicketActivity extends BaseActivity<ApplyTicketPresenter> impl
             tempData = new ArrayList<>();
         }
         for (GetTicketInfoBo.ListBean bean : list) {
-            tempData.add(bean.getPrice());
+            tempData.add(bean.getName());
         }
         adapterType = new ArrayAdapter(this, R.layout.item_spinner_apply, tempData);
         typeSpinner.setAdapter(adapterType);
@@ -570,6 +568,11 @@ public class ApplyTicketActivity extends BaseActivity<ApplyTicketPresenter> impl
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.btn_address_close:
+                if (dialog != null)
+                    dialog.dismiss();
+                dialog = null;
+                break;
             case R.id.btn_cancel:
                 if (dialogTicket != null)
                     dialogTicket.dismiss();
@@ -601,6 +604,7 @@ public class ApplyTicketActivity extends BaseActivity<ApplyTicketPresenter> impl
                     waterTicketBean.setId(ticketList.get(positionTicket).getId());
                     waterTicketBean.setNumber(Integer.parseInt(count));
                     waterTicketBean.setPrice(ticketList.get(positionTicket).getPrice());
+                    waterTicketBean.setName(ticketList.get(positionTicket).getName());
                     mData.add(waterTicketBean);
                     rvGoods.getAdapter().notifyDataSetChanged();
                     ToastUtil.shortToast(this, R.string.add_ticket_success);

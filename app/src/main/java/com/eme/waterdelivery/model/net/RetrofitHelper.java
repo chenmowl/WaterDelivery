@@ -8,8 +8,11 @@ import com.eme.waterdelivery.model.bean.StatusResult;
 import com.eme.waterdelivery.model.bean.entity.ApplyDetailVo;
 import com.eme.waterdelivery.model.bean.entity.ApplyOneLevelBo;
 import com.eme.waterdelivery.model.bean.entity.ApplyTwoLevelGoodBo;
+import com.eme.waterdelivery.model.bean.entity.AssessMoneyRecordVo;
 import com.eme.waterdelivery.model.bean.entity.AssessMoneyVo;
+import com.eme.waterdelivery.model.bean.entity.AssessTicketRecordVo;
 import com.eme.waterdelivery.model.bean.entity.AssessTicketVo;
+import com.eme.waterdelivery.model.bean.entity.BackBarrelBo;
 import com.eme.waterdelivery.model.bean.entity.CalculationPayAmountBo;
 import com.eme.waterdelivery.model.bean.entity.ChaseOrderVo;
 import com.eme.waterdelivery.model.bean.entity.GetActiveInfoByTicketBo;
@@ -27,6 +30,8 @@ import com.eme.waterdelivery.model.bean.entity.TrafficDetailVo;
 import com.eme.waterdelivery.model.bean.entity.TrafficVo;
 import com.eme.waterdelivery.model.bean.entity.WaitingOrderVo;
 import com.eme.waterdelivery.model.net.api.WaterApi;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -352,7 +357,7 @@ public class RetrofitHelper {
      * @param pageNo
      * @return
      */
-    public Observable<AResult<TrafficVo>> getTrafficList(String pageNo){
+    public Observable<AResult<TrafficVo>> getTrafficList(int pageNo){
         return waterApi.getTrafficList(pageNo);
     }
 
@@ -379,7 +384,7 @@ public class RetrofitHelper {
      * @param pageNo
      * @return
      */
-    public Observable<AResult<ChaseOrderVo>> getCrefditRecords(String pageNo){
+    public Observable<AResult<ChaseOrderVo>> getCrefditRecords(int pageNo){
         return waterApi.getCrefditRecords(pageNo);
     }
 
@@ -406,6 +411,42 @@ public class RetrofitHelper {
      */
     public Observable<AResult<AssessTicketVo>> ticketsStatements(){
         return waterApi.ticketsStatements();
+    }
+
+    /**
+     * 拉取历史缴帐记录
+     * @param pageNo
+     * @return
+     */
+    public Observable<AResult<AssessMoneyRecordVo>> cashStatementRecord(int pageNo){
+        return waterApi.cashStatementRecord(pageNo);
+    }
+
+    /**
+     * 拉取历史缴票记录
+     * @param pageNo
+     * @return
+     */
+    public Observable<AResult<AssessTicketRecordVo>> ticketsStatementRecord(int pageNo){
+        return waterApi.ticketsStatementRecord(pageNo);
+    }
+
+    /**
+     * 拉取应缴空桶
+     * @return
+     */
+    public Observable<AResult<List<BackBarrelBo>>> backBarrel(){
+        return waterApi.backBarrel();
+    }
+
+    /**
+     * 取消订单接口（cancelOrder）
+     * @param orderId
+     * @param nextSendTime
+     * @return
+     */
+    public Observable<StatusResult> cancelOrder(String orderId,String nextSendTime){
+        return waterApi.cancelOrder(orderId,nextSendTime);
     }
 
 }

@@ -7,8 +7,11 @@ import com.eme.waterdelivery.model.bean.StatusResult;
 import com.eme.waterdelivery.model.bean.entity.ApplyDetailVo;
 import com.eme.waterdelivery.model.bean.entity.ApplyOneLevelBo;
 import com.eme.waterdelivery.model.bean.entity.ApplyTwoLevelGoodBo;
+import com.eme.waterdelivery.model.bean.entity.AssessMoneyRecordVo;
 import com.eme.waterdelivery.model.bean.entity.AssessMoneyVo;
+import com.eme.waterdelivery.model.bean.entity.AssessTicketRecordVo;
 import com.eme.waterdelivery.model.bean.entity.AssessTicketVo;
+import com.eme.waterdelivery.model.bean.entity.BackBarrelBo;
 import com.eme.waterdelivery.model.bean.entity.CalculationPayAmountBo;
 import com.eme.waterdelivery.model.bean.entity.ChaseOrderVo;
 import com.eme.waterdelivery.model.bean.entity.GetActiveInfoByTicketBo;
@@ -25,6 +28,8 @@ import com.eme.waterdelivery.model.bean.entity.SaleTicketRecordBo;
 import com.eme.waterdelivery.model.bean.entity.TrafficDetailVo;
 import com.eme.waterdelivery.model.bean.entity.TrafficVo;
 import com.eme.waterdelivery.model.bean.entity.WaitingOrderVo;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -314,7 +319,7 @@ public interface WaterApi {
      */
     @FormUrlEncoded
     @POST("/xbz-api/dispatch/getTrafficList")
-    Observable<AResult<TrafficVo>> getTrafficList(@Field("pageNo")String pageNo);
+    Observable<AResult<TrafficVo>> getTrafficList(@Field("pageNo")int pageNo);
 
     /**
      * 获取运单详情
@@ -341,7 +346,7 @@ public interface WaterApi {
      */
     @FormUrlEncoded
     @POST("/xbz-api/dispatch/getCrefditRecords")
-    Observable<AResult<ChaseOrderVo>> getCrefditRecords(@Field("pageNo")String pageNo);
+    Observable<AResult<ChaseOrderVo>> getCrefditRecords(@Field("pageNo")int pageNo);
 
     /**
      * 欠款完结接口
@@ -365,5 +370,40 @@ public interface WaterApi {
      */
     @POST("/xbz-api/dispatch/ticketsStatements")
     Observable<AResult<AssessTicketVo>> ticketsStatements();
+
+    /**
+     * 拉取历史缴帐记录
+     * @param pageNo
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/xbz-api/dispatch/cashStatementRecord")
+    Observable<AResult<AssessMoneyRecordVo>> cashStatementRecord(@Field("pageNo")int pageNo);
+
+    /**
+     * 拉取历史缴票记录
+     * @param pageNo
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/xbz-api/dispatch/ticketsStatementRecord")
+    Observable<AResult<AssessTicketRecordVo>> ticketsStatementRecord(@Field("pageNo")int pageNo);
+
+    /**
+     * 拉取应缴空桶
+     * @return
+     */
+    @POST("/xbz-api/dispatch/backBarrel")
+    Observable<AResult<List<BackBarrelBo>>> backBarrel();
+
+    /**
+     * 取消订单接口（cancelOrder）
+     * @param orderId
+     * @param nextSendTime
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("/xbz-api/order/cancelOrder")
+    Observable<StatusResult> cancelOrder(@Field("orderId")String orderId,@Field("nextSendTime")String nextSendTime);
 
 }

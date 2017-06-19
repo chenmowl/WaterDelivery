@@ -56,6 +56,7 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
+import static com.eme.waterdelivery.R.id.btn_close;
 import static com.eme.waterdelivery.R.id.et_invoice;
 
 /**
@@ -182,7 +183,12 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
                         adapter.notifyItemChanged(position);
                         break;
                     case R.id.btn_add:
-                        bean.setNumber(number + 1);
+                        number++;
+                        if(number>Constant.TWENTY){
+                            number=Constant.TWENTY;
+                            ToastUtil.shortToast(SaleTicketActivity.this, R.string.add_ticket_tip);
+                        }
+                        bean.setNumber(number);
                         adapter.notifyItemChanged(position);
                         break;
                     case R.id.ll_close:
@@ -293,6 +299,7 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
                 }
                 mData.clear();
                 rvGoods.getAdapter().notifyDataSetChanged();
+                updateAmount();
             }
         });
         rgPayMode.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -355,6 +362,7 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_list_address, null, false);
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.rv_address);
+        view.findViewById(R.id.btn_address_close).setOnClickListener(this);
         recycler.setHasFixedSize(true);
         recycler.setNestedScrollingEnabled(false);
         FullyLinearLayoutManager manager = new FullyLinearLayoutManager(App.getAppInstance());
@@ -366,8 +374,18 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 GetAddressByPhoneBo.ListBean model=list.get(position);
+                String areaInfo=model.getAreaInfo();
+                String address=model.getAddress();
+                String info;
+                if(TextUtils.isEmpty(areaInfo)){
+                    info=TextUtils.isEmpty(address)?Constant.STR_EMPTY:address;
+                }else{
+                    info=TextUtils.isEmpty(address)?areaInfo:TextUtils.concat(areaInfo,",",address).toString();
+                }
+                etAddress.setText(info);
+                etUsername.setText(TextUtils.isEmpty(model.getTrueName())?Constant.STR_EMPTY:model.getTrueName());
                 memberAdressId = model.getId();
-                etAddress.setText(model.getAddress());
+//                etAddress.postInvalidate();
                 if (dialog != null) {
                     dialog.dismiss();
                 }
@@ -518,7 +536,7 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View viewWX = LayoutInflater.from(this).inflate(R.layout.dialog_image_wx, null, false);
         ImageLoader.load(this, imageUrl, (ImageView) viewWX.findViewById(R.id.iv_wx));
-        viewWX.findViewById(R.id.btn_close).setOnClickListener(this);
+        viewWX.findViewById(btn_close).setOnClickListener(this);
         builder.setView(viewWX);
         dialogWX=builder.show();
     }
@@ -551,7 +569,7 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
             tempData = new ArrayList<>();
         }
         for (GetTicketInfoBo.ListBean bean : list) {
-            tempData.add(bean.getPrice());
+            tempData.add(bean.getName());
         }
         adapterType = new ArrayAdapter(this, R.layout.item_spinner_apply, tempData);
         typeSpinner.setAdapter(adapterType);
@@ -570,6 +588,11 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.btn_address_close:
+                if (dialog != null)
+                    dialog.dismiss();
+                dialog = null;
+                break;
             case R.id.btn_cancel:
                 if (dialogTicket != null)
                     dialogTicket.dismiss();
@@ -586,11 +609,16 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
                 }
                 String count = etTicketAmount.getText().toString();
                 if (!TextUtils.isEmpty(count)) {
+                    int number=Integer.parseInt(count);
                     for (WaterTicketBean bean : mData) {
                         if (bean.getId().equals(ticketList.get(positionTicket).getId())) {
-                            bean.setNumber(bean.getNumber() + Integer.parseInt(count));
+                            number+=bean.getNumber();
+                            if(number>Constant.TWENTY){
+                                number=Constant.TWENTY;
+                                ToastUtil.shortToast(this, R.string.add_ticket_tip);
+                            }
+                            bean.setNumber(number);
                             rvGoods.getAdapter().notifyDataSetChanged();
-                            ToastUtil.shortToast(this, R.string.add_ticket_success);
                             dialogTicket.dismiss();
                             dialogTicket = null;
                             updateAmount();
@@ -599,11 +627,16 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
                     }
                     WaterTicketBean waterTicketBean = new WaterTicketBean();
                     waterTicketBean.setId(ticketList.get(positionTicket).getId());
-                    waterTicketBean.setNumber(Integer.parseInt(count));
                     waterTicketBean.setPrice(ticketList.get(positionTicket).getPrice());
+                    waterTicketBean.setName(ticketList.get(positionTicket).getName());
+                    if(number>Constant.TWENTY){
+                        number=Constant.TWENTY;
+                        ToastUtil.shortToast(this, R.string.add_ticket_tip);
+                    }
+                    waterTicketBean.setNumber(number);
                     mData.add(waterTicketBean);
                     rvGoods.getAdapter().notifyDataSetChanged();
-                    ToastUtil.shortToast(this, R.string.add_ticket_success);
+//                    ToastUtil.shortToast(this, R.string.add_ticket_success);
                 } else {
                     ToastUtil.shortToast(this, R.string.no_input_ticket_count);
                 }
@@ -611,7 +644,7 @@ public class SaleTicketActivity extends BaseActivity<SaleTicketPresenter> implem
                 dialogTicket.dismiss();
                 dialogTicket = null;
                 break;
-            case R.id.btn_close:
+            case btn_close:
                 if (dialogWX != null)
                 dialogWX.dismiss();
                 dialogWX = null;

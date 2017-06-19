@@ -69,16 +69,16 @@ public class CollectWaterPresenter implements CollectWaterContract.Presenter {
                     @Override
                     public void accept(AResult<TrafficDetailVo> trafficDetailAResult) throws Exception {
                         if(trafficDetailAResult!=null && trafficDetailAResult.isSuccess() &&trafficDetailAResult.getData()!=null && trafficDetailAResult.getData().getGoods()!=null){
-                            view.showRequestResult(true,trafficDetailAResult.getData().getGoods(),null);
+                            view.showRequestResult(true,trafficDetailAResult.getData().getGoods());
                         }else{
-                            view.showRequestResult(false,null,null);
+                            view.showRequestResult(false,null);
                         }
                         view.showProgress(false);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        view.showRequestResult(false,null,null);
+                        view.showRequestResult(false,null);
                         view.showProgress(false);
                     }
                 })

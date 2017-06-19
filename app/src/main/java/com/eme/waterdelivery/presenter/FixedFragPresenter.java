@@ -77,7 +77,7 @@ public class FixedFragPresenter implements FixedFragContract.Presenter {
         int pNum = 0;
         switch (refreshFlag) {
             case Constant.REFRESH_NORMAL:
-                pNum = pageNum + Constant.ONE;
+                pNum = Constant.ONE;
                 break;
             case Constant.REFRESH_DOWN:
                 pNum = Constant.ONE;
@@ -150,43 +150,45 @@ public class FixedFragPresenter implements FixedFragContract.Presenter {
     }
 
     /**
-     * 接单
+     * 取消订单
      * @param orderId
+     * @param nextSendTime
      */
     @Override
-    public void receiveOrder(String orderId) {
+    public void cancelOrder(String orderId, String nextSendTime) {
         disposables.add(
-                retrofitHelper.receiveOrder(orderId)
-                        .subscribeOn(Schedulers.io()).doOnSubscribe(new Consumer<Disposable>() {
-                            @Override
-                            public void accept(Disposable disposable) throws Exception {
-                                view.showProgress(true);
+                retrofitHelper.cancelOrder(orderId,nextSendTime)
+                .subscribeOn(Schedulers.io())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        view.showProgress(true);
+                    }
+                })
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<StatusResult>() {
+                    @Override
+                    public void accept(StatusResult statusResult) throws Exception {
+                        if(statusResult!=null && statusResult.isSuccess() && statusResult.getData()!=null && Constant.CODE_COMPLETE.equals(statusResult.getData().getCode())){
+                            view.showCancelOrderStatus(true,statusResult.getData().getMessage());
+                        }else{
+                            if(statusResult!=null && statusResult.getData()!=null && statusResult.getData().getMessage()!=null){
+                                view.showCancelOrderStatus(false,statusResult.getData().getMessage());
+                            }else{
+                                view.showCancelOrderStatus(false,null);
                             }
-                        })
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<StatusResult>() {
-                            @Override
-                            public void accept(StatusResult statusResult) throws Exception {
-                                if(statusResult!=null && statusResult.isSuccess() &&statusResult.getData()!=null&& Constant.CODE_COMPLETE.equals(statusResult.getData().getCode())){
-                                    view.showReceiveOrderStatus(statusResult.getData().getMessage());
-                                    requestData(Constant.REFRESH_DOWN);
-                                }else{
-                                    if(statusResult!=null && statusResult.getData()!=null){
-                                        view.showReceiveOrderStatus(statusResult.getData().getMessage());
-                                    }else{
-                                        view.showReceiveOrderStatus(null);
-                                    }
-                                }
-                                view.showProgress(false);
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable throwable) throws Exception {
-                                view.showReceiveOrderStatus(null);
-                                view.showProgress(false);
-                            }
-                        }));
-
+                        }
+                        view.showProgress(true);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        view.showCancelOrderStatus(false,null);
+                        view.showProgress(true);
+                    }
+                })
+        );
     }
+
 }

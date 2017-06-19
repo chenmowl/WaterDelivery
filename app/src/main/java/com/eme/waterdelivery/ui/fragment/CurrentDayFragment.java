@@ -235,7 +235,7 @@ public class CurrentDayFragment extends BaseFragment<CurrentDayPresenter> implem
     }
 
     public void refreshPage(){
-        mPresenter.requestData(Constant.REFRESH_DOWN);
+        mPresenter.requestData(Constant.REFRESH_NORMAL);
     }
 
 }

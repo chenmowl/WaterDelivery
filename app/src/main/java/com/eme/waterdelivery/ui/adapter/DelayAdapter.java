@@ -61,6 +61,14 @@ public class DelayAdapter extends BaseQuickAdapter<WaitingOrderBo, BaseViewHolde
             helper.setText(R.id.tv_delivery_time, TimeUtils.date2String(TimeUtils.string2Date(time),new SimpleDateFormat("MM-dd HH:mm", Locale.getDefault())));
         }
         helper.setText(R.id.tv_receiver, TextUtils.concat("收件人: ",(TextUtils.isEmpty(item.getMemberName())?Constant.STR_EMPTY:item.getMemberName())));
-        helper.setText(R.id.tv_address, TextUtils.concat("地址: ",(TextUtils.isEmpty(item.getMemberAddress())?Constant.STR_EMPTY:item.getMemberAddress())));
+        String areaInfo=item.getMemberAreaInfo();
+        String address=item.getMemberAddress();
+        String addressInfo;
+        if(TextUtils.isEmpty(areaInfo)){
+            addressInfo=TextUtils.isEmpty(address)?Constant.STR_EMPTY:address;
+        }else{
+            addressInfo=TextUtils.isEmpty(address)?areaInfo:TextUtils.concat(areaInfo,",",address).toString();
+        }
+        helper.setText(R.id.tv_address, TextUtils.concat("地址: ", addressInfo));
     }
 }

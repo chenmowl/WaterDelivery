@@ -121,7 +121,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:text="@string/used_time"
+                        android:text="@string/order_used_time"
                         android:textColor="@color/text_color_bar"
                         android:textSize="12sp" />
 
@@ -156,20 +156,11 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/tv_locate_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:text="定位地址: "
-                android:textColor="@color/text_color_bar"
-                android:textSize="12sp" />
-
-            <TextView
                 android:id="@+id/tv_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
+                android:lineSpacingExtra="4dp"
                 android:layout_marginTop="10dp"
                 android:text="地址: 北京市朝阳区建国路112号中国惠普大厦"
                 android:textColor="@color/text_color_bar"

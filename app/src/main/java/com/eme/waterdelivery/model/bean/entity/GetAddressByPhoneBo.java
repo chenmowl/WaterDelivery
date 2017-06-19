@@ -38,12 +38,22 @@ public class GetAddressByPhoneBo {
         /**
          * address : i am address
          * id : 103
+         * areaInfo: "北京市朝阳区建外街道建国路辅路"
          * trueName : nick
          */
 
         private String address;
+        private String areaInfo;
         private String id;
         private String trueName;
+
+        public String getAreaInfo() {
+            return areaInfo;
+        }
+
+        public void setAreaInfo(String areaInfo) {
+            this.areaInfo = areaInfo;
+        }
 
         public String getAddress() {
             return address;

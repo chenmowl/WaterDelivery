@@ -20,8 +20,8 @@ project.ext {
             applicationId    : "com.eme.waterdelivery",
             minSdkVersion    : 15,
             targetSdkVersion : 25,
-            versionCode      : 1,
-            versionName      : "1.0"
+            versionCode      : 1000,
+            versionName      : "1.0.0"
     ]
 
     dependencies = [
@@ -63,7 +63,8 @@ project.ext {
             "okhttp3"                    : "com.squareup.okhttp3:okhttp:3.4.1",
             "okhttp3-logging-interceptor": "com.squareup.okhttp3:logging-interceptor:3.4.1",
             "ormlite-android"            : "com.j256.ormlite:ormlite-android:4.48",
-            "fastjson"                   : "com.alibaba:fastjson:1.2.31",
+            "fastjson"                   : "com.alibaba:fastjson:1.2.33",
+            "fastjson_android"           : "com.alibaba:fastjson:1.1.58.android",
             "butterknife"                : "com.jakewharton:butterknife:${butterKnifeVersion}",
             "butterknife-compiler"       : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
 //            "retrofit2-fastjson-converter": "me.baron.retrofit2.converter:Retrofit2-FastJson-Converter:1.0.0"

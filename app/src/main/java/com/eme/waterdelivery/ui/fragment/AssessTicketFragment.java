@@ -129,6 +129,12 @@ public class AssessTicketFragment extends BaseFragment<AssessTicketPresenter> im
             case Constant.REFRESH_NORMAL:
                 showProgress(false);
                 break;
+            default:
+                showProgress(false);
+                if(swipeRefresh.isRefreshing()){
+                    swipeRefresh.setRefreshing(false);
+                }
+                break;
         }
     }
 

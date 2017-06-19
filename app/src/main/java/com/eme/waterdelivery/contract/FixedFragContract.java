@@ -26,7 +26,7 @@ public interface FixedFragContract {
 
         void showOrderSumError();
 
-        void showReceiveOrderStatus(String message);
+        void showCancelOrderStatus(boolean isSuccess,String message);
 
         void netError(int flag);
     }
@@ -35,7 +35,7 @@ public interface FixedFragContract {
 
         void requestData(int refreshFlag);
 
-        void receiveOrder(String orderId);
+        void cancelOrder(String orderId,String nextSendTime);
 
     }
 

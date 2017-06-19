@@ -16,7 +16,7 @@ public interface CollectWaterContract {
 
         void showProgress(boolean isShow);
 
-        void showRequestResult(boolean isSuccess, List<TrafficDetailVo.GoodsBean> data, String message);
+        void showRequestResult(boolean isSuccess, List<TrafficDetailVo.GoodsBean> data);
 
         void showConfirmResult(boolean isSuccess);
     }

@@ -24,11 +24,6 @@ import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.CameraPosition;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
-import com.amap.api.services.core.LatLonPoint;
-import com.amap.api.services.geocoder.GeocodeResult;
-import com.amap.api.services.geocoder.GeocodeSearch;
-import com.amap.api.services.geocoder.RegeocodeQuery;
-import com.amap.api.services.geocoder.RegeocodeResult;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.eme.waterdelivery.App;
@@ -70,7 +65,7 @@ import static com.eme.waterdelivery.R.id.tv_order_detail_used_time;
  * <p>
  * Created by dijiaoliang on 17/3/8.
  */
-public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> implements FixedDetailContract.View, GeocodeSearch.OnGeocodeSearchListener {
+public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> implements FixedDetailContract.View{
 
     public static final int FIXED_REQUEST_CODE = 1101;
 
@@ -118,11 +113,8 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
     RecyclerView rvTicket;
     @BindView(R.id.tv_pay_type)
     TextView tvPayType;
-    @BindView(R.id.tv_locate_address)
-    TextView tvLocateAddress;
 
     private AMap aMap;
-    private GeocodeSearch geocoderSearch;//逆地理编码组建
 
     private List<OrderDetailBo.GoodsBean> mData;
 
@@ -150,9 +142,6 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
         // TODO: 17/3/8  改变可视区域,添加坐标点 
         aMap.clear();
         mapContainer.setScrollView(sv);//MapContainer关联ScrollView 解决地图和ScrollView的事件冲突
-        //初始化地图组建
-        geocoderSearch = new GeocodeSearch(this);
-        geocoderSearch.setOnGeocodeSearchListener(this);
 
 //        如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         rvContent.setHasFixedSize(true);
@@ -483,7 +472,15 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
             tvOrderDetailUsedTime.setText(TimeUtils.getIntervalTime(TimeUtils.getCurTimeString(), orderDetailBo.getShippingTime(), ConstUtils.TimeUnit.MIN) + getText(R.string.order_minute).toString());
         }
         tvReceiver.setText(getText(R.string.order_receiver_title) + (TextUtils.isEmpty(orderDetailBo.getMemberName()) ? Constant.STR_EMPTY : orderDetailBo.getMemberName()));
-        tvAddress.setText(getText(R.string.order_address_title) + (TextUtils.isEmpty(orderDetailBo.getMemberAddress()) ? Constant.STR_EMPTY : orderDetailBo.getMemberAddress()));
+        String areaInfo=orderDetailBo.getMemberAreaInfo();
+        String address=orderDetailBo.getMemberAddress();
+        String addressInfo;
+        if(TextUtils.isEmpty(areaInfo)){
+            addressInfo=TextUtils.isEmpty(address)?Constant.STR_EMPTY:address;
+        }else{
+            addressInfo=TextUtils.isEmpty(address)?areaInfo:TextUtils.concat(areaInfo,",",address).toString();
+        }
+        tvAddress.setText(getText(R.string.order_address_title) + addressInfo);
         tvRemark.setText(TextUtils.isEmpty(orderDetailBo.getOrderMessage()) ? Constant.STR_EMPTY : orderDetailBo.getOrderMessage());
         tvOrderDetailClientPhone.setText(TextUtils.isEmpty(orderDetailBo.getServicePhone()) ? Constant.STR_EMPTY : orderDetailBo.getServicePhone());
         tvOrderDetailCustomerPhone.setText(TextUtils.isEmpty(orderDetailBo.getMemberPhone()) ? Constant.STR_EMPTY : orderDetailBo.getMemberPhone());
@@ -508,9 +505,6 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
         aMap.addMarker(new MarkerOptions().position(new LatLng(memberLat, memberLng))
                 .icon(BitmapDescriptorFactory
                         .defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        // 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
-        RegeocodeQuery query = new RegeocodeQuery(new LatLonPoint(memberLat, memberLng), 200, GeocodeSearch.AMAP);
-        geocoderSearch.getFromLocationAsyn(query);
     }
 
     @Override
@@ -594,21 +588,4 @@ public class FixedDetailActivity extends BaseActivity<FixedDetailPresenter> impl
         }
     }
 
-    /**
-     * 逆地理编码
-     *
-     * @param regeocodeResult
-     * @param i
-     */
-    @Override
-    public void onRegeocodeSearched(RegeocodeResult regeocodeResult, int i) {
-        //解析result获取地址描述信息
-        String address = regeocodeResult.getRegeocodeAddress().getFormatAddress();
-        tvLocateAddress.setText(getText(R.string.locate_address)+address);
-    }
-
-    @Override
-    public void onGeocodeSearched(GeocodeResult geocodeResult, int i) {
-
-    }
 }

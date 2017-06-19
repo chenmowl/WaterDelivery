@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.eme.waterdelivery.Constant;
 import com.eme.waterdelivery.R;
 import com.eme.waterdelivery.model.bean.entity.WaterTicketBean;
 
@@ -27,7 +28,7 @@ public class SaleTicketAdapter extends BaseQuickAdapter<WaterTicketBean, BaseVie
 
     @Override
     protected void convert(BaseViewHolder helper, WaterTicketBean item) {
-        helper.setText(R.id.tv_order_id, TextUtils.concat("水票面值: ￥",item.getPrice()));
+        helper.setText(R.id.tv_order_id, TextUtils.isEmpty(item.getName())? Constant.STR_EMPTY:item.getName());
         helper.setText(R.id.tv_show_cart_item_number,String.valueOf(item.getNumber()));
         helper.addOnClickListener(R.id.ll_close);
         helper.addOnClickListener(R.id.btn_add);

@@ -62,7 +62,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:gravity="center_vertical"
-                    android:text="现金+水票"
+                    android:text=""
                     android:textColor="@color/main_color_red"
                     android:textSize="12sp" />
 
@@ -169,6 +169,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:lineSpacingExtra="4dp"
                 android:layout_marginBottom="10dp"
                 android:background="@android:color/white"
                 android:paddingLeft="15dp"

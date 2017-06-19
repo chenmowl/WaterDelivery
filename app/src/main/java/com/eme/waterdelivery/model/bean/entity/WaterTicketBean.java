@@ -10,6 +10,7 @@ public class WaterTicketBean {
     private String id;//水票id
     private int number;//水票数量
     private String price;//面值
+    private String name;
 
     public String getId() {
         return id;
@@ -33,5 +34,13 @@ public class WaterTicketBean {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -20,9 +20,9 @@ public interface HomeCollectWaterContract {
 
     interface Presenter extends BasePresenter {
 
-        void requestTrafficList(String pageNo);
+        void requestTrafficList(int pageNo);
 
-        void requestTrafficListRefresh(String pageNo);
+        void requestTrafficListRefresh(int pageNo);
 
     }
 

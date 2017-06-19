@@ -27,7 +27,6 @@ import com.eme.waterdelivery.base.BaseActivity;
 import com.eme.waterdelivery.contract.CompleteDetailContract;
 import com.eme.waterdelivery.model.bean.entity.OrderDetailBo;
 import com.eme.waterdelivery.presenter.CompleteDetailPresenter;
-import com.eme.waterdelivery.tools.ConstUtils;
 import com.eme.waterdelivery.tools.TimeUtils;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.ui.adapter.SendingDetailGoodAdapter;
@@ -148,7 +147,7 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
                 holder.getView(R.id.ll_number).setVisibility(View.GONE);
                 TextView ticketNum=holder.getView(R.id.tv_ticket_num);
                 ticketNum.setVisibility(View.VISIBLE);
-                ticketNum.setText(String.valueOf(goodsBean.getTicketUsedCount()));
+                ticketNum.setText("X"+String.valueOf(goodsBean.getTicketUsedCount()));
                 holder.setText(R.id.tv_ticket_type,goodsBean.getTicketName());
             }
         };
@@ -255,11 +254,24 @@ public class CompleteDetailActivity extends BaseActivity<CompleteDetailPresenter
             default:
                 break;
         }
-        if (!TextUtils.isEmpty(orderDetailBo.getShippingTime())) {
-            tvOrderDetailUsedTime.setText(TimeUtils.getIntervalTime(TimeUtils.getCurTimeString(), orderDetailBo.getShippingTime(), ConstUtils.TimeUnit.MIN) + "分钟");
+        String createTime = orderDetailBo.getCreateTime();
+        String finishTime = orderDetailBo.getFinnshedTime();
+        if (TextUtils.isEmpty(createTime) || TextUtils.isEmpty(finishTime)) {
+            //为空是立即送达
+            tvOrderDetailUsedTime.setText(getText(R.string.used_time_error));
+        } else {
+            tvOrderDetailUsedTime.setText(TimeUtils.getTimeDifference(createTime, finishTime));
         }
         tvReceiver.setText(getText(R.string.order_receiver_title) + (TextUtils.isEmpty(orderDetailBo.getMemberName()) ? Constant.STR_EMPTY : orderDetailBo.getMemberName()));
-        tvAddress.setText(getText(R.string.order_address_title) + (TextUtils.isEmpty(orderDetailBo.getMemberAddress()) ? Constant.STR_EMPTY : orderDetailBo.getMemberAddress()));
+        String areaInfo=orderDetailBo.getMemberAreaInfo();
+        String address=orderDetailBo.getMemberAddress();
+        String addressInfo;
+        if(TextUtils.isEmpty(areaInfo)){
+            addressInfo=TextUtils.isEmpty(address)?Constant.STR_EMPTY:address;
+        }else{
+            addressInfo=TextUtils.isEmpty(address)?areaInfo:TextUtils.concat(areaInfo,",",address).toString();
+        }
+        tvAddress.setText(getText(R.string.order_address_title) + addressInfo);
         tvRemark.setText(TextUtils.isEmpty(orderDetailBo.getOrderMessage()) ? Constant.STR_EMPTY : orderDetailBo.getOrderMessage());
         tvOrderDetailClientPhone.setText(TextUtils.isEmpty(orderDetailBo.getServicePhone()) ? Constant.STR_EMPTY : orderDetailBo.getServicePhone());
         tvOrderDetailCustomerPhone.setText(TextUtils.isEmpty(orderDetailBo.getMemberPhone()) ? Constant.STR_EMPTY : orderDetailBo.getMemberPhone());

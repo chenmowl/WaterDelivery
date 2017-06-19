@@ -73,7 +73,7 @@ public class CurrentDayPresenter implements CurrentDayContract.Presenter {
         int pNum = 0;
         switch (refreshFlag) {
             case Constant.REFRESH_NORMAL:
-                pNum = pageNum + Constant.ONE;
+                pNum = Constant.ONE;
                 break;
             case Constant.REFRESH_DOWN:
                 pNum = Constant.ONE;

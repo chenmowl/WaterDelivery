@@ -235,7 +235,7 @@ public class MonthOrderFragment extends BaseFragment<MonthOrderPresenter> implem
     }
 
     public void refreshPage(){
-        mPresenter.requestData(Constant.REFRESH_DOWN);
+        mPresenter.requestData(Constant.REFRESH_NORMAL);
     }
 
 }

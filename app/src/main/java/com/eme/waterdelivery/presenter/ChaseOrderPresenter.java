@@ -79,7 +79,7 @@ public class ChaseOrderPresenter implements ChaseOrderContract.Presenter {
                 break;
         }
         disposables.add(
-                retrofitHelper.getCrefditRecords(String.valueOf(pNum))
+                retrofitHelper.getCrefditRecords(pNum)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override

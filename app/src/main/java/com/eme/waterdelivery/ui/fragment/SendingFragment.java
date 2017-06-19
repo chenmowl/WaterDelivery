@@ -231,7 +231,7 @@ public class SendingFragment extends BaseFragment<SendingFragPresenter> implemen
     }
 
     public void refreshPage(){
-        mPresenter.requestData(Constant.REFRESH_DOWN);
+        mPresenter.requestData(Constant.REFRESH_NORMAL);
     }
 
     @Override

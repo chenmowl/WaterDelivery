@@ -26,6 +26,7 @@ public class WaitingOrderBo {
     private String createTime;
     private String finnshedTime;
     private String memberAddress;
+    private String memberAreaInfo;
     private String memberName;
     private String memberPhone;
     private String orderId;
@@ -35,6 +36,14 @@ public class WaitingOrderBo {
     private String storeId;
     private List<GoodsBean> goods;
     private String orderAmount;
+
+    public String getMemberAreaInfo() {
+        return memberAreaInfo;
+    }
+
+    public void setMemberAreaInfo(String memberAreaInfo) {
+        this.memberAreaInfo = memberAreaInfo;
+    }
 
     public String getOrderAmount() {
         return orderAmount;

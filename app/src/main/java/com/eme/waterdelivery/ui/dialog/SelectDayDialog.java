@@ -213,7 +213,7 @@ public class SelectDayDialog extends BaseDialog {
         CharSequence y = ((NumericWheelAdapter)year.getViewAdapter()).getItemText(year.getCurrentItem());
         CharSequence m = ((NumericWheelAdapter)month.getViewAdapter()).getItemText(month.getCurrentItem());
         CharSequence d = ((NumericWheelAdapter)day.getViewAdapter()).getItemText(day.getCurrentItem());
-        mListener.changeBirthday((String) TextUtils.concat(y,"-",m,"-",d));
+        mListener.changeBirthday((String) TextUtils.concat(y,"-",m,"-",d," 00:00:00"));
     }
 
     @Override

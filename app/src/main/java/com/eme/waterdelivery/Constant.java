@@ -9,13 +9,18 @@ public class Constant {
     //空字符串
     public static final String STR_EMPTY = "";
 
+    public static final String STR_ZERO = "0";
+
     public static final String STR_ONE = "1";
+
+    public static final String STR_TWO = "2";
 
     //数字0,1
     public static final int MINUS = -1;
     public static final int ZERO = 0;
     public static final int ONE = 1;
     public static final int TWO = 2;
+    public static final int TWENTY = 20;
 
     //一页显示的条目个数
     public static final String PAGE_SIZE = "8";
@@ -43,9 +48,9 @@ public class Constant {
     public static final String PAY_TYPE_WEIXIN = "2";
     public static final String PAY_TYPE_DEBT = "3";
 
-    //售票的支付类型  1、微信 2、现金 3白条
-    public static final String PAY_MODE_WEIXIN = "1";
-    public static final String PAY_MODE_MONEY = "2";
+    //售票的支付类型  1、现金 2、微信 3白条
+    public static final String PAY_MODE_MONEY = "1";
+    public static final String PAY_MODE_WEIXIN = "2";
     public static final String PAY_MODE_DEBT = "3";
 
     //支付状态 1、已支付 2、待支付

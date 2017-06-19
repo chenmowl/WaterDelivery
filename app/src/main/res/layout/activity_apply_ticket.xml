@@ -141,8 +141,10 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/info_line_height02"
-                android:background="@color/activity_bg">
+                android:layout_height="wrap_content"
+                android:background="@color/activity_bg"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp">
 
                 <TextView
                     android:id="@+id/tv_address"
@@ -157,18 +159,16 @@
                 <EditText
                     android:id="@+id/et_address"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/tv_address"
-                    android:layout_weight="1"
                     android:background="@drawable/bg_edit"
                     android:ellipsize="end"
-                    android:maxLines="1"
+                    android:paddingBottom="4dp"
                     android:paddingLeft="10dp"
+                    android:paddingTop="4dp"
                     android:textColor="@color/text_color_bar"
                     android:textColorHint="@color/text_color_gray"
                     android:textSize="@dimen/font_info_line_normal" />
@@ -194,9 +194,9 @@
                 android:background="@color/cline_deep" />
 
             <LinearLayout
-                android:background="@color/activity_bg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/activity_bg"
                 android:orientation="horizontal">
 
                 <RadioGroup
@@ -213,12 +213,12 @@
                         android:id="@+id/rb_invoice_no"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:background="@android:color/transparent"
                         android:button="@null"
                         android:drawableLeft="@drawable/rb_invoice"
                         android:drawablePadding="8dp"
                         android:text="@string/invoice_no"
-                        android:layout_marginBottom="10dp"
                         android:textColor="@drawable/selector_tv_invoice_info"
                         android:textSize="@dimen/font_info_line_normal" />
 
@@ -228,11 +228,11 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="10dp"
                         android:background="@android:color/transparent"
                         android:button="@null"
                         android:drawableLeft="@drawable/rb_invoice"
                         android:drawablePadding="8dp"
-                        android:layout_marginBottom="10dp"
                         android:text="@string/invoice_has"
                         android:textColor="@drawable/selector_tv_invoice_info"
                         android:textSize="@dimen/font_info_line_normal" />
@@ -245,8 +245,8 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/info_line_height02"
                     android:layout_gravity="bottom"
-                    android:layout_marginLeft="16dp"
                     android:layout_marginBottom="2dp"
+                    android:layout_marginLeft="16dp"
                     android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:layout_weight="1"
                     android:background="@drawable/bg_edit"
@@ -308,18 +308,18 @@
                         android:textSize="@dimen/font_info_line_normal" />
 
                     <!--<RadioButton-->
-                        <!--android:id="@+id/rb_electron_ticket"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_centerVertical="true"-->
-                        <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
-                        <!--android:background="@android:color/transparent"-->
-                        <!--android:button="@null"-->
-                        <!--android:drawableLeft="@drawable/rb_invoice"-->
-                        <!--android:drawablePadding="6dp"-->
-                        <!--android:text="@string/electron_ticket"-->
-                        <!--android:textColor="@drawable/selector_tv_invoice_info"-->
-                        <!--android:textSize="@dimen/font_info_line_normal" />-->
+                    <!--android:id="@+id/rb_electron_ticket"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:layout_marginLeft="@dimen/activity_horizontal_margin"-->
+                    <!--android:background="@android:color/transparent"-->
+                    <!--android:button="@null"-->
+                    <!--android:drawableLeft="@drawable/rb_invoice"-->
+                    <!--android:drawablePadding="6dp"-->
+                    <!--android:text="@string/electron_ticket"-->
+                    <!--android:textColor="@drawable/selector_tv_invoice_info"-->
+                    <!--android:textSize="@dimen/font_info_line_normal" />-->
 
                 </RadioGroup>
 
@@ -390,10 +390,10 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/info_line_height02"
-                android:background="@color/activity_bg">
+                android:background="@color/activity_bg"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_pay_type_title"

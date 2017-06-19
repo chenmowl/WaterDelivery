@@ -7,6 +7,7 @@ import com.eme.waterdelivery.ui.ApplyDetailActivity;
 import com.eme.waterdelivery.ui.ApplyTicketActivity;
 import com.eme.waterdelivery.ui.ApplyTicketRecordActivity;
 import com.eme.waterdelivery.ui.ApplyVacationActivity;
+import com.eme.waterdelivery.ui.AssessRecordActivity;
 import com.eme.waterdelivery.ui.AssessmentActivity;
 import com.eme.waterdelivery.ui.AssessmentHistoryActivity;
 import com.eme.waterdelivery.ui.ChaseOrderActivity;
@@ -30,7 +31,9 @@ import com.eme.waterdelivery.ui.fragment.AllOrderFragment;
 import com.eme.waterdelivery.ui.fragment.ApplyFragment;
 import com.eme.waterdelivery.ui.fragment.ApplyRecordFragment;
 import com.eme.waterdelivery.ui.fragment.AssessMoneyFragment;
+import com.eme.waterdelivery.ui.fragment.AssessMoneyRecordFragment;
 import com.eme.waterdelivery.ui.fragment.AssessTicketFragment;
+import com.eme.waterdelivery.ui.fragment.AssessTicketRecordFragment;
 import com.eme.waterdelivery.ui.fragment.CurrentDayFragment;
 import com.eme.waterdelivery.ui.fragment.DelayFragment;
 import com.eme.waterdelivery.ui.fragment.FixedFragment;
@@ -92,6 +95,10 @@ public interface ViewComponent {
 
     void inject(ApplyDetailActivity applyDetailActivity);
 
+    void inject(AssessRecordActivity assessRecordActivity);
+
+
+
     void inject(DelayFragment delayFragment);
 
     void inject(FixedFragment fixedFragment);
@@ -111,5 +118,9 @@ public interface ViewComponent {
     void inject(AssessMoneyFragment assessMoneyFragment);
 
     void inject(AssessTicketFragment assessTicketFragment);
+
+    void inject(AssessMoneyRecordFragment assessMoneyRecordFragment);
+
+    void inject(AssessTicketRecordFragment assessTicketRecordFragment);
 
 }

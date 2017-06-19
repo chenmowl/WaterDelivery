@@ -157,7 +157,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
         vpMain.setOnPageChangeListener(this);
 
         //校验应用版本
-//        checkAppVersion();
+        checkAppVersion();
     }
 
     /**
@@ -238,7 +238,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
 
                     @Override
                     public void accept(Object o) throws Exception {
-                        startActivity(new Intent(HomeActivity.this, CollectWaterActivity.class));
+                        startActivity(new Intent(HomeActivity.this, CollectBucketActivity.class));
                     }
                 });
         RxView.clicks(headerLayout.findViewById(R.id.rl_assessment))
@@ -416,6 +416,10 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
                         for(String md5:idMd5){
                             bo.setMd5(md5);
                         }
+                        Set<String> idSize=map.get("size");
+                        for(String size:idSize){
+                            bo.setSize(Long.parseLong(size));
+                        }
                         Set<String> idRefreshVersion=map.get("refreshVersion");
                         List<String> list= bo.getRefreshVersionList();
                         for(String refreshVersion:idRefreshVersion){
@@ -428,7 +432,7 @@ public class HomeActivity extends BaseActivity<HomePresenter> implements HomeCon
                             info.versionName = bo.getVersion();
                             info.url = bo.getUrl();
                             info.md5 = bo.getMd5();
-                            info.size = 10149314;
+                            info.size = bo.getSize();
                             List<String> versions=bo.getRefreshVersionList();
                             for(String version: versions){
                                 if(versionName.equals(version)){

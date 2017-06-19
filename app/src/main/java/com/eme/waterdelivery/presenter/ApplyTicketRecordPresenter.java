@@ -84,7 +84,7 @@ public class ApplyTicketRecordPresenter implements ApplyTicketRecordContract.Pre
                 break;
         }
         disposables.add(
-                retrofitHelper.getSellTicketByPage(storeId,pNum,Constant.PAGE_SIZE)
+                retrofitHelper.getApplyTicketByPage(storeId,pNum,Constant.PAGE_SIZE)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(new Consumer<Disposable>() {
                     @Override

@@ -19,13 +19,14 @@ public final class ApiConfig {
 //    public static final String WATER_HOST="http://192.168.50.218";//彬哥ip
 
     //版本更新
-    public static final String VERSION_CHECK_URL = "http://192.168.50.218/xbz-manage/device/getAndroidVersionUpdate?username=admin&password=123456";
+    public static final String VERSION_CHECK_URL = "http://xbzwater.com:8082/xbz-manage/device/getAndroidVersionUpdate?username=admin&password=123456";
+//    public static final String VERSION_CHECK_URL = "http://192.168.50.218/xbz-manage/device/getAndroidVersionUpdate?username=admin&password=123456";
 
 
 //    public static final String WATER_HOST="http://192.168.1.17:8082";
 
     //正式发布时要做修改
-    public static final boolean DEBUG = Boolean.parseBoolean("true");
+    public static final boolean DEBUG = Boolean.parseBoolean("false");
 
     public static final String PATH_DATA = App.getAppInstance().getCacheDir().getAbsolutePath() + File.separator + "data";
 

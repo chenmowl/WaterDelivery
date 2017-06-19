@@ -122,6 +122,12 @@ public class AssessMoneyFragment extends BaseFragment<AssessMoneyPresenter> impl
             case Constant.REFRESH_NORMAL:
                 showProgress(false);
                 break;
+            default:
+                showProgress(false);
+                if(swipeRefresh.isRefreshing()){
+                    swipeRefresh.setRefreshing(false);
+                }
+                break;
         }
     }
 

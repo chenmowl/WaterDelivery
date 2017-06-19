@@ -21,7 +21,6 @@ import com.eme.waterdelivery.presenter.HomeCollectWaterPresenter;
 import com.eme.waterdelivery.tools.NetworkUtils;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.ui.adapter.TrafficListAdapter;
-import com.eme.waterdelivery.widget.FullyLinearLayoutManager;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.ArrayList;
@@ -74,7 +73,7 @@ public class HomeCollectWaterActivity extends BaseActivity<HomeCollectWaterPrese
         }
         rvContent.setHasFixedSize(true);
         rvContent.setNestedScrollingEnabled(false);
-        FullyLinearLayoutManager manager = new FullyLinearLayoutManager(App.getAppInstance());
+        LinearLayoutManager manager = new LinearLayoutManager(App.getAppInstance());
         manager.setAutoMeasureEnabled(true);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         rvContent.setLayoutManager(manager);
@@ -83,7 +82,7 @@ public class HomeCollectWaterActivity extends BaseActivity<HomeCollectWaterPrese
         mTicketAdapter.setOnItemClickListener(this);
         rvContent.setAdapter(mTicketAdapter);
         initListener();
-        mPresenter.requestTrafficList(Constant.STR_ONE);
+        mPresenter.requestTrafficList(Constant.ONE);
     }
 
     private void initListener() {
@@ -118,13 +117,13 @@ public class HomeCollectWaterActivity extends BaseActivity<HomeCollectWaterPrese
     public void showRequestResult(boolean isSuccess, List<TrafficVo.ResultsBean> data, String message) {
         if (isSuccess) {
             //成功
+            mGoodsData.clear();
             if (data != null && data.size() != 0) {
-                mGoodsData.clear();
                 mGoodsData.addAll(data);
-                rvContent.getAdapter().notifyDataSetChanged();
             } else {
                 ToastUtil.shortToast(this, getText(R.string.empty_traffic).toString());
             }
+            rvContent.getAdapter().notifyDataSetChanged();
         } else {
             //失败
             ToastUtil.shortToast(this, getText(R.string.get_traffic_failure).toString());
@@ -149,14 +148,14 @@ public class HomeCollectWaterActivity extends BaseActivity<HomeCollectWaterPrese
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==Constant.REQUEST_CODE_COLLECT_WATER && resultCode==RESULT_OK){
-            mPresenter.requestTrafficList(Constant.STR_ONE);
+            mPresenter.requestTrafficList(Constant.ONE);
         }
     }
 
     @Override
     public void onRefresh() {
         if(NetworkUtils.isConnected(this)){
-            mPresenter.requestTrafficListRefresh(Constant.STR_ONE);
+            mPresenter.requestTrafficListRefresh(Constant.ONE);
         }else{
             showNetError();
             swipeRefresh.setRefreshing(false);

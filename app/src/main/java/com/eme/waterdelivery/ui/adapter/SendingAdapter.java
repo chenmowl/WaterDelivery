@@ -61,7 +61,15 @@ public class SendingAdapter extends BaseQuickAdapter<WaitingOrderBo, BaseViewHol
             }
         }
         helper.setText(R.id.tv_receiver, TextUtils.concat("收件人: ",(TextUtils.isEmpty(item.getMemberName())? Constant.STR_EMPTY:item.getMemberName())));
-        helper.setText(R.id.tv_address, TextUtils.concat("地址: ",(TextUtils.isEmpty(item.getMemberAddress())? Constant.STR_EMPTY:item.getMemberAddress())));
         helper.setText(R.id.tv_amount, TextUtils.concat("现金: ",(TextUtils.isEmpty(item.getOrderAmount())? Constant.STR_EMPTY:item.getOrderAmount()),"元"));
+        String areaInfo=item.getMemberAreaInfo();
+        String address=item.getMemberAddress();
+        String addressInfo;
+        if(TextUtils.isEmpty(areaInfo)){
+            addressInfo=TextUtils.isEmpty(address)?Constant.STR_EMPTY:address;
+        }else{
+            addressInfo=TextUtils.isEmpty(address)?areaInfo:TextUtils.concat(areaInfo,",",address).toString();
+        }
+        helper.setText(R.id.tv_address, TextUtils.concat("地址: ", addressInfo));
     }
 }

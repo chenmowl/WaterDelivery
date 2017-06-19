@@ -28,6 +28,7 @@
     <string name="no_select_ticket_type">未选择水票类型</string>
     <string name="no_input_ticket_count">未输入数票数量</string>
     <string name="add_ticket_success">添加水票成功</string>
+    <string name="add_ticket_tip">单水票类型数量上限为20</string>
     <string name="tip_reduce">已经为1</string>
     <string name="tip_has_not_add_ticket">未添加水票</string>
     <string name="tip_has_not_username">未添加用户名</string>
@@ -45,6 +46,11 @@
     <string name="traffic_confirm_success">运单确认成功</string>
     <string name="crefdit_finish">追欠订单完结</string>
     <string name="crefdit_finish_failure">追欠订单完结失败</string>
+    <string name="empty_data">数据为空</string>
+    <string name="empty_request_data">请求数据为空</string>
+    <string name="request_data_failure">请求数据失败</string>
+    <string name="cancel_order_failure">取消订单失败</string>
+    <string name="cancel_order_success">取消订单成功</string>
 
     <!--登陆页面-->
     <string name="input_username">输入账户名</string>
@@ -82,7 +88,7 @@
     <string name="navigation_drawer_close">侧关</string>
     <string name="product">产品:</string>
     <string name="reach_time">送达时间</string>
-    <string name="reach_cast_time">送达用间</string>
+    <string name="reach_cast_time">送达时间</string>
     <string name="yuan">元</string>
     <string name="number_job">工号:</string>
     <string name="waiting">待接单 (</string>
@@ -159,6 +165,7 @@
 
     <!--fixed-->
     <string name="fixed_input_empty">输入数量为空</string>
+    <string name="next_delivery_time">下次配送时间</string>
 
     <!--sending-->
     <string name="call">电话</string>
@@ -166,6 +173,8 @@
     <string name="place_time">下单时间</string>
     <string name="pay_mode">付款方式</string>
     <string name="used_time">已用时间</string>
+    <string name="order_used_time">订单用时</string>
+    <string name="used_time_error">时间异常</string>
     <string name="service">客服:</string>
     <string name="customer">客户:</string>
     <string name="good_info">商品信息</string>
@@ -256,6 +265,9 @@
     <string name="assessment_amount">应缴金额</string>
     <string name="assessment_ticket">应缴水票</string>
     <string name="assessment_total_amount">应缴总额: </string>
+    <string name="assessment_record">缴帐历史</string>
+    <string name="assessment_money_record">缴帐金额历史</string>
+    <string name="assessment_ticket_record">缴帐水票历史</string>
     <string name="link_flag">X</string>
 
     <array name="product_types">

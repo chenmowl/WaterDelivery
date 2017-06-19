@@ -30,6 +30,7 @@ public class OrderDetailBo {
     private String createTime;
     private String finnshedTime;
     private String memberAddress;
+    private String memberAreaInfo;
     private String memberName;
     private String memberPhone;
     private String orderAmount;
@@ -48,6 +49,14 @@ public class OrderDetailBo {
     private String payMethod;   //1货到付款  2在线支付
     private boolean canOwe;     //是否可欠款
     private boolean waterOrder; //是否水订单
+
+    public String getMemberAreaInfo() {
+        return memberAreaInfo;
+    }
+
+    public void setMemberAreaInfo(String memberAreaInfo) {
+        this.memberAreaInfo = memberAreaInfo;
+    }
 
     public String getPayMethod() {
         return payMethod;

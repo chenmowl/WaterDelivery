@@ -85,12 +85,22 @@ public class FixedFragment extends BaseFragment<FixedFragPresenter> implements F
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, final int position) {
                 super.onItemChildClick(adapter, view, position);
+                final String orderId=delayData.get(position).getOrderId();
                 switch (view.getId()) {
                     case R.id.btn_reject:
                         final SelectDayDialog sbDialog=new SelectDayDialog(mActivity);
                         sbDialog.setOnBirthChangeListener(new SelectDayDialog.OnBirthChangeListener() {
                             @Override
                             public void changeBirthday(String birthday) {
+                                if(NetworkUtils.isConnected(mActivity)){
+                                    if(!TextUtils.isEmpty(orderId)){
+                                        mPresenter.cancelOrder(orderId,birthday);
+                                    }else{
+                                        ToastUtil.shortToast(mActivity,mActivity.getText(R.string.order_info_error).toString());
+                                    }
+                                }else{
+                                    showNetError();
+                                }
                                 sbDialog.cancel();
                             }
                         });
@@ -245,14 +255,21 @@ public class FixedFragment extends BaseFragment<FixedFragPresenter> implements F
     }
 
     @Override
-    public void showReceiveOrderStatus(String message) {
-        if (TextUtils.isEmpty(message)) {
-            message = getText(R.string.receive_order_success).toString();
+    public void showCancelOrderStatus(boolean isSuccess,String message) {
+        if (isSuccess) {
+            refreshPage();
+        }
+        if(TextUtils.isEmpty(message)){
+            if(isSuccess){
+                message=getText(R.string.cancel_order_success).toString();
+            }else{
+                message=getText(R.string.cancel_order_failure).toString();
+            }
         }
         ToastUtil.shortToast(mActivity, message);
     }
 
     public void refreshPage(){
-        mPresenter.requestData(Constant.REFRESH_DOWN);
+        mPresenter.requestData(Constant.REFRESH_NORMAL);
     }
 }

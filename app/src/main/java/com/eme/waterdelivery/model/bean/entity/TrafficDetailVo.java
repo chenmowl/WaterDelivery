@@ -67,14 +67,14 @@ public class TrafficDetailVo {
          * goodsId : 007db72b65f7d7d314b3e559b398fdb3
          * goodsImage : http://xbzwater.com:8000/upload/img/goods/0a737baadeb76d7751c5477f19fc98c3.jpg
          * goodsName : 三加仑纯净水
-         * preGoodsCount : 136
+         * goodsCount : 136
          * specName : 3升/桶
          */
 
         private String goodsId;
         private String goodsImage;
         private String goodsName;
-        private int preGoodsCount;
+        private int goodsCount;
         private String specName;
 
         public String getGoodsId() {
@@ -101,12 +101,12 @@ public class TrafficDetailVo {
             this.goodsName = goodsName;
         }
 
-        public int getPreGoodsCount() {
-            return preGoodsCount;
+        public int getGoodsCount() {
+            return goodsCount;
         }
 
-        public void setPreGoodsCount(int preGoodsCount) {
-            this.preGoodsCount = preGoodsCount;
+        public void setGoodsCount(int goodsCount) {
+            this.goodsCount = goodsCount;
         }
 
         public String getSpecName() {

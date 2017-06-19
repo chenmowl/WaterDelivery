@@ -15,13 +15,14 @@
         android:gravity="center"
         android:text="@string/next_period"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/font_info_line_big" />
+        android:textSize="@dimen/font_info_line_big"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_next_period"
+        android:layout_alignParentBottom="true"
         android:background="@android:color/white"
         android:orientation="horizontal">
 
@@ -68,6 +69,16 @@
             android:paddingRight="32dp"
             android:text="@string/cancel"
             android:textColor="@color/main_color_blue"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:background="@android:color/transparent"
+            android:text="@string/next_delivery_time"
+            android:textColor="@color/main_color_red"
             android:textSize="17sp" />
 
 

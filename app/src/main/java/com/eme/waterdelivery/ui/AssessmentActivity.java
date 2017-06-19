@@ -100,7 +100,7 @@ public class AssessmentActivity extends BaseActivity<AssessmentPresenter> implem
 
                     @Override
                     public void accept(Object o) throws Exception {
-                        startActivity(new Intent(AssessmentActivity.this, AssessmentHistoryActivity.class));
+                        startActivity(new Intent(AssessmentActivity.this, AssessRecordActivity.class));
                     }
                 });
         RxView.clicks(back)

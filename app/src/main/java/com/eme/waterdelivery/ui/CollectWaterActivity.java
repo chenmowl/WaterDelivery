@@ -23,7 +23,6 @@ import com.eme.waterdelivery.tools.ImageLoader;
 import com.eme.waterdelivery.tools.ToastUtil;
 import com.eme.waterdelivery.ui.adapter.WBaseRecycleAdapter;
 import com.eme.waterdelivery.ui.adapter.WBaseRecycleViewHolder;
-import com.eme.waterdelivery.widget.FullyLinearLayoutManager;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.ArrayList;
@@ -73,7 +72,7 @@ public class CollectWaterActivity extends BaseActivity<CollectWaterPresenter> im
 //        如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         rvGoods.setHasFixedSize(true);
         rvGoods.setNestedScrollingEnabled(false);
-        FullyLinearLayoutManager manager = new FullyLinearLayoutManager(App.getAppInstance());
+        LinearLayoutManager manager = new LinearLayoutManager(App.getAppInstance());
         manager.setAutoMeasureEnabled(true);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         rvGoods.setLayoutManager(manager);
@@ -81,10 +80,10 @@ public class CollectWaterActivity extends BaseActivity<CollectWaterPresenter> im
         WBaseRecycleAdapter<TrafficDetailVo.GoodsBean> mTicketAdapter = new WBaseRecycleAdapter<TrafficDetailVo.GoodsBean>(this, mGoodsData, R.layout.item_collect_water_goods) {
             @Override
             public void onBindViewHolder(WBaseRecycleViewHolder holder, int position, TrafficDetailVo.GoodsBean s) {
-                ImageLoader.load(CollectWaterActivity.this, s.getGoodsImage(), (ImageView) holder.getView(R.id.sdv_good));
-                holder.setText(R.id.tv_good_name, s.getGoodsName());
-                holder.setText(R.id.tv_good_size, "规格: " + s.getSpecName());
-                holder.setText(R.id.tv_good_count, "x" + s.getPreGoodsCount());
+                ImageLoader.load(CollectWaterActivity.this, TextUtils.isEmpty(s.getGoodsImage())? Constant.STR_EMPTY:s.getGoodsImage(), (ImageView) holder.getView(R.id.sdv_good));
+                holder.setText(R.id.tv_good_name, TextUtils.isEmpty(s.getGoodsName())? Constant.STR_EMPTY:s.getGoodsName());
+                holder.setText(R.id.tv_good_size, "规格: " + (TextUtils.isEmpty(s.getSpecName())? Constant.STR_EMPTY:s.getSpecName()));
+                holder.setText(R.id.tv_good_count, "x" + s.getGoodsCount());
             }
         };
         rvGoods.setAdapter(mTicketAdapter);
@@ -125,7 +124,7 @@ public class CollectWaterActivity extends BaseActivity<CollectWaterPresenter> im
     }
 
     @Override
-    public void showRequestResult(boolean isSuccess, List<TrafficDetailVo.GoodsBean> data, String message) {
+    public void showRequestResult(boolean isSuccess, List<TrafficDetailVo.GoodsBean> data) {
         if (isSuccess) {
             if (data != null && data.size() != 0) {
                 mGoodsData.clear();

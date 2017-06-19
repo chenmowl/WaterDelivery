@@ -233,6 +233,6 @@ public class AllOrderFragment extends BaseFragment<AllOrderPresenter> implements
     }
 
     public void refreshPage(){
-        mPresenter.requestData(Constant.REFRESH_DOWN);
+        mPresenter.requestData(Constant.REFRESH_NORMAL);
     }
 }

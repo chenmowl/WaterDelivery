@@ -227,6 +227,6 @@ public class DelayFragment extends BaseFragment<DelayFragPresenter> implements D
     }
 
     public void refreshPage(){
-        mPresenter.requestData(Constant.REFRESH_DOWN);
+        mPresenter.requestData(Constant.REFRESH_NORMAL);
     }
 }

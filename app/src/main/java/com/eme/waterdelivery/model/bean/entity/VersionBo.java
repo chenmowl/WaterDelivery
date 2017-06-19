@@ -10,11 +10,20 @@ import java.util.List;
 public class VersionBo {
     private String id;
     private String title;
+    private long size;
     private String version;
     private String description;
     private String url;
     private String md5;
     private List<String> refreshVersionList;
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
 
     public String getId() {
         return id;
